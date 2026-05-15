@@ -31,6 +31,9 @@ target-version = "py312"
 select = ["E", "F", "I", "B", "UP"]
 ignore = []
 
+[tool.ruff.lint.isort]
+known-first-party = ["scripts", "tests"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-q"
