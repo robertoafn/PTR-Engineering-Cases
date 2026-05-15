@@ -31,5 +31,5 @@ y este proyecto adhiere a [Semantic Versioning 2.0.0](https://semver.org/).
 - Aún no hay casos reales en `cases/`. Solo el placeholder `000_template`.
 - Esta versión es la base sobre la que iterarán futuras releases.
 
-[Unreleased]: https://github.com/<owner>/PTR-Engineering-Cases/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/<owner>/PTR-Engineering-Cases/releases/tag/v0.1.0
+[Unreleased]: https://github.com/robertoafn/PTR-Engineering-Cases/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/robertoafn/PTR-Engineering-Cases/releases/tag/v0.1.0

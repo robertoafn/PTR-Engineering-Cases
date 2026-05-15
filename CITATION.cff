@@ -6,7 +6,7 @@ authors:
   - given-names: "Roberto"
     family-names: "Flores"
     email: "roberto.flores.n1987@gmail.com"
-repository-code: "https://github.com/<owner>/PTR-Engineering-Cases"
+repository-code: "https://github.com/robertoafn/PTR-Engineering-Cases"
 license: MIT
 version: 0.1.0
 date-released: "2026-05-15"

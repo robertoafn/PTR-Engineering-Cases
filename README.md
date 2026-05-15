@@ -51,7 +51,7 @@ Cada artefacto declara: `provenance.json` (agentes, actividades, entidades),
 ## Reproducir un caso
 
 ```bash
-git clone https://github.com/<owner>/PTR-Engineering-Cases.git
+git clone https://github.com/robertoafn/PTR-Engineering-Cases.git
 cd PTR-Engineering-Cases
 python -m venv .venv
 # Linux/macOS
