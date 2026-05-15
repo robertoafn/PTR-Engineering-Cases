@@ -21,9 +21,10 @@ build/
 Thumbs.db
 desktop.ini
 
-# IDE
+# IDE / herramientas locales
 .vscode/
 .idea/
+.claude/
 
 # Datos pesados no versionables
 data/raw/**/*.bin
