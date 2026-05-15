@@ -5,7 +5,7 @@ from pathlib import Path
 
 import yaml
 
-from scripts.unit_consistency_check import scan_metadata, scan_sidecar, _load_vocab  # type: ignore
+from scripts.unit_consistency_check import _load_vocab, scan_metadata, scan_sidecar  # type: ignore
 
 ROOT = Path(__file__).resolve().parents[1]
 
