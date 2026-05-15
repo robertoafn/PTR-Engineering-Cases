@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.env
+.ipynb_checkpoints/
+*.egg-info/
+dist/
+build/
+
+# DWSIM / simulación
+*.bak
+*.tmp
+*.log
+
+# Power BI
+*.pbix.tmp
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+
+# Datos pesados no versionables
+data/raw/**/*.bin
+data/raw/**/*.mzML
+data/raw/**/*.cdf
+data/interim/**
+
+# Reportes generados
+tests/reports/
+**/validation_report_*.html

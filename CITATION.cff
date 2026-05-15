@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+title: "PTR Engineering Cases"
+message: "Si usa este repositorio, cite como se indica."
+type: software
+authors:
+  - given-names: "Roberto"
+    family-names: "Flores"
+    email: "roberto.flores.n1987@gmail.com"
+repository-code: "https://github.com/<owner>/PTR-Engineering-Cases"
+license: MIT
+version: 0.1.0
+date-released: "2026-05-15"
+keywords:
+  - chemical-engineering
+  - process-simulation
+  - reproducible-research
+  - FAIR
+  - DWSIM
+  - metrology
+  - QA-QC
+  - SI-units
+  - IUPAC

@@ -1,0 +1,32 @@
+thermodynamic:
+  - {symbol: T,    name: temperature,           unit: K}
+  - {symbol: P,    name: pressure,              unit: Pa}
+  - {symbol: V,    name: volume,                unit: m^3}
+  - {symbol: n,    name: amount_of_substance,   unit: mol}
+  - {symbol: x_i,  name: liquid_mole_fraction,  unit: dimensionless, range: [0, 1]}
+  - {symbol: y_i,  name: vapor_mole_fraction,   unit: dimensionless, range: [0, 1]}
+  - {symbol: H,    name: enthalpy,              unit: J}
+  - {symbol: S,    name: entropy,               unit: J/K}
+  - {symbol: G,    name: gibbs_energy,          unit: J}
+  - {symbol: mu_i, name: chemical_potential,    unit: J/mol}
+  - {symbol: rho,  name: mass_density,          unit: kg/m^3}
+  - {symbol: cp,   name: specific_heat_capacity, unit: J/(kg·K)}
+
+transport:
+  - {symbol: eta,  name: dynamic_viscosity,     unit: Pa·s}
+  - {symbol: k,    name: thermal_conductivity,  unit: W/(m·K)}
+  - {symbol: D,    name: diffusivity,           unit: m^2/s}
+
+process:
+  - {symbol: m_dot, name: mass_flow_rate,       unit: kg/s}
+  - {symbol: n_dot, name: molar_flow_rate,      unit: mol/s}
+  - {symbol: Q_dot, name: heat_duty,            unit: W}
+  - {symbol: W_dot, name: shaft_work_rate,      unit: W}
+  - {symbol: U,     name: overall_heat_transfer_coefficient, unit: W/(m^2·K)}
+  - {symbol: dP,    name: pressure_drop,        unit: Pa}
+
+chemistry:
+  - {symbol: c_i,   name: amount_concentration, unit: mol/m^3}
+  - {symbol: r,     name: reaction_rate,        unit: mol/(m^3·s)}
+  - {symbol: Ea,    name: activation_energy,    unit: J/mol}
+  - {symbol: k_r,   name: rate_constant,        unit: varies}

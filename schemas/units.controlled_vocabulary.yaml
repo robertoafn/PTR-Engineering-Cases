@@ -1,0 +1,45 @@
+base_si:
+  - {symbol: kg,  quantity: mass}
+  - {symbol: m,   quantity: length}
+  - {symbol: s,   quantity: time}
+  - {symbol: K,   quantity: thermodynamic_temperature}
+  - {symbol: mol, quantity: amount_of_substance}
+  - {symbol: A,   quantity: electric_current}
+  - {symbol: cd,  quantity: luminous_intensity}
+
+derived_si:
+  - {symbol: Pa,         quantity: pressure,              definition: "N/m^2"}
+  - {symbol: J,          quantity: energy,                definition: "N·m"}
+  - {symbol: W,          quantity: power,                 definition: "J/s"}
+  - {symbol: N,          quantity: force,                 definition: "kg·m/s^2"}
+  - {symbol: Hz,         quantity: frequency,             definition: "1/s"}
+  - {symbol: m^2,        quantity: area}
+  - {symbol: m^3,        quantity: volume}
+  - {symbol: m/s,        quantity: velocity}
+  - {symbol: kg/s,       quantity: mass_flow_rate}
+  - {symbol: mol/s,      quantity: molar_flow_rate}
+  - {symbol: mol/m^3,    quantity: amount_concentration}
+  - {symbol: kg/m^3,     quantity: mass_density}
+  - {symbol: J/mol,      quantity: molar_energy}
+  - {symbol: J/(mol·K),  quantity: molar_heat_capacity}
+  - {symbol: J/(kg·K),   quantity: specific_heat_capacity}
+  - {symbol: W/(m·K),    quantity: thermal_conductivity}
+  - {symbol: W/(m^2·K),  quantity: heat_transfer_coefficient}
+  - {symbol: Pa·s,       quantity: dynamic_viscosity}
+  - {symbol: m^2/s,      quantity: kinematic_viscosity_or_diffusivity}
+  - {symbol: dimensionless, quantity: dimensionless}
+
+allowed_non_si:
+  - {symbol: "°C", quantity: temperature, rule: "Convertir a K antes de cálculo"}
+  - {symbol: bar,  quantity: pressure,    rule: "1 bar = 1e5 Pa, declarar en metadata"}
+  - {symbol: L,    quantity: volume,      rule: "1 L = 1e-3 m^3"}
+  - {symbol: h,    quantity: time,        rule: "1 h = 3600 s"}
+
+forbidden:
+  - psi
+  - atm
+  - mmHg
+  - cal
+  - BTU
+  - "°F"
+  - "°R"

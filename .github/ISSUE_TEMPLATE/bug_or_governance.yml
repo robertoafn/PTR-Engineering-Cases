@@ -1,0 +1,31 @@
+name: Bug o problema de gobernanza
+description: Reportar un fallo en scripts, schemas, plantillas o políticas
+labels: ["bug"]
+body:
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Alcance
+      options:
+        - scripts
+        - schemas
+        - templates
+        - docs/governance
+        - CI workflow
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Descripción
+      placeholder: ¿Qué está fallando o es incorrecto?
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Pasos para reproducir
+  - type: textarea
+    id: expected
+    attributes:
+      label: Comportamiento esperado

@@ -1,0 +1,40 @@
+name: Nuevo caso
+description: Propuesta de incorporación de caso reproducible
+labels: ["case", "proposal"]
+body:
+  - type: input
+    id: case_id
+    attributes:
+      label: case_id propuesto
+      placeholder: NNN_slug_kebab
+    validations:
+      required: true
+  - type: textarea
+    id: phenomenon
+    attributes:
+      label: Fenómeno físico/químico
+    validations:
+      required: true
+  - type: textarea
+    id: objective
+    attributes:
+      label: Pregunta de ingeniería
+    validations:
+      required: true
+  - type: dropdown
+    id: source
+    attributes:
+      label: Tipo de fuente de inspiración
+      options:
+        - book_exercise
+        - paper_methodology
+        - own_investigation
+        - standard_reference
+  - type: textarea
+    id: stack
+    attributes:
+      label: Stack tentativo
+  - type: textarea
+    id: data
+    attributes:
+      label: Datos previstos (synthetic / hypothetical / literature / simulated)

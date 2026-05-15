@@ -1,0 +1,38 @@
+case_id: NNN_slug
+title: ""
+phenomenon: ""
+objective: ""
+authors:
+  - name: "Roberto Flores"
+    email: "roberto.flores.n1987@gmail.com"
+created_at: "2026-05-15T00:00:00Z"
+version: 0.1.0
+license_code: MIT
+license_docs: CC-BY-4.0
+software_stack:
+  - name: DWSIM
+    version: ""
+    license: GPL-3.0
+    purpose: "Simulación de proceso"
+  - name: python
+    version: "3.12"
+    license: PSF
+    purpose: "Análisis y QC"
+inputs: []
+outputs: []
+qc_rules:
+  - schema
+  - units
+  - completeness
+  - range
+  - naming
+  - referential_integrity
+  - checksum
+validation:
+  strategy: ""
+  acceptance_criteria: ""
+traceability:
+  provenance_ref: provenance.json
+  derived_from: []
+si_units: true
+status: draft

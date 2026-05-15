@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ptr/cases/provenance.schema.json",
+  "title": "Provenance (W3C PROV-lite)",
+  "type": "object",
+  "required": ["case_id", "generated_at", "agents", "activities", "entities"],
+  "properties": {
+    "case_id":      { "type": "string" },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "agents": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "type"],
+        "properties": {
+          "id":   { "type": "string" },
+          "type": { "enum": ["person", "software", "organization"] },
+          "name": { "type": "string" }
+        }
+      }
+    },
+    "activities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "started_at", "ended_at", "software"],
+        "properties": {
+          "id":         { "type": "string" },
+          "started_at": { "type": "string", "format": "date-time" },
+          "ended_at":   { "type": "string", "format": "date-time" },
+          "software":   { "type": "string" },
+          "parameters": { "type": "object" },
+          "used":       { "type": "array", "items": { "type": "string" } },
+          "generated":  { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    "entities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "path", "checksum_sha256"],
+        "properties": {
+          "id":              { "type": "string" },
+          "path":            { "type": "string" },
+          "checksum_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+          "derived_from":    { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    }
+  }
+}

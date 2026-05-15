@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ptr/cases/dataset.schema.json",
+  "title": "Dataset",
+  "type": "object",
+  "required": [
+    "dataset_id",
+    "case_id",
+    "source_type",
+    "variables",
+    "created_at",
+    "version",
+    "checksum_sha256"
+  ],
+  "properties": {
+    "dataset_id":  { "type": "string", "pattern": "^[a-z0-9_]+_v\\d{2}$" },
+    "case_id":     { "type": "string" },
+    "title":       { "type": "string" },
+    "description": { "type": "string" },
+    "source_type": {
+      "enum": ["synthetic", "hypothetical", "literature", "simulated"]
+    },
+    "license":     { "type": "string" },
+    "author":      { "type": "string" },
+    "variables": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["symbol", "name", "unit", "type"],
+        "properties": {
+          "symbol":   { "type": "string" },
+          "name":     { "type": "string" },
+          "unit":     { "type": "string" },
+          "type":     { "enum": ["float", "int", "string", "bool", "datetime"] },
+          "range":    {
+            "type": "array",
+            "items": { "type": "number" },
+            "minItems": 2,
+            "maxItems": 2
+          },
+          "nullable": { "type": "boolean", "default": false }
+        }
+      }
+    },
+    "created_at":      { "type": "string", "format": "date-time" },
+    "version":         { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+    "checksum_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "provenance_ref":  { "type": "string" }
+  }
+}

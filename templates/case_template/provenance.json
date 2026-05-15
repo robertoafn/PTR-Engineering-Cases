@@ -1,0 +1,23 @@
+{
+  "case_id": "NNN_slug",
+  "generated_at": "2026-05-15T00:00:00Z",
+  "agents": [
+    {
+      "id": "agent:author",
+      "type": "person",
+      "name": "Roberto Flores"
+    }
+  ],
+  "activities": [
+    {
+      "id": "act:example",
+      "started_at": "2026-05-15T00:00:00Z",
+      "ended_at": "2026-05-15T00:00:00Z",
+      "software": "python 3.12",
+      "parameters": {},
+      "used": [],
+      "generated": []
+    }
+  ],
+  "entities": []
+}
