@@ -23,7 +23,7 @@ Dominio simulado:
 - [x] Verificación de rangos y fases
 - [x] Inspección de paquete termodinámico y modo VLE
 - [x] Workflows `validate` y `lint` después de integrar el caso
-- [ ] Réplica en una segunda instalación o reapertura independiente de DWSIM
+- [x] Reapertura, resolución e inspección visual del archivo versionado por el autor
 
 ## 3. Criterios de aceptación
 
@@ -35,6 +35,8 @@ Dominio simulado:
 | Desviación de carga térmica aproximada | <= 1 % | Réplica independiente |
 | Fracción de vapor | aproximadamente 0 | Coherencia de fase |
 | Nomenclatura | 100 % conforme | Trazabilidad |
+| Reapertura y resolución | PASS | Integridad operacional del archivo versionado |
+| Concordancia visual y numérica | PASS | Consistencia entre flowsheet y documentación |
 
 ## 4. Resultados cuantitativos
 
@@ -74,6 +76,23 @@ Q_DWSIM = 1670.50072 kW
 desviación = 0.013 %
 ```
 
+### 4.5 Validación de ejecución por el autor
+
+Fecha: `2026-07-17`  
+Validador: Roberto Flores  
+Software: DWSIM 9.0.5
+
+Comprobaciones realizadas:
+
+- apertura del archivo `.dwxmz` desde la ruta versionada del caso;
+- resolución satisfactoria del flowsheet;
+- inspección visual de la secuencia corriente de entrada → bomba → calentador → corriente de salida;
+- verificación de las corrientes energéticas asociadas a bomba y calentador;
+- concordancia de la potencia de bomba, aproximadamente `4.02 kW`, con el valor documentado;
+- concordancia de la carga térmica, aproximadamente `1670.50 kW`, con el valor documentado.
+
+Resultado de la validación de ejecución: **PASS**.
+
 ## 5. Análisis de residuales
 
 Los residuales de conservación son numéricamente despreciables frente a los flujos
@@ -86,19 +105,22 @@ No se desarrolla una incertidumbre metrológica completa. Las entradas son
 especificaciones sintéticas deterministas. La mayor fuente de incertidumbre conceptual
 es la representatividad industrial del modelo simplificado.
 
+La validación manual confirma integridad, resolución y concordancia del archivo; no
+constituye una validación contra datos operacionales reales ni un estudio de incertidumbre
+experimental.
+
 ## 7. Veredicto
 
-**PASS para el modelo numérico y para las comprobaciones documentadas.**
+**PASS para el modelo numérico, las comprobaciones independientes, los controles
+automatizados y la validación de ejecución realizada por el autor.**
 
-Los workflows de gobernanza y linting finalizaron correctamente después de la
-integración del caso. El estado se mantiene en `review` hasta confirmar la reapertura,
-resolución y consistencia del archivo DWSIM desde una copia clonada e independiente.
+El archivo versionado fue abierto, resuelto e inspeccionado en DWSIM 9.0.5. La
+topología y los resultados principales concuerdan con la documentación. El Caso 001
+cumple los criterios definidos y cambia su estado de `review` a `validated`.
 
-## 8. Acciones pendientes
+## 8. Acciones no bloqueantes
 
-1. Clonar el repositorio en un entorno independiente.
-2. Reabrir el archivo desde `cases/.../simulations/dwsim/` con DWSIM 9.0.5.
-3. Resolver nuevamente el flowsheet y contrastar los resultados principales.
-4. Exportar opcionalmente el flowsheet real de DWSIM a PNG.
-5. Actualizar checksums si se agrega o modifica cualquier activo.
-6. Cambiar el estado a `validated` solo después de documentar la réplica independiente.
+1. Exportar una captura limpia del flowsheet desde DWSIM a PNG o JPG.
+2. Añadir la imagen a `assets/figures/` y enlazarla desde el README del caso.
+3. Actualizar la procedencia y los checksums si se incorpora un nuevo activo controlado.
+4. Considerar una réplica futura por un tercero como evidencia adicional, no obligatoria.

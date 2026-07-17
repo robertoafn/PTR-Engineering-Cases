@@ -1,6 +1,6 @@
 {
   "case_id": "001_acondicionamiento_agua_lavado_pulpa_kraft",
-  "generated_at": "2026-07-17T02:30:42Z",
+  "generated_at": "2026-07-17T06:31:19Z",
   "agents": [
     {
       "id": "agent:author",
@@ -49,6 +49,25 @@
         "entity:dwsim_simulation"
       ],
       "generated": [
+        "entity:process_results"
+      ]
+    },
+    {
+      "id": "act:author_validation",
+      "started_at": "2026-07-17T06:31:19Z",
+      "ended_at": "2026-07-17T06:31:19Z",
+      "software": "DWSIM 9.0.5",
+      "parameters": {
+        "validator": "Roberto Flores",
+        "validation_type": "author_reopen_resolve_visual_inspection",
+        "file_opened_from_versioned_case_path": true,
+        "flowsheet_resolved": true,
+        "topology_concordant": true,
+        "principal_results_concordant": true,
+        "outcome": "PASS"
+      },
+      "used": [
+        "entity:dwsim_simulation",
         "entity:process_results"
       ]
     }

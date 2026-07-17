@@ -1,7 +1,7 @@
 # 001_acondicionamiento_agua_lavado_pulpa_kraft — Acondicionamiento de agua para lavado de pulpa Kraft
 
-> **Status:** review  
-> **Versión:** 0.1.0  
+> **Status:** validated  
+> **Versión:** 0.1.1  
 > **Aviso de datos:** entradas sintéticas y resultados simulados.  
 > **No representa condiciones operacionales reales ni datos internos de CMPC.**
 
@@ -188,11 +188,20 @@ Resultados principales:
 - desviación del deber térmico respecto a `m_dot Cp DeltaT`: `0.013 %`;
 - fracción de vapor de salida: aproximadamente cero.
 
+Validación manual del autor, ejecutada el `2026-07-17`:
+
+- archivo `.dwxmz` abierto desde la ruta versionada del caso en DWSIM 9.0.5;
+- flowsheet resuelto correctamente;
+- topología de bomba, calentador y corrientes verificada visualmente;
+- potencia de bomba y carga térmica concordantes con los resultados documentados;
+- veredicto de ejecución: `PASS`.
+
 Ver `validation_report.md` y `qc_checklist.md`.
 
 ## 12. Trazabilidad
 
-Ver `provenance.json`.
+Ver `provenance.json`. La actividad `act:author_validation` registra la reapertura,
+resolución e inspección visual realizada por el autor.
 
 SHA-256 del archivo de simulación:
 
@@ -216,6 +225,10 @@ El modelo converge y conserva masa y energía dentro de los criterios establecid
 Para las condiciones sintéticas definidas, la bomba requiere `4.01711 kW` y el
 calentador `1670.50072 kW`. El sistema entrega `10 kg/s` de agua a `343.15 K`
 y `580000 Pa`, completamente líquida.
+
+El caso fue reabierto, resuelto e inspeccionado por el autor en DWSIM 9.0.5. Con
+los balances, cálculos independientes, controles automatizados y validación manual
+completados, el estado del Caso 001 es `validated`.
 
 ## 15. Referencias
 

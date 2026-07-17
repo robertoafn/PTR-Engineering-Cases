@@ -84,7 +84,7 @@ de cada caso.
 
 | ID | Caso | Dominio | Equipos principales | Software | Estado |
 |---|---|---|---|---|---|
-| [001](./cases/001_acondicionamiento_agua_lavado_pulpa_kraft/) | Acondicionamiento de agua para lavado de pulpa Kraft | Bombeo y calentamiento de agua | Bomba centrífuga, calentador | DWSIM 9.0.5, Python 3.13.5 | `review` |
+| [001](./cases/001_acondicionamiento_agua_lavado_pulpa_kraft/) | Acondicionamiento de agua para lavado de pulpa Kraft | Bombeo y calentamiento de agua | Bomba centrífuga, calentador | DWSIM 9.0.5, Python 3.13.5 | `validated` |
 
 ### Caso fundacional 001
 
@@ -100,8 +100,10 @@ Incluye:
 - supuestos, limitaciones, informe de validación y checklist QC;
 - procedencia y checksums SHA-256.
 
-El modelo numérico obtuvo veredicto `PASS`. El caso permanece en `review` hasta
-confirmar su reapertura y resolución desde un clon independiente del repositorio.
+El modelo numérico, los controles automatizados y la validación de ejecución
+realizada por el autor obtuvieron veredicto `PASS`. El archivo versionado fue
+abierto, resuelto e inspeccionado en DWSIM 9.0.5, por lo que el Caso 001 se
+encuentra en estado `validated`.
 
 ## Roadmap
 

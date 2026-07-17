@@ -8,7 +8,7 @@ authors:
 - name: Roberto Flores
   email: roberto.flores.n1987@gmail.com
 created_at: '2026-07-17T02:19:22Z'
-version: 0.1.0
+version: 0.1.1
 license_code: MIT
 license_docs: CC-BY-4.0
 software_stack:
@@ -92,13 +92,15 @@ qc_rules:
 - checksum
 validation:
   strategy: Balance global de masa y energía, verificación de rangos físicos, comparación
-    de potencia de bomba con V_dot*DeltaP/eta y comparación de carga térmica con m_dot*Cp*DeltaT.
+    de potencia de bomba con V_dot*DeltaP/eta, comparación de carga térmica con m_dot*Cp*DeltaT
+    y reapertura, resolución e inspección visual del archivo versionado por el autor en DWSIM 9.0.5.
   acceptance_criteria: Residuo de masa <= 0.01%; residuo de energía <= 0.1%; desviación
-    de cálculos independientes <= 1%; estado líquido en las tres corrientes.
+    de cálculos independientes <= 1%; estado líquido en las tres corrientes; topología y
+    resultados principales concordantes durante la validación manual del autor.
 traceability:
   provenance_ref: provenance.json
   derived_from:
   - simulations/dwsim/001_acondicionamiento_agua_lavado_pulpa_kraft.dwxmz
   - DWSIM Steam Tables (IAPWS-IF97)
 si_units: true
-status: review
+status: validated
