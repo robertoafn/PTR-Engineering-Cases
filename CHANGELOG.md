@@ -47,8 +47,8 @@ y este proyecto adhiere a [Semantic Versioning 2.0.0](https://semver.org/).
 - Verificación independiente de potencia de bombeo: PASS.
 - Verificación aproximada de carga térmica: PASS.
 - Apertura, resolución e inspección visual del archivo DWSIM por el autor: PASS.
-- Workflow `validate`: pendiente de ejecución sobre este Pull Request.
-- Workflow `lint`: pendiente de ejecución sobre este Pull Request.
+- Workflow `validate` del Pull Request #5: PASS.
+- Workflow `lint` del Pull Request #5: PASS.
 
 ### Notes
 - Los datos del Caso 001 son sintéticos y didácticos.
