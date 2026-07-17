@@ -22,8 +22,8 @@ Dominio simulado:
 - [x] Réplica calorimétrica aproximada del calentador
 - [x] Verificación de rangos y fases
 - [x] Inspección de paquete termodinámico y modo VLE
-- [ ] Réplica en una segunda instalación independiente de DWSIM
-- [ ] Revisión CI después del commit
+- [x] Workflows `validate` y `lint` después de integrar el caso
+- [ ] Réplica en una segunda instalación o reapertura independiente de DWSIM
 
 ## 3. Criterios de aceptación
 
@@ -88,18 +88,17 @@ es la representatividad industrial del modelo simplificado.
 
 ## 7. Veredicto
 
-**PASS para el modelo numérico.**
+**PASS para el modelo numérico y para las comprobaciones documentadas.**
 
-El caso se mantiene con status `review` hasta ejecutar validadores, pruebas y CI dentro
-del repositorio clonado, y hasta confirmar la reapertura y resolución del archivo DWSIM
-desde la copia versionada.
+Los workflows de gobernanza y linting finalizaron correctamente después de la
+integración del caso. El estado se mantiene en `review` hasta confirmar la reapertura,
+resolución y consistencia del archivo DWSIM desde una copia clonada e independiente.
 
 ## 8. Acciones pendientes
 
-1. Clonar el repositorio.
-2. Copiar el caso.
-3. Ejecutar validaciones locales.
-4. Reabrir el archivo desde `cases/.../simulations/dwsim/`.
-5. Exportar opcionalmente el flowsheet real de DWSIM a PNG.
-6. Actualizar checksums si se agrega o modifica cualquier activo.
-7. Abrir PR y verificar CI.
+1. Clonar el repositorio en un entorno independiente.
+2. Reabrir el archivo desde `cases/.../simulations/dwsim/` con DWSIM 9.0.5.
+3. Resolver nuevamente el flowsheet y contrastar los resultados principales.
+4. Exportar opcionalmente el flowsheet real de DWSIM a PNG.
+5. Actualizar checksums si se agrega o modifica cualquier activo.
+6. Cambiar el estado a `validated` solo después de documentar la réplica independiente.

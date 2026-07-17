@@ -17,7 +17,8 @@
 - [x] `validation_report.md` con veredicto declarado
 - [x] `CHANGELOG.md` del caso actualizado
 - [x] Status declarado en `metadata.yaml`
-- [ ] Reapertura y ejecución desde el repositorio clonado
-- [ ] Validadores locales del repositorio PASS
-- [ ] CI del Pull Request en verde
+- [x] Workflow `validate` del PR de integración en verde
+- [x] Workflow `lint` del PR de integración en verde
+- [ ] Reapertura y ejecución desde un clon independiente del repositorio
 - [ ] Flowsheet DWSIM exportado a PNG y añadido a `assets/figures/` (recomendado)
+- [ ] Cambio de estado a `validated` después de documentar la réplica independiente
