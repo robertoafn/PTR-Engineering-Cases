@@ -19,8 +19,8 @@ from __future__ import annotations
 import hashlib
 import json
 import sys
+from collections.abc import Iterable
 from pathlib import Path
-from typing import Iterable
 
 ROOT = Path(__file__).resolve().parents[1]
 BUF = 1 << 20  # 1 MiB
