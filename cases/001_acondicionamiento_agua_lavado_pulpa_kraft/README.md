@@ -107,6 +107,17 @@ H-001_CALENTADOR_AGUA ---- QSTR-001_CALOR_AGUA
 MSTR-003_AGUA_ACONDICIONADA
 ```
 
+### 5.1 Flowsheet implementado en DWSIM 9.0.5
+
+![Flowsheet del Caso 001 resuelto en DWSIM 9.0.5](assets/figures/fig_001_01_flowsheet_dwsim.svg)
+
+**Figura 1.** Captura del flowsheet estacionario utilizado para simular el
+acondicionamiento de agua asociado conceptualmente al lavado de pulpa Kraft.
+La línea incluye la bomba `P-001_BOMBA_AGUA`, el calentador
+`H-001_CALENTADOR_AGUA`, tres corrientes materiales y dos corrientes
+energéticas. La captura muestra aproximadamente `4.02 kW` de potencia de
+bombeo y `1670.50 kW` de carga térmica. Los datos son sintéticos y didácticos.
+
 ## 6. Supuestos
 
 Ver `assumptions.md`.
