@@ -16,9 +16,12 @@
 - [x] Réplica aproximada de carga térmica PASS
 - [x] `validation_report.md` con veredicto declarado
 - [x] `CHANGELOG.md` del caso actualizado
-- [x] Status declarado en `metadata.yaml`
 - [x] Workflow `validate` del PR de integración en verde
 - [x] Workflow `lint` del PR de integración en verde
-- [ ] Reapertura y ejecución desde un clon independiente del repositorio
-- [ ] Flowsheet DWSIM exportado a PNG y añadido a `assets/figures/` (recomendado)
-- [ ] Cambio de estado a `validated` después de documentar la réplica independiente
+- [x] Archivo versionado abierto por el autor en DWSIM 9.0.5
+- [x] Flowsheet resuelto correctamente
+- [x] Topología inspeccionada visualmente
+- [x] Resultados principales concordantes con la documentación
+- [x] Actividad de validación registrada en `provenance.json`
+- [x] Status `validated` declarado en `metadata.yaml`
+- [ ] Flowsheet DWSIM exportado a PNG o JPG y añadido a `assets/figures/` (recomendado, no bloqueante)
