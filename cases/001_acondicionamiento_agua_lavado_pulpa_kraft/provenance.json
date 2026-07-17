@@ -1,0 +1,74 @@
+{
+  "case_id": "001_acondicionamiento_agua_lavado_pulpa_kraft",
+  "generated_at": "2026-07-17T02:30:42Z",
+  "agents": [
+    {
+      "id": "agent:author",
+      "type": "person",
+      "name": "Roberto Flores"
+    },
+    {
+      "id": "agent:assistant",
+      "type": "software",
+      "name": "OpenAI ChatGPT"
+    }
+  ],
+  "activities": [
+    {
+      "id": "act:dwsim_simulation",
+      "started_at": "2026-07-17T02:16:19Z",
+      "ended_at": "2026-07-17T02:19:22Z",
+      "software": "DWSIM 9.0.5",
+      "parameters": {
+        "property_package": "Steam Tables (IAPWS-IF97)",
+        "equilibrium_mode": "VLE",
+        "flash_algorithm": "Nested Loops",
+        "regime": "steady_state"
+      },
+      "used": [
+        "entity:synthetic_inputs"
+      ],
+      "generated": [
+        "entity:dwsim_simulation"
+      ]
+    },
+    {
+      "id": "act:results_extraction",
+      "started_at": "2026-07-17T02:20:00Z",
+      "ended_at": "2026-07-17T02:30:42Z",
+      "software": "Python 3.13.5",
+      "parameters": {
+        "operations": [
+          "inspect_dwxmz",
+          "extract_stream_properties",
+          "calculate_mass_energy_residuals",
+          "compute_sha256"
+        ]
+      },
+      "used": [
+        "entity:dwsim_simulation"
+      ],
+      "generated": [
+        "entity:process_results"
+      ]
+    }
+  ],
+  "entities": [
+    {
+      "id": "entity:dwsim_simulation",
+      "path": "simulations/dwsim/001_acondicionamiento_agua_lavado_pulpa_kraft.dwxmz",
+      "checksum_sha256": "ac292d0375b3e71aacc9d3bf1576d5ab6c4e6eeadd77ec210ce49804cba96605",
+      "derived_from": [
+        "entity:synthetic_inputs"
+      ]
+    },
+    {
+      "id": "entity:process_results",
+      "path": "data/process_results_v01.csv",
+      "checksum_sha256": "25e5cc8bf7856fea75b9df94e66fff38e1df6ef1531e6df3ec89d022c35432ea",
+      "derived_from": [
+        "entity:dwsim_simulation"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,104 @@
+case_id: 001_acondicionamiento_agua_lavado_pulpa_kraft
+title: Acondicionamiento de agua para lavado de pulpa Kraft
+phenomenon: Transporte de cantidad de movimiento en una bomba centrífuga y transferencia
+  de energía sensible en un calentador, en régimen estacionario.
+objective: Determinar la potencia de bombeo y la carga térmica requeridas para acondicionar
+  10 kg/s de agua desde 303.15 K y 300000 Pa hasta 343.15 K y 580000 Pa.
+authors:
+- name: Roberto Flores
+  email: roberto.flores.n1987@gmail.com
+created_at: '2026-07-17T02:19:22Z'
+version: 0.1.0
+license_code: MIT
+license_docs: CC-BY-4.0
+software_stack:
+- name: DWSIM
+  version: 9.0.5
+  license: GPL-3.0
+  purpose: Simulación estacionaria del sistema bomba-calefactor
+- name: Python
+  version: 3.13.5
+  license: PSF
+  purpose: Extracción de resultados, validación y generación de activos
+inputs:
+- name: fluido
+  value: Water
+  unit: dimensionless
+  source_type: synthetic
+- name: fraccion_masica_agua
+  value: 1.0
+  unit: dimensionless
+  source_type: synthetic
+- name: caudal_masico
+  value: 10.0
+  unit: kg/s
+  source_type: synthetic
+- name: temperatura_entrada
+  value: 303.15
+  unit: K
+  source_type: synthetic
+- name: presion_entrada
+  value: 300000.0
+  unit: Pa
+  source_type: synthetic
+- name: presion_descarga_bomba
+  value: 600000.0
+  unit: Pa
+  source_type: synthetic
+- name: eficiencia_bomba
+  value: 0.75
+  unit: dimensionless
+  source_type: synthetic
+- name: temperatura_salida_calentador
+  value: 343.15
+  unit: K
+  source_type: synthetic
+- name: caida_presion_calentador
+  value: 20000.0
+  unit: Pa
+  source_type: synthetic
+outputs:
+- name: potencia_bomba
+  value: 4017.1113691051705
+  unit: W
+  source_type: simulated
+- name: carga_termica_calentador
+  value: 1670500.7176977599
+  unit: W
+  source_type: simulated
+- name: temperatura_salida
+  value: 343.149999983601
+  unit: K
+  source_type: simulated
+- name: presion_salida
+  value: 580000.0
+  unit: Pa
+  source_type: simulated
+- name: residuo_balance_masa
+  value: 0.0
+  unit: kg/s
+  source_type: simulated
+- name: residuo_balance_energia
+  value: -0.007887455012678402
+  unit: W
+  source_type: simulated
+qc_rules:
+- schema
+- units
+- completeness
+- range
+- naming
+- referential_integrity
+- checksum
+validation:
+  strategy: Balance global de masa y energía, verificación de rangos físicos, comparación
+    de potencia de bomba con V_dot*DeltaP/eta y comparación de carga térmica con m_dot*Cp*DeltaT.
+  acceptance_criteria: Residuo de masa <= 0.01%; residuo de energía <= 0.1%; desviación
+    de cálculos independientes <= 1%; estado líquido en las tres corrientes.
+traceability:
+  provenance_ref: provenance.json
+  derived_from:
+  - simulations/dwsim/001_acondicionamiento_agua_lavado_pulpa_kraft.dwxmz
+  - DWSIM Steam Tables (IAPWS-IF97)
+si_units: true
+status: review
