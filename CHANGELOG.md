@@ -14,6 +14,8 @@ y este proyecto adhiere a [Semantic Versioning 2.0.0](https://semver.org/).
   datasets, unidades, checksums, pruebas y linting.
 - `AGENTS.md` con reglas persistentes para trabajo local mediante ChatGPT
   Desktop, Codex u otros agentes.
+- `requirements-ci.txt` con el entorno mínimo para validadores y pruebas de
+  gobernanza.
 - Soporte opcional de `column` y `primary_key` en sidecars de datasets.
 - Pruebas de regresión para objetivos de checksum individuales y validación
   integral de datasets.
@@ -25,7 +27,8 @@ y este proyecto adhiere a [Semantic Versioning 2.0.0](https://semver.org/).
   perder el contrato de trazabilidad.
 - `CONTRIBUTING.md` y plantilla de Pull Request sincronizados con el preflight y
   la política de datos.
-- GitHub Actions ahora valida los datasets ubicados dentro de `cases/`.
+- GitHub Actions ahora valida los datasets ubicados dentro de `cases/` y utiliza
+  dependencias mínimas con caché específica de CI.
 - Validador tabular ampliado para schema, correspondencia columna/símbolo, tipos,
   rangos, nulos, clave primaria y checksum del CSV.
 - Estado del Caso 001 actualizado de `review` a `validated` y versión del caso a
