@@ -2,13 +2,26 @@
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-07-17
+
 ### Changed
-- Sincronizado el informe de validación con los workflows `validate` y `lint`
-  ejecutados satisfactoriamente después de integrar el caso.
-- Actualizado el checklist QC para distinguir entre validación automatizada y
-  réplica independiente del archivo DWSIM.
-- Mantenido el estado `review` hasta documentar la reapertura y resolución desde
-  un clon independiente del repositorio.
+- Estado actualizado de `review` a `validated`.
+- Versión del caso actualizada de `0.1.0` a `0.1.1`.
+- Informe de validación ampliado con la reapertura, resolución e inspección visual
+  realizada por el autor en DWSIM 9.0.5.
+- Checklist QC cerrado para los criterios bloqueantes.
+- Procedencia actualizada con la actividad `act:author_validation`.
+
+### Validation
+- Archivo `.dwxmz` abierto desde la ruta versionada del caso: PASS.
+- Resolución estacionaria del flowsheet: PASS.
+- Concordancia de topología: PASS.
+- Concordancia de potencia de bomba y carga térmica: PASS.
+- Veredicto general del Caso 001: `validated`.
+
+### Notes
+- La exportación del flowsheet a PNG o JPG queda como mejora visual no bloqueante.
+- No se modificaron la simulación, las entradas sintéticas ni los resultados numéricos.
 
 ## [0.1.0] - 2026-07-17
 
