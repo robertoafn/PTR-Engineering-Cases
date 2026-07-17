@@ -83,6 +83,11 @@ No publicar mientras exista cualquier fallo. Si se corrige un defecto en un
 script, añadir o actualizar una prueba de regresión que reproduzca el defecto.
 No documentar capacidades de validación que el código todavía no implemente.
 
+`requirements.txt` define el entorno completo de desarrollo y
+`requirements-ci.txt` contiene solo las dependencias de gobernanza. Si un nuevo
+validador o test importa una biblioteca externa, actualizar ambos archivos según
+corresponda y comprobar el workflow `validate`.
+
 ## 7. Sincronización documental
 
 Al integrar un caso o modificar su estado:
