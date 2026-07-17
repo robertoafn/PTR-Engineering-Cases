@@ -14,8 +14,10 @@ y este proyecto adhiere a [Semantic Versioning 2.0.0](https://semver.org/).
   hacia un portafolio progresivo de simulaciones contextuales.
 - Sincronizado el estado documental del Caso 001 con los workflows de integración
   continua ya ejecutados satisfactoriamente.
-- Mantenido el estado `review` del Caso 001 hasta confirmar la reapertura y
-  resolución de la simulación desde un clon independiente.
+- Estado del Caso 001 actualizado de `review` a `validated`.
+- Versión del Caso 001 actualizada de `0.1.0` a `0.1.1`.
+- Registrada en `provenance.json` la reapertura, resolución e inspección visual
+  realizada por el autor en DWSIM 9.0.5.
 
 ### Added
 - Caso `001_acondicionamiento_agua_lavado_pulpa_kraft`.
@@ -43,13 +45,15 @@ y este proyecto adhiere a [Semantic Versioning 2.0.0](https://semver.org/).
 - Estado físico líquido de las corrientes: PASS.
 - Workflow `validate`: PASS.
 - Workflow `lint`: PASS.
+- Apertura del archivo versionado por el autor en DWSIM 9.0.5: PASS.
+- Resolución estacionaria del flowsheet: PASS.
+- Concordancia visual de topología y resultados principales: PASS.
 
 ### Notes
 - Los datos del Caso 001 son sintéticos y didácticos.
 - El caso no contiene datos operacionales reales ni información interna de CMPC.
 - El modelo representa un sistema auxiliar simplificado y no un lavador de pulpa completo.
-- El Caso 001 permanece con estado `review` hasta confirmar la reapertura y
-  resolución del archivo DWSIM desde una copia clonada y versionada.
+- La futura exportación del flowsheet a PNG o JPG es una mejora visual no bloqueante.
 
 ## [0.1.0] - 2026-05-15
 
