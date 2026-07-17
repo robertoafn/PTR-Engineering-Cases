@@ -1,62 +1,97 @@
 # PTR Engineering Cases
 
-> Portafolio técnico de casos reproducibles de ingeniería química industrial.
-> Stack open source · FAIR · SI · IUPAC · ISO 8000 · VIM · trazabilidad SHA-256.
+> Portafolio técnico de casos reproducibles de ingeniería química industrial.  
+> DWSIM · Python · FAIR · SI · QA/QC · metrología · trazabilidad SHA-256.
 
-[![status](https://img.shields.io/badge/status-case--portfolio--v0.2.0-blue)](./CHANGELOG.md)
+[![validate](https://github.com/robertoafn/PTR-Engineering-Cases/actions/workflows/validate.yml/badge.svg)](https://github.com/robertoafn/PTR-Engineering-Cases/actions/workflows/validate.yml)
+[![lint](https://github.com/robertoafn/PTR-Engineering-Cases/actions/workflows/lint.yml/badge.svg)](https://github.com/robertoafn/PTR-Engineering-Cases/actions/workflows/lint.yml)
 [![license-code](https://img.shields.io/badge/code-MIT-green)](./LICENSE)
 [![license-docs](https://img.shields.io/badge/docs-CC--BY--4.0-lightgrey)](./LICENSE-docs)
 
----
+## Propósito profesional
 
-## ¿Quién soy?
+PTR Engineering Cases convierte ejercicios y simulaciones en evidencia técnica
+auditable. Cada caso conecta:
 
-Ingeniero en Química Industrial enfocado en simulación de procesos, QA/QC,
-metrología, validación de datos, ETL científico y documentación reproducible.
-Construyo casos auditables que conectan **fenómeno → modelo → simulación →
-validación → trazabilidad → conclusión**.
+```text
+fenómeno → fundamento → modelo → simulación → datos → validación → trazabilidad → conclusión
+```
 
-## ¿Qué resuelve este repositorio?
+El repositorio demuestra la capacidad de formular una pregunta de ingeniería,
+construir un modelo, verificar sus resultados, identificar limitaciones y
+publicar artefactos reproducibles. No pretende representar condiciones internas
+de una empresa ni sustituir datos operacionales reales.
 
-Demuestra, caso por caso, competencia técnica integral mediante artefactos
-verificables. Cada caso busca ser reproducible end-to-end, validado contra
-referencias, balances globales o cálculos independientes, con metadatos formales,
-unidades SI y checksums SHA-256.
+## Perfil del autor
 
-El repositorio combina ingeniería de procesos, control de calidad de datos y
-prácticas de ingeniería de software. Los casos pueden usar datos sintéticos,
-hipotéticos, abiertos o experimentales, siempre declarados explícitamente.
+Roberto Flores, Ingeniero en Química Industrial, enfocado en:
 
-## Metodología
+- simulación y análisis de procesos;
+- balances de materia y energía;
+- QA/QC, metrología y criterios de aceptación;
+- validación de datos y ETL científico;
+- documentación reproducible y control de versiones.
 
-`fenómeno → fundamento científico → modelo → simulación/procesamiento →
-resultados → validación/QC → trazabilidad → conclusión técnica`
+## Estado actual
 
-## Stack
+El repositorio contiene una arquitectura funcional y un primer caso fundacional
+validado por el autor. La gobernanza ya está operativa; la cobertura industrial
+crecerá mediante casos progresivos de mayor extensión, número de equipos y
+complejidad de proceso.
 
-- **Principal:** DWSIM · Python (pandas, numpy, scipy) · Power Query · Power BI · Streamlit
-- **Complementario, según caso:** OpenChrom, SpectraGryph, OpenMS, ProteoWizard,
-  pyOpenMS, JCAMP-DX, mzML, SQLite, DuckDB, Plotly, Altair y Jupyter
+### Evidencia publicada
 
-## Gobernanza
+| Evidencia | Estado |
+|---|---|
+| Simulación DWSIM versionada | Disponible |
+| Dataset CSV con sidecar YAML | Disponible |
+| Balances y cálculos independientes | PASS |
+| Metadatos validados con JSON Schema | PASS |
+| Consistencia de unidades SI | PASS |
+| Checksums SHA-256 | PASS |
+| Pruebas automatizadas y linting | Integrados en CI |
+| Reproducción independiente externa | Pendiente |
 
-- UTF-8 · LF · CSV `,` · decimal `.` · ISO 8601 UTC
-- Unidades SI obligatorias y vocabulario controlado en `schemas/`
-- Metadatos YAML por caso validados contra JSON Schema
-- SemVer · Keep a Changelog · CITATION.cff
-- Provenance W3C PROV-lite + SHA-256 por artefacto
-- Estados del ciclo de vida: `draft → review → validated → published`
+La validación actual del Caso 001 corresponde a reapertura, resolución e
+inspección ejecutadas por el autor. No se presenta como revisión externa ni como
+validación contra datos de planta.
 
-Ver [`docs/`](./docs/) para la metodología, gobernanza, convenciones y modelo de
-trazabilidad.
+## Metodología y gobernanza
 
-## Trazabilidad
+Cada caso utiliza un contrato documental común:
 
-Cada caso declara `provenance.json` con agentes, actividades, entidades,
-relaciones `derived_from`, versiones de software y checksums SHA-256 de los
-artefactos principales.
+- UTF-8, LF, CSV con separador `,`, decimal `.` e ISO 8601 UTC;
+- unidades SI y vocabularios controlados;
+- `metadata.yaml` validado contra JSON Schema;
+- datasets con sidecar `.meta.yaml`;
+- separación entre columna física del CSV (`column`) y símbolo científico
+  (`symbol`);
+- procedencia W3C PROV-lite y relaciones `derived_from`;
+- checksums SHA-256 de artefactos principales;
+- SemVer, Keep a Changelog y `CITATION.cff`;
+- ciclo de vida `draft → review → validated → published`.
 
-## Reproducir un caso
+Ver [`docs/`](./docs/), [`CONTRIBUTING.md`](./CONTRIBUTING.md) y
+[`AGENTS.md`](./AGENTS.md).
+
+## Stack demostrado
+
+Las herramientas siguientes ya participan en artefactos o controles publicados:
+
+- DWSIM 9.0.5;
+- Python 3.11+;
+- pandas, PyYAML y jsonschema;
+- pytest y Ruff;
+- GitHub Actions;
+- CSV, YAML, JSON, BibTeX y Markdown.
+
+Herramientas como Power BI, Streamlit, DuckDB, Jupyter, OpenChrom, OpenMS,
+Plotly o Altair se incorporarán al stack demostrado únicamente cuando exista un
+caso reproducible que las utilice.
+
+## Reproducción y preflight
+
+### Instalación
 
 ```bash
 git clone https://github.com/robertoafn/PTR-Engineering-Cases.git
@@ -66,19 +101,55 @@ python -m venv .venv
 # Linux/macOS
 source .venv/bin/activate
 
-# Windows
-.venv\Scripts\activate
+# Windows PowerShell
+.venv\Scripts\Activate.ps1
 
+python -m pip install --upgrade pip
 pip install -r requirements.txt
-python scripts/validate_metadata.py cases/<NNN_slug>
-python scripts/unit_consistency_check.py cases/<NNN_slug>
-python scripts/compute_checksums.py --verify cases/<NNN_slug>
-pytest tests/ -q
 ```
 
-La simulación debe abrirse desde la copia clonada y resolverse con la versión de
-software declarada por el caso. Los pasos adicionales se documentan en el README
-de cada caso.
+### Control completo de un caso
+
+```bash
+python scripts/preflight.py cases/001_acondicionamiento_agua_lavado_pulpa_kraft
+```
+
+### Control completo del portafolio
+
+```bash
+python scripts/preflight.py cases/
+```
+
+El preflight ejecuta nomenclatura, metadatos, datasets, unidades, checksums,
+pruebas y linting. Los validadores fallan ante objetivos inexistentes o vacíos;
+no aceptan un `PASS` sin artefactos descubiertos.
+
+## Flujo para nuevos casos desde ChatGPT Desktop
+
+1. Sincronizar `main` y revisar el estado local.
+2. Crear una rama `case/NNN_slug`.
+3. Copiar [`templates/case_template/`](./templates/case_template/).
+4. Definir un objetivo verificable y la frontera del sistema.
+5. Construir la simulación, cálculos y datasets.
+6. Documentar supuestos, limitaciones, referencias y criterios de aceptación.
+7. Actualizar procedencia y checksums:
+
+   ```bash
+   python scripts/compute_checksums.py cases/NNN_slug
+   ```
+
+8. Ejecutar:
+
+   ```bash
+   python scripts/preflight.py cases/NNN_slug
+   ```
+
+9. Actualizar el índice y los changelogs.
+10. Publicar mediante Pull Request; nunca modificar `main` directamente.
+
+Las reglas persistentes para agentes están en [`AGENTS.md`](./AGENTS.md). Los
+casos pueden ser breves o extensos, pero todos deben conservar el mismo contrato
+de trazabilidad y validación.
 
 ## Índice de casos
 
@@ -88,61 +159,75 @@ de cada caso.
 
 ### Caso fundacional 001
 
-El primer caso implementado establece el patrón canónico del portafolio. Modela
-una línea auxiliar simplificada de agua asociada conceptualmente al lavado de
-pulpa Kraft, con datos sintéticos y sin información operacional interna de CMPC.
+Modela una línea auxiliar simplificada de agua asociada conceptualmente al
+lavado de pulpa Kraft. Emplea datos sintéticos y no contiene información
+operacional interna de CMPC.
+
 Incluye:
 
-- archivo de simulación DWSIM versionado;
+- archivo `.dwxmz` versionado;
 - balances globales de masa y energía;
 - comprobaciones hidráulica y calorimétrica independientes;
-- dataset de resultados y sidecar de metadatos;
-- supuestos, limitaciones, informe de validación y checklist QC;
+- dataset de resultados con metadatos y clave primaria;
+- supuestos, limitaciones, validación y checklist QA/QC;
 - procedencia y checksums SHA-256.
 
-El modelo numérico, los controles automatizados y la validación de ejecución
-realizada por el autor obtuvieron veredicto `PASS`. El archivo versionado fue
-abierto, resuelto e inspeccionado en DWSIM 9.0.5, por lo que el Caso 001 se
-encuentra en estado `validated`.
+Resultados principales para las condiciones simuladas:
 
-## Roadmap
+- caudal de agua: `10 kg/s`;
+- potencia de bomba: `4.01711 kW`;
+- carga térmica: `1670.50072 kW`;
+- residuo global de masa: `0 kg/s`;
+- error relativo del balance energético: `2.69E-07 %`.
+
+## Roadmap técnico
 
 | Release | Alcance |
 |---|---|
-| **v0.1.0** | Arquitectura fundacional: plantillas, schemas, scripts, CI y gobernanza |
-| **v0.2.0** | Primer caso integrado, índice de casos y sincronización documental |
-| **v0.3.0** | Nuevos casos contextuales y endurecimiento de validadores de datasets, unidades y checksums |
-| **v0.4.0** | Visualizaciones técnicas, automatización del índice y cobertura de tests ≥ 80 % |
-| **v1.0.0** | Portafolio inicial validado y publicado con varios casos reproducibles |
+| **v0.2.x** | Endurecimiento de validadores, preflight local y reglas para agentes |
+| **v0.3.0** | Nuevos casos básicos y progresivos; validación de datasets ampliada |
+| **v0.4.0** | Figuras ejecutivas, automatización del índice y cobertura de tests ≥ 80 % |
+| **v0.5.0** | Casos con reciclajes, flash, integración energética y análisis de sensibilidad |
+| **v1.0.0** | Portafolio inicial con varios casos reproducibles y publicación estable |
 
-Próximas líneas de desarrollo previstas:
+Líneas previstas:
 
-1. recuperación de calor y precalentamiento de corrientes;
-2. flash de condensado y recuperación de vapor secundario;
+1. intercambiadores y recuperación de calor;
+2. válvulas y flash de condensado;
 3. recirculación de agua con purga y make-up;
-4. operaciones unitarias Kraft de complejidad progresiva.
+4. mezclas y selección de paquetes termodinámicos;
+5. evaporación y operaciones Kraft de complejidad progresiva;
+6. reactores, separaciones y tratamiento de efluentes.
+
+## Política de datos y uso
+
+- Los datos deben clasificarse como `synthetic`, `hypothetical`, `simulated` o
+  `literature`.
+- No se aceptan datos operacionales internos, confidenciales o sin licencia.
+- Los resultados no deben utilizarse para diseño de planta o decisiones
+  operacionales fuera del dominio declarado por cada caso.
+- Hechos, supuestos, estimaciones y resultados simulados deben diferenciarse.
 
 ## Uso profesional
 
-El repositorio está diseñado como evidencia verificable de competencias en:
+El repositorio sirve como evidencia verificable de competencias en:
 
+- formulación de problemas de ingeniería;
 - balances de materia y energía;
-- simulación y selección de modelos termodinámicos;
-- validación independiente de resultados;
+- simulación y selección de modelos;
+- validación independiente de resultados numéricos;
 - QA/QC, metrología y criterios de aceptación;
 - ingeniería de datos científicos;
 - trazabilidad, versionado, pruebas y CI/CD.
 
-## Licencia
+## Licencias
 
-- **Código:** MIT, ver [`LICENSE`](./LICENSE)
-- **Documentación:** CC BY 4.0, ver [`LICENSE-docs`](./LICENSE-docs)
-- **Datos sintéticos:** CC0 1.0, declarado por dataset
+- Código: MIT, ver [`LICENSE`](./LICENSE).
+- Documentación: CC BY 4.0, ver [`LICENSE-docs`](./LICENSE-docs).
+- Datos sintéticos: CC0 1.0, declarado por dataset.
 
-## Citación
+## Citación y contacto
 
 Ver [`CITATION.cff`](./CITATION.cff).
-
-## Contacto
 
 Roberto Flores — `roberto.flores.n1987@gmail.com`
