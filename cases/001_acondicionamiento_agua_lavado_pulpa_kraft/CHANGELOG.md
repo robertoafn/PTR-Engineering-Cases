@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+### Changed
+- Sincronizado el informe de validación con los workflows `validate` y `lint`
+  ejecutados satisfactoriamente después de integrar el caso.
+- Actualizado el checklist QC para distinguir entre validación automatizada y
+  réplica independiente del archivo DWSIM.
+- Mantenido el estado `review` hasta documentar la reapertura y resolución desde
+  un clon independiente del repositorio.
+
 ## [0.1.0] - 2026-07-17
 
 ### Added
