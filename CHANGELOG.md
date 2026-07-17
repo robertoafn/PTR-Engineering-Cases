@@ -7,53 +7,55 @@ y este proyecto adhiere a [Semantic Versioning 2.0.0](https://semver.org/).
 
 ## [Unreleased]
 
-### Changed
-- Actualizada la portada para reconocer el Caso 001 como primer caso integrado.
-- Añadido un índice explícito de casos con dominio, equipos, software y estado.
-- Actualizado el roadmap para reflejar la transición desde arquitectura fundacional
-  hacia un portafolio progresivo de simulaciones contextuales.
-- Sincronizado el estado documental del Caso 001 con los workflows de integración
-  continua ya ejecutados satisfactoriamente.
-- Estado del Caso 001 actualizado de `review` a `validated`.
-- Versión del Caso 001 actualizada de `0.1.0` a `0.1.1`.
-- Registrada en `provenance.json` la reapertura, resolución e inspección visual
-  realizada por el autor en DWSIM 9.0.5.
-
 ### Added
-- Caso `001_acondicionamiento_agua_lavado_pulpa_kraft`.
-- Simulación estacionaria desarrollada en DWSIM 9.0.5.
-- Modelo simplificado de bombeo y calentamiento de agua asociado
-  conceptualmente al lavado de pulpa Kraft.
-- Archivo reproducible de simulación DWSIM en formato `.dwxmz`.
-- Contexto científico e industrial del proceso.
-- Fundamentos de balance de masa, balance de energía, bombeo y calentamiento.
-- Metadatos estructurados en `metadata.yaml`.
-- Registro de supuestos y limitaciones en `assumptions.md`.
-- Dataset de resultados simulados y su archivo de metadatos.
-- Informe de validación de balances y comprobaciones independientes.
-- Lista de control de calidad y reproducibilidad.
-- Registro de procedencia y checksums SHA-256.
-- Referencias técnicas y documentación del caso.
-- Changelog independiente para el Caso 001.
+- Caso `001_acondicionamiento_agua_lavado_pulpa_kraft` con simulación DWSIM,
+  dataset, metadatos, validación, QA/QC, referencias y procedencia.
+- `scripts/preflight.py` como control local único para nomenclatura, metadatos,
+  datasets, unidades, checksums, pruebas y linting.
+- `AGENTS.md` con reglas persistentes para trabajo local mediante ChatGPT
+  Desktop, Codex u otros agentes.
+- Soporte opcional de `column` y `primary_key` en sidecars de datasets.
+- Pruebas de regresión para objetivos de checksum individuales y validación
+  integral de datasets.
+
+### Changed
+- README principal reestructurado como activo profesional, con evidencia actual,
+  stack demostrado, limitaciones, flujo local y roadmap progresivo.
+- Plantilla canónica de casos ampliada para admitir casos básicos o extensos sin
+  perder el contrato de trazabilidad.
+- `CONTRIBUTING.md` y plantilla de Pull Request sincronizados con el preflight y
+  la política de datos.
+- GitHub Actions ahora valida los datasets ubicados dentro de `cases/`.
+- Validador tabular ampliado para schema, correspondencia columna/símbolo, tipos,
+  rangos, nulos, clave primaria y checksum del CSV.
+- Estado del Caso 001 actualizado de `review` a `validated` y versión del caso a
+  `0.1.1` tras su validación por el autor en DWSIM 9.0.5.
+
+### Fixed
+- `compute_checksums.py` ya reconoce correctamente tanto `cases/` como un
+  directorio de caso individual y falla ante objetivos vacíos o inexistentes.
+- Bloqueadas rutas de artefactos que escapen del directorio del caso.
+- Sidecar del Caso 001 alineado con las columnas físicas de
+  `process_results_v01.csv` mediante `column`/`symbol`.
+- Checksum del sidecar del Caso 001 sincronizado con el CSV versionado.
+- Eliminado el falso positivo de CI que validaba `data/processed/` mientras los
+  datasets publicados residían dentro de cada caso.
 
 ### Validation
-- Balance global de masa: PASS.
-- Balance global de energía: PASS.
-- Verificación independiente de la potencia de bombeo: PASS.
-- Verificación aproximada de la carga térmica: PASS.
-- Consistencia de las condiciones de entrada y salida: PASS.
-- Estado físico líquido de las corrientes: PASS.
-- Workflow `validate`: PASS.
-- Workflow `lint`: PASS.
-- Apertura del archivo versionado por el autor en DWSIM 9.0.5: PASS.
-- Resolución estacionaria del flowsheet: PASS.
-- Concordancia visual de topología y resultados principales: PASS.
+- Balance global de masa del Caso 001: PASS.
+- Balance global de energía del Caso 001: PASS.
+- Verificación independiente de potencia de bombeo: PASS.
+- Verificación aproximada de carga térmica: PASS.
+- Apertura, resolución e inspección visual del archivo DWSIM por el autor: PASS.
+- Workflow `validate`: pendiente de ejecución sobre este Pull Request.
+- Workflow `lint`: pendiente de ejecución sobre este Pull Request.
 
 ### Notes
 - Los datos del Caso 001 son sintéticos y didácticos.
-- El caso no contiene datos operacionales reales ni información interna de CMPC.
-- El modelo representa un sistema auxiliar simplificado y no un lavador de pulpa completo.
-- La futura exportación del flowsheet a PNG o JPG es una mejora visual no bloqueante.
+- No se utilizan datos operacionales reales ni información interna de CMPC.
+- La validación actual es del autor y no constituye reproducción externa.
+- La exportación del flowsheet a PNG o JPG continúa como mejora visual no
+  bloqueante.
 
 ## [0.1.0] - 2026-05-15
 
