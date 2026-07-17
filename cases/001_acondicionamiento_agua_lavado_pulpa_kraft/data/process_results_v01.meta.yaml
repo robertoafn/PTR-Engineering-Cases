@@ -1,0 +1,64 @@
+dataset_id: process_results_v01
+case_id: 001_acondicionamiento_agua_lavado_pulpa_kraft
+title: Resultados de corrientes y equipos del Caso 001
+description: Resultados extraídos del archivo DWSIM 9.0.5 convergente. Los datos de
+  entrada son sintéticos y didácticos. Las variables se expresan con símbolos admitidos
+  por el vocabulario SI del repositorio.
+source_type: simulated
+license: CC0-1.0
+author: Roberto Flores
+variables:
+- symbol: object_id
+  name: Identificador del objeto
+  unit: dimensionless
+  type: string
+  nullable: false
+- symbol: object_type
+  name: Tipo de objeto
+  unit: dimensionless
+  type: string
+  nullable: false
+- symbol: T
+  name: Temperatura
+  unit: K
+  type: float
+  range:
+  - 273.15
+  - 373.15
+  nullable: true
+- symbol: P
+  name: Presión absoluta
+  unit: Pa
+  type: float
+  range:
+  - 100000.0
+  - 1000000.0
+  nullable: true
+- symbol: m_dot
+  name: Caudal másico
+  unit: kg/s
+  type: float
+  range:
+  - 0.0
+  - 100.0
+  nullable: true
+- symbol: rho
+  name: Densidad
+  unit: kg/m^3
+  type: float
+  range:
+  - 900.0
+  - 1100.0
+  nullable: true
+- symbol: E_dot
+  name: Flujo de energía
+  unit: W
+  type: float
+  range:
+  - 0.0
+  - 5000000.0
+  nullable: true
+created_at: '2026-07-17T02:30:42Z'
+version: 0.1.0
+checksum_sha256: 25e5cc8bf7856fea75b9df94e66fff38e1df6ef1531e6df3ec89d022c35432ea
+provenance_ref: ../provenance.json

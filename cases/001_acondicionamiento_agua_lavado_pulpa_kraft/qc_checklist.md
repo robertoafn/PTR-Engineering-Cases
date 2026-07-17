@@ -1,0 +1,23 @@
+# QC Checklist — 001_acondicionamiento_agua_lavado_pulpa_kraft
+
+- [x] `metadata.yaml` validado contra `schemas/case_metadata.schema.json`
+- [x] Dataset con sidecar `.meta.yaml`
+- [x] Unidades SI declaradas
+- [x] Sin nulos en campos obligatorios
+- [x] Rangos físicamente plausibles
+- [x] Integridad referencial entre simulación, dataset y metadatos
+- [x] Naming conforme a `docs/03_naming_conventions.md`
+- [x] SHA-256 del archivo DWSIM y dataset generado
+- [x] `provenance.json` con agentes, actividades y entidades principales
+- [x] Referencias técnicas incluidas
+- [x] Balance global de masa PASS
+- [x] Balance global de energía PASS
+- [x] Réplica numérica de potencia de bomba PASS
+- [x] Réplica aproximada de carga térmica PASS
+- [x] `validation_report.md` con veredicto declarado
+- [x] `CHANGELOG.md` del caso actualizado
+- [x] Status declarado en `metadata.yaml`
+- [ ] Reapertura y ejecución desde el repositorio clonado
+- [ ] Validadores locales del repositorio PASS
+- [ ] CI del Pull Request en verde
+- [ ] Flowsheet DWSIM exportado a PNG y añadido a `assets/figures/` (recomendado)
