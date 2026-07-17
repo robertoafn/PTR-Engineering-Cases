@@ -1,0 +1,6 @@
+# Dependencias mínimas para validadores y pruebas de gobernanza en CI.
+# El entorno completo de desarrollo permanece en requirements.txt.
+pandas>=2.2
+pyyaml>=6.0
+jsonschema>=4.22
+pytest>=8.2

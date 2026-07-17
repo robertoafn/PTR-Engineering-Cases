@@ -24,11 +24,13 @@
     "author":      { "type": "string" },
     "variables": {
       "type": "array",
+      "minItems": 1,
       "items": {
         "type": "object",
         "required": ["symbol", "name", "unit", "type"],
         "properties": {
           "symbol":   { "type": "string" },
+          "column":   { "type": "string" },
           "name":     { "type": "string" },
           "unit":     { "type": "string" },
           "type":     { "enum": ["float", "int", "string", "bool", "datetime"] },
@@ -41,6 +43,17 @@
           "nullable": { "type": "boolean", "default": false }
         }
       }
+    },
+    "primary_key": {
+      "oneOf": [
+        { "type": "string" },
+        {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      ]
     },
     "created_at":      { "type": "string", "format": "date-time" },
     "version":         { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },

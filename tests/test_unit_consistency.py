@@ -5,7 +5,12 @@ from pathlib import Path
 
 import yaml
 
-from scripts.unit_consistency_check import _load_vocab, scan_metadata, scan_sidecar  # type: ignore
+from scripts.unit_consistency_check import (
+    _load_vocab,
+    main,
+    scan_metadata,
+    scan_sidecar,
+)
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -19,21 +24,25 @@ def test_vocab_loads_allowed_and_forbidden() -> None:
 
 
 def test_scan_metadata_flags_forbidden_unit(tmp_path: Path) -> None:
-    p = tmp_path / "metadata.yaml"
+    path = tmp_path / "metadata.yaml"
     yaml.safe_dump(
         {"inputs": [{"units": {"P": "psi"}}]},
-        p.open("w", encoding="utf-8"),
+        path.open("w", encoding="utf-8"),
     )
     allowed, forbidden = _load_vocab()
-    bad = scan_metadata(p, allowed, forbidden)
-    assert any("prohibida" in b for b in bad)
+    bad = scan_metadata(path, allowed, forbidden)
+    assert any("prohibida" in error for error in bad)
 
 
 def test_scan_sidecar_passes_si(tmp_path: Path) -> None:
-    p = tmp_path / "dataset_v01.meta.yaml"
+    path = tmp_path / "dataset_v01.meta.yaml"
     yaml.safe_dump(
         {"variables": [{"symbol": "T", "unit": "K"}]},
-        p.open("w", encoding="utf-8"),
+        path.open("w", encoding="utf-8"),
     )
     allowed, forbidden = _load_vocab()
-    assert scan_sidecar(p, allowed, forbidden) == []
+    assert scan_sidecar(path, allowed, forbidden) == []
+
+
+def test_main_rejects_empty_target(tmp_path: Path) -> None:
+    assert main(tmp_path) == 1

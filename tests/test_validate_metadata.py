@@ -7,6 +7,8 @@ from pathlib import Path
 import yaml
 from jsonschema import Draft202012Validator
 
+from scripts.validate_metadata import validate
+
 ROOT = Path(__file__).resolve().parents[1]
 SCHEMA = ROOT / "schemas" / "case_metadata.schema.json"
 TEMPLATE = ROOT / "templates" / "case_template" / "metadata.yaml"
@@ -18,14 +20,26 @@ def _validator() -> Draft202012Validator:
 
 
 def test_template_metadata_structure_loadable() -> None:
-    """La plantilla canónica debe parsear como YAML válido y tener los campos
-    obligatorios declarados (aun con valores vacíos)."""
+    """La plantilla canónica debe incluir todos los campos obligatorios."""
     data = yaml.safe_load(TEMPLATE.read_text(encoding="utf-8"))
     required_keys = {
-        "case_id", "title", "phenomenon", "objective", "authors",
-        "created_at", "version", "license_code", "license_docs",
-        "software_stack", "inputs", "outputs", "qc_rules",
-        "validation", "traceability", "si_units", "status",
+        "case_id",
+        "title",
+        "phenomenon",
+        "objective",
+        "authors",
+        "created_at",
+        "version",
+        "license_code",
+        "license_docs",
+        "software_stack",
+        "inputs",
+        "outputs",
+        "qc_rules",
+        "validation",
+        "traceability",
+        "si_units",
+        "status",
     }
     assert required_keys.issubset(set(data.keys()))
 
@@ -35,4 +49,8 @@ def test_invalid_metadata_missing_required_fields_fails() -> None:
     data = yaml.safe_load(TEMPLATE.read_text(encoding="utf-8"))
     del data["case_id"]
     errors = list(_validator().iter_errors(data))
-    assert len(errors) >= 1
+    assert errors
+
+
+def test_validate_rejects_empty_target(tmp_path: Path) -> None:
+    assert validate(tmp_path) == 1

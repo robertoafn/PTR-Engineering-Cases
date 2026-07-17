@@ -2,6 +2,16 @@
 
 ## [Unreleased]
 
+### Fixed
+- Sidecar del dataset alineado con las columnas físicas del CSV mediante el
+  mapeo explícito `column`/`symbol`.
+- Checksum SHA-256 del sidecar sincronizado con `process_results_v01.csv`.
+- Clave primaria `object_id` declarada para permitir control de unicidad.
+
+### Notes
+- No se modificaron la simulación DWSIM, las entradas ni los resultados
+  numéricos del caso.
+
 ## [0.1.1] - 2026-07-17
 
 ### Changed

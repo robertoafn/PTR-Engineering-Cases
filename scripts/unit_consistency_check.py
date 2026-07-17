@@ -1,8 +1,11 @@
-"""Verifica que toda unidad declarada exista en el vocabulario controlado SI
-y que ninguna unidad prohibida aparezca en metadata o sidecars de datasets.
+"""Verifica unidades declaradas contra el vocabulario controlado del repositorio.
+
+Revisa ``metadata.yaml`` y sidecars ``*.meta.yaml`` de forma recursiva. Falla si
+el objetivo no existe o no contiene archivos declarativos.
 
 Uso:
     python scripts/unit_consistency_check.py cases/
+    python scripts/unit_consistency_check.py cases/001_slug/
 """
 from __future__ import annotations
 
@@ -18,65 +21,89 @@ VOCAB_PATH = ROOT / "schemas" / "units.controlled_vocabulary.yaml"
 def _load_vocab() -> tuple[set[str], set[str]]:
     vocab = yaml.safe_load(VOCAB_PATH.read_text(encoding="utf-8"))
     allowed: set[str] = set()
-    for grp in ("base_si", "derived_si", "allowed_non_si"):
-        for u in vocab.get(grp, []) or []:
-            allowed.add(u["symbol"])
+    for group in ("base_si", "derived_si", "allowed_non_si"):
+        for unit in vocab.get(group, []) or []:
+            allowed.add(unit["symbol"])
     forbidden = set(vocab.get("forbidden", []) or [])
     return allowed, forbidden
 
 
-def _check_units_dict(units: dict, source: str, allowed, forbidden) -> list[str]:
+def _check_units_dict(
+    units: dict,
+    source: str,
+    allowed: set[str],
+    forbidden: set[str],
+) -> list[str]:
     bad: list[str] = []
-    for sym, unit in (units or {}).items():
+    for symbol, unit in (units or {}).items():
         if unit in forbidden:
-            bad.append(f"{source}: unidad prohibida '{unit}' en {sym}")
+            bad.append(f"{source}: unidad prohibida '{unit}' en {symbol}")
         elif unit not in allowed:
-            bad.append(
-                f"{source}: unidad fuera de vocabulario '{unit}' en {sym}"
-            )
+            bad.append(f"{source}: unidad fuera de vocabulario '{unit}' en {symbol}")
     return bad
 
 
-def scan_metadata(path: Path, allowed, forbidden) -> list[str]:
+def scan_metadata(path: Path, allowed: set[str], forbidden: set[str]) -> list[str]:
     meta = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
     bad: list[str] = []
-    for inp in meta.get("inputs", []) or []:
+    for item in meta.get("inputs", []) or []:
         bad.extend(
             _check_units_dict(
-                inp.get("units") or {}, str(path), allowed, forbidden
+                item.get("units") or {},
+                str(path),
+                allowed,
+                forbidden,
             )
         )
     return bad
 
 
-def scan_sidecar(path: Path, allowed, forbidden) -> list[str]:
+def scan_sidecar(path: Path, allowed: set[str], forbidden: set[str]) -> list[str]:
     meta = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
     bad: list[str] = []
-    for v in meta.get("variables", []) or []:
-        unit = v.get("unit")
+    for variable in meta.get("variables", []) or []:
+        unit = variable.get("unit")
+        symbol = variable.get("symbol")
         if unit in forbidden:
-            bad.append(
-                f"{path}: unidad prohibida '{unit}' en variable {v.get('symbol')}"
-            )
+            bad.append(f"{path}: unidad prohibida '{unit}' en variable {symbol}")
         elif unit and unit not in allowed:
             bad.append(
-                f"{path}: unidad fuera de vocabulario '{unit}' en variable {v.get('symbol')}"
+                f"{path}: unidad fuera de vocabulario '{unit}' en variable {symbol}"
             )
     return bad
 
 
 def main(target: Path) -> int:
-    allowed, forbidden = _load_vocab()
-    bad: list[str] = []
-    for p in target.rglob("metadata.yaml"):
-        bad.extend(scan_metadata(p, allowed, forbidden))
-    for p in target.rglob("*.meta.yaml"):
-        bad.extend(scan_sidecar(p, allowed, forbidden))
-    if bad:
-        for b in bad:
-            print(b)
+    if not target.exists():
+        print(f"[FAIL] objetivo inexistente: {target}")
         return 1
-    print("[OK] unidades consistentes con vocabulario SI.")
+
+    allowed, forbidden = _load_vocab()
+    metadata_files = sorted(target.rglob("metadata.yaml")) if target.is_dir() else []
+    sidecar_files = sorted(target.rglob("*.meta.yaml")) if target.is_dir() else []
+
+    if target.is_file() and target.name == "metadata.yaml":
+        metadata_files = [target]
+    elif target.is_file() and target.name.endswith(".meta.yaml"):
+        sidecar_files = [target]
+
+    checked = len(metadata_files) + len(sidecar_files)
+    if checked == 0:
+        print(f"[FAIL] no se encontraron archivos de unidades en: {target}")
+        return 1
+
+    bad: list[str] = []
+    for path in metadata_files:
+        bad.extend(scan_metadata(path, allowed, forbidden))
+    for path in sidecar_files:
+        bad.extend(scan_sidecar(path, allowed, forbidden))
+
+    if bad:
+        for error in bad:
+            print(error)
+        return 1
+
+    print(f"[OK] unidades consistentes en {checked} archivo(s).")
     return 0
 
 
