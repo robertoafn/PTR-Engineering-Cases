@@ -7,7 +7,17 @@ y este proyecto adhiere a [Semantic Versioning 2.0.0](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+- Caso `002_recuperacion_vapor_flash_y_particion_de_volatiles` en estado `review`.
+- Simulación estacionaria de expansión isoentálpica, flash y separación
+  gas-líquido en DWSIM 9.0.5 con mezcla sintética agua-metanol y paquete NRTL.
+- Evidencia cromatográfica GC-FID sintética importable en OpenChrom 1.6.14,
+  tabla canónica de resultados analíticos y artefactos nativos disponibles.
+- Datasets versionados de proceso y cromatografía, metadatos, supuestos,
+  checklist QC, informe de validación, procedencia y checksums SHA-256.
+
 ### Changed
+- Actualizada la portada e índice de casos para incorporar el Caso 002.
 - Actualizada la portada para reconocer el Caso 001 como primer caso integrado.
 - Añadido un índice explícito de casos con dominio, equipos, software y estado.
 - Actualizado el roadmap para reflejar la transición desde arquitectura fundacional

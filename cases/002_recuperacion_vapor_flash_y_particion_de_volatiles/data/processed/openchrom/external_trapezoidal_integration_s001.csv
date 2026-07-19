@@ -1,0 +1,11 @@
+sample_id,source_file,peak_status,retention_time_s,peak_height_signal,integration_start_s,integration_stop_s,integrated_area_signal_s,baseline_signal,noise_sd_signal,integration_method,source_system
+OC-BLK-001,OC-BLK-001.xy,NO_PEAK_DETECTED,,,,,0,92.182700,4.146959,external_trapezoidal_baseline_corrected_v01,external_reconstruction_from_OpenChrom_xy
+OC-STD-001,OC-STD-001.xy,PEAK_DETECTED,128.400,424.083400,121.800,135.000,2300.479330,92.017200,4.050339,external_trapezoidal_baseline_corrected_v01,external_reconstruction_from_OpenChrom_xy
+OC-STD-002,OC-STD-002.xy,PEAK_DETECTED,128.600,1033.725000,122.000,135.000,5692.132320,92.563200,3.904044,external_trapezoidal_baseline_corrected_v01,external_reconstruction_from_OpenChrom_xy
+OC-STD-003,OC-STD-003.xy,PEAK_DETECTED,128.400,2090.929900,122.000,134.800,11512.115490,93.872400,4.042533,external_trapezoidal_baseline_corrected_v01,external_reconstruction_from_OpenChrom_xy
+OC-STD-004,OC-STD-004.xy,PEAK_DETECTED,128.600,3125.807950,122.000,135.000,17159.028550,92.741650,3.911069,external_trapezoidal_baseline_corrected_v01,external_reconstruction_from_OpenChrom_xy
+OC-STD-005,OC-STD-005.xy,PEAK_DETECTED,128.400,4181.649600,121.800,135.000,23002.083600,94.313600,3.858282,external_trapezoidal_baseline_corrected_v01,external_reconstruction_from_OpenChrom_xy
+OC-MSTR-201,OC-MSTR-201.xy,PEAK_DETECTED,128.400,4169.221000,121.800,134.800,22925.001700,94.838000,4.008253,external_trapezoidal_baseline_corrected_v01,external_reconstruction_from_OpenChrom_xy
+OC-MSTR-203,OC-MSTR-203.xy,PEAK_DETECTED,128.400,3369.591650,121.800,135.000,18539.707390,93.552650,4.162442,external_trapezoidal_baseline_corrected_v01,external_reconstruction_from_OpenChrom_xy
+OC-MSTR-204,OC-MSTR-204.xy,PEAK_DETECTED,128.400,2663.915200,121.600,135.000,14664.134480,92.313000,4.254013,external_trapezoidal_baseline_corrected_v01,external_reconstruction_from_OpenChrom_xy
+OC-MSTR-203-DUP,OC-MSTR-203-DUP.xy,PEAK_DETECTED,128.600,3459.065800,122.000,135.200,19004.280930,92.625500,4.114864,external_trapezoidal_baseline_corrected_v01,external_reconstruction_from_OpenChrom_xy
