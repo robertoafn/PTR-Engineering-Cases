@@ -25,4 +25,5 @@ ingeniería química industrial, donde cada caso documenta la cadena completa:
 - Comunidad académica y open-source.
 
 ## Estado actual
-v0.1.0 — Arquitectura fundacional. Sin casos reales.
+v0.2.0 (pendiente de release formal) — Arquitectura fundacional (v0.1.0)
+completa. Dos casos integrados: 001 `validated`, 002 `review`.

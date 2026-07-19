@@ -82,6 +82,14 @@
       ]
     },
     {
+      "id": "entity:flowsheet_figure",
+      "path": "assets/figures/fig_001_01_flowsheet.png",
+      "checksum_sha256": "6cf6fb564104ccc6b91d18a2add5c57423d983daaf43a661b22448b8c54644ab",
+      "derived_from": [
+        "entity:dwsim_simulation"
+      ]
+    },
+    {
       "id": "entity:process_results",
       "path": "data/process_results_v01.csv",
       "checksum_sha256": "a5f614093066bca6fc97feb6518edc3ecb9d5e83e8879b0f2f94ddbc5ab9091e",

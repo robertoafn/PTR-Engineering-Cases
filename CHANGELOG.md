@@ -7,63 +7,31 @@ y este proyecto adhiere a [Semantic Versioning 2.0.0](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-07-18
+
 ### Added
-- Caso `002_recuperacion_vapor_flash_y_particion_de_volatiles` en estado `review`.
-- Simulación estacionaria de expansión isoentálpica, flash y separación
-  gas-líquido en DWSIM 9.0.5 con mezcla sintética agua-metanol y paquete NRTL.
-- Evidencia cromatográfica GC-FID sintética importable en OpenChrom 1.6.14,
-  tabla canónica de resultados analíticos y artefactos nativos disponibles.
-- Datasets versionados de proceso y cromatografía, metadatos, supuestos,
-  checklist QC, informe de validación, procedencia y checksums SHA-256.
+- Caso `001_acondicionamiento_agua_lavado_pulpa_kraft`, validado, con
+  simulación DWSIM, dataset, validación, QC y trazabilidad.
+- Caso `002_recuperacion_vapor_flash_y_particion_de_volatiles`, en estado
+  `review`, con simulación flash agua-metanol, cromatografía GC-FID sintética,
+  resultados, validación, QC y procedencia.
+- Figura exportada del flowsheet DWSIM del Caso 001.
 
 ### Changed
-- Actualizada la portada e índice de casos para incorporar el Caso 002.
-- Actualizada la portada para reconocer el Caso 001 como primer caso integrado.
-- Añadido un índice explícito de casos con dominio, equipos, software y estado.
-- Actualizado el roadmap para reflejar la transición desde arquitectura fundacional
-  hacia un portafolio progresivo de simulaciones contextuales.
-- Sincronizado el estado documental del Caso 001 con los workflows de integración
-  continua ya ejecutados satisfactoriamente.
-- Estado del Caso 001 actualizado de `review` a `validated`.
-- Versión del Caso 001 actualizada de `0.1.0` a `0.1.1`.
-- Registrada en `provenance.json` la reapertura, resolución e inspección visual
-  realizada por el autor en DWSIM 9.0.5.
-
-### Added
-- Caso `001_acondicionamiento_agua_lavado_pulpa_kraft`.
-- Simulación estacionaria desarrollada en DWSIM 9.0.5.
-- Modelo simplificado de bombeo y calentamiento de agua asociado
-  conceptualmente al lavado de pulpa Kraft.
-- Archivo reproducible de simulación DWSIM en formato `.dwxmz`.
-- Contexto científico e industrial del proceso.
-- Fundamentos de balance de masa, balance de energía, bombeo y calentamiento.
-- Metadatos estructurados en `metadata.yaml`.
-- Registro de supuestos y limitaciones en `assumptions.md`.
-- Dataset de resultados simulados y su archivo de metadatos.
-- Informe de validación de balances y comprobaciones independientes.
-- Lista de control de calidad y reproducibilidad.
-- Registro de procedencia y checksums SHA-256.
-- Referencias técnicas y documentación del caso.
-- Changelog independiente para el Caso 001.
+- Actualizadas la portada, el índice de casos, el roadmap y el overview para
+  reflejar un portafolio con dos casos integrados.
+- Estado del Caso 001 actualizado de `review` a `validated`; versión del caso
+  actualizada de `0.1.0` a `0.1.1`.
+- Registrada la reapertura, resolución e inspección visual del Caso 001 en
+  DWSIM 9.0.5, junto con la procedencia de su figura.
 
 ### Validation
-- Balance global de masa: PASS.
-- Balance global de energía: PASS.
-- Verificación independiente de la potencia de bombeo: PASS.
-- Verificación aproximada de la carga térmica: PASS.
-- Consistencia de las condiciones de entrada y salida: PASS.
-- Estado físico líquido de las corrientes: PASS.
-- Workflow `validate`: PASS.
-- Workflow `lint`: PASS.
-- Apertura del archivo versionado por el autor en DWSIM 9.0.5: PASS.
-- Resolución estacionaria del flowsheet: PASS.
-- Concordancia visual de topología y resultados principales: PASS.
+- Controles de masa, energía, unidades, metadatos, naming y checksums de los
+  casos publicados: PASS.
 
 ### Notes
-- Los datos del Caso 001 son sintéticos y didácticos.
-- El caso no contiene datos operacionales reales ni información interna de CMPC.
-- El modelo representa un sistema auxiliar simplificado y no un lavador de pulpa completo.
-- La futura exportación del flowsheet a PNG o JPG es una mejora visual no bloqueante.
+- Los datos y cromatogramas de los casos 001 y 002 son sintéticos y no
+  representan condiciones operacionales ni información interna de CMPC.
 
 ## [0.1.0] - 2026-05-15
 
@@ -93,5 +61,6 @@ y este proyecto adhiere a [Semantic Versioning 2.0.0](https://semver.org/).
 - Solo se incluía el placeholder `000_template`.
 - Esta versión constituye la arquitectura base para las iteraciones posteriores.
 
-[Unreleased]: https://github.com/robertoafn/PTR-Engineering-Cases/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/robertoafn/PTR-Engineering-Cases/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/robertoafn/PTR-Engineering-Cases/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/robertoafn/PTR-Engineering-Cases/releases/tag/v0.1.0

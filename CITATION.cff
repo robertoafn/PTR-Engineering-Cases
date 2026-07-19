@@ -8,8 +8,8 @@ authors:
     email: "roberto.flores.n1987@gmail.com"
 repository-code: "https://github.com/robertoafn/PTR-Engineering-Cases"
 license: MIT
-version: 0.1.0
-date-released: "2026-05-15"
+version: 0.2.0
+date-released: "2026-07-18"
 keywords:
   - chemical-engineering
   - process-simulation
