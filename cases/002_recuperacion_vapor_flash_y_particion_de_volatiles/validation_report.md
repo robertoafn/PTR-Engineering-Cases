@@ -34,4 +34,4 @@ Por esta razón, el caso no afirma que las áreas fueron calculadas por OpenChro
 
 ## Veredicto
 
-**REVIEW.** Los controles físicos y analíticos definidos para el escenario sintético pasan, pero el caso espera la validación de schema, checksums y revisión documental final para cambiar a `validated`.
+**REVIEW.** Los controles físicos, analíticos, metadatos, unidades, naming y checksums definidos para el escenario sintético pasan. El caso conserva estado `review` hasta completar la revisión final del PR y la decisión explícita de promoverlo a `validated`.

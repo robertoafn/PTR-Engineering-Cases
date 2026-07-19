@@ -18,5 +18,8 @@
 - [x] Dataset de proceso y dataset cromatográfico con sidecars `.meta.yaml`.
 - [x] Comprobación estructural local de campos obligatorios, datasets y entidades de procedencia.
 - [x] SHA-256 generado y registrado en `provenance.json`.
-- [ ] `scripts/validate_metadata.py` ejecutado en un entorno con PyYAML disponible (bloqueado localmente por dependencia ausente).
+- [x] `scripts/validate_metadata.py` ejecutado con PyYAML y jsonschema disponibles (PASS).
+- [x] `scripts/unit_consistency_check.py` ejecutado contra el vocabulario controlado (PASS).
+- [x] `scripts/compute_checksums.py --verify` ejecutado sobre el caso (PASS).
+- [x] `scripts/enforce_naming.py` ejecutado sobre el caso (PASS).
 - [ ] Revisión final de documentación y status `validated`.
