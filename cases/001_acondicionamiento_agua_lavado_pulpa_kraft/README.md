@@ -107,6 +107,10 @@ H-001_CALENTADOR_AGUA ---- QSTR-001_CALOR_AGUA
 MSTR-003_AGUA_ACONDICIONADA
 ```
 
+Flowsheet resuelto en DWSIM:
+
+![Flowsheet DWSIM del Caso 001: bomba y calentador de agua](assets/figures/fig_001_01_flowsheet.png)
+
 ## 6. Supuestos
 
 Ver `assumptions.md`.

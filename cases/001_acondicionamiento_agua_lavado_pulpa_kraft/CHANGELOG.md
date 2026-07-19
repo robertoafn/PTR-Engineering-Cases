@@ -2,6 +2,15 @@
 
 ## [Unreleased]
 
+### Added
+- Figura exportada del flowsheet DWSIM en
+  `assets/figures/fig_001_01_flowsheet.png`.
+
+### Changed
+- README del caso actualizado para referenciar la figura junto con la
+  topología y los resultados documentados.
+- Procedencia actualizada con el checksum SHA-256 de la figura.
+
 ## [0.1.1] - 2026-07-17
 
 ### Changed
