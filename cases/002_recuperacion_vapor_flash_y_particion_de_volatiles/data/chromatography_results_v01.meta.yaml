@@ -1,0 +1,47 @@
+dataset_id: chromatography_results_v01
+case_id: 002_recuperacion_vapor_flash_y_particion_de_volatiles
+title: Resultados cromatográficos sintéticos del escenario S001
+description: Resultados de cromatogramas sintéticos importados en OpenChrom. La retención y la altura se verificaron en OpenChrom; las áreas se reconstruyeron externamente por trapecios desde los archivos XY por la limitación documentada del integrador FID.
+source_type: synthetic
+license: CC0-1.0
+author: Roberto Flores
+variables:
+  - symbol: case_id
+    name: Identificador de caso
+    unit: dimensionless
+    type: string
+  - symbol: stream_id
+    name: Identificador de corriente
+    unit: dimensionless
+    type: string
+    nullable: true
+  - symbol: sample_id
+    name: Identificador de muestra
+    unit: dimensionless
+    type: string
+  - symbol: t_R
+    name: Tiempo de retención
+    unit: s
+    type: float
+    range: [0.0, 300.0]
+    nullable: true
+  - symbol: A
+    name: Área integrada de respuesta relativa
+    unit: dimensionless
+    type: float
+    range: [0.0, 100000.0]
+    nullable: true
+  - symbol: C_vial
+    name: Concentración en vial
+    unit: kg/m^3
+    type: float
+    range: [0.0, 10.0]
+  - symbol: C_stream
+    name: Concentración de corriente reconstruida
+    unit: kg/m^3
+    type: float
+    range: [0.0, 10.0]
+created_at: '2026-07-18T00:00:00Z'
+version: 0.1.0
+checksum_sha256: 390201853de0e38fa1ccd6586e4c2e1763cc3fc408ca3995483156d2dc99ad48
+provenance_ref: ../provenance.json

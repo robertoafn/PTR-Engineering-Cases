@@ -85,6 +85,7 @@ de cada caso.
 | ID | Caso | Dominio | Equipos principales | Software | Estado |
 |---|---|---|---|---|---|
 | [001](./cases/001_acondicionamiento_agua_lavado_pulpa_kraft/) | Acondicionamiento de agua para lavado de pulpa Kraft | Bombeo y calentamiento de agua | Bomba centrífuga, calentador | DWSIM 9.0.5, Python 3.13.5 | `validated` |
+| [002](./cases/002_recuperacion_vapor_flash_y_particion_de_volatiles/) | Recuperación de vapor flash y partición de compuestos volátiles | Flash isoentálpico y equilibrio vapor-líquido | Válvula, separador gas-líquido | DWSIM 9.0.5, OpenChrom 1.6.14, Python 3.13.5 | `review` |
 
 ### Caso fundacional 001
 
@@ -105,22 +106,34 @@ realizada por el autor obtuvieron veredicto `PASS`. El archivo versionado fue
 abierto, resuelto e inspeccionado en DWSIM 9.0.5, por lo que el Caso 001 se
 encuentra en estado `validated`.
 
+### Caso 002 — Recuperación de vapor flash y partición de volátiles
+
+El segundo caso modela un condensado sintético de agua y metanol que se expande
+de forma isoentálpica y se separa en vapor flash y líquido residual. Integra la
+simulación DWSIM con cromatogramas GC-FID sintéticos procesados en OpenChrom,
+datos estructurados, controles de balance y trazabilidad por checksum.
+
+El escenario base obtuvo un rendimiento másico de vapor flash de `0.10488775`
+y una recuperación de metanol hacia el vapor de `0.42793470`. El caso se
+mantiene en estado `review`: sus activos técnicos y resultados están
+disponibles, pero aún no debe interpretarse como una validación experimental o
+industrial. Ver [Caso 002](./cases/002_recuperacion_vapor_flash_y_particion_de_volatiles/).
+
 ## Roadmap
 
 | Release | Alcance |
 |---|---|
 | **v0.1.0** | Arquitectura fundacional: plantillas, schemas, scripts, CI y gobernanza |
 | **v0.2.0** | Primer caso integrado, índice de casos y sincronización documental |
-| **v0.3.0** | Nuevos casos contextuales y endurecimiento de validadores de datasets, unidades y checksums |
+| **v0.3.0** | Incorporación y revisión de nuevos casos contextuales; endurecimiento de validadores de datasets, unidades y checksums |
 | **v0.4.0** | Visualizaciones técnicas, automatización del índice y cobertura de tests ≥ 80 % |
 | **v1.0.0** | Portafolio inicial validado y publicado con varios casos reproducibles |
 
 Próximas líneas de desarrollo previstas:
 
-1. recuperación de calor y precalentamiento de corrientes;
-2. flash de condensado y recuperación de vapor secundario;
-3. recirculación de agua con purga y make-up;
-4. operaciones unitarias Kraft de complejidad progresiva.
+1. recuperación de calor y precalentamiento de corrientes a partir del líquido residual del Caso 002;
+2. recirculación de agua con purga y make-up;
+3. operaciones unitarias Kraft de complejidad progresiva.
 
 ## Uso profesional
 

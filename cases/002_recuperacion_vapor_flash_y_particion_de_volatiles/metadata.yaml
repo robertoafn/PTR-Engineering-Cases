@@ -1,0 +1,84 @@
+case_id: 002_recuperacion_vapor_flash_y_particion_de_volatiles
+title: Recuperación de vapor flash y partición de compuestos volátiles
+phenomenon: Expansión isoentálpica, equilibrio vapor-líquido y separación flash de una mezcla sintética agua-metanol en régimen estacionario.
+objective: Determinar la producción de vapor secundario tras expandir un condensado caliente sintético y cuantificar la partición de metanol entre las fases vapor y líquida mediante simulación DWSIM y evidencia cromatográfica sintética.
+authors:
+  - name: Roberto Flores
+    email: roberto.flores.n1987@gmail.com
+created_at: '2026-07-18T00:00:00Z'
+version: 0.1.0
+license_code: MIT
+license_docs: CC-BY-4.0
+software_stack:
+  - name: DWSIM
+    version: 9.0.5
+    license: GPL-3.0
+    purpose: Simulación estacionaria de válvula y separador flash con NRTL.
+  - name: OpenChrom
+    version: 1.6.14
+    license: EPL-2.0
+    purpose: Importación, revisión visual y detección del pico cromatográfico sintético.
+  - name: Python
+    version: 3.13.5
+    license: PSF
+    purpose: Normalización de resultados y reconstrucción externa de área trapezoidal.
+inputs:
+  - name: caudal_masico_alimentacion
+    value: 10.0
+    unit: kg/s
+    source_type: synthetic
+  - name: temperatura_alimentacion
+    value: 453.15
+    unit: K
+    source_type: synthetic
+  - name: presion_alimentacion
+    value: 1200000.0
+    unit: Pa
+    source_type: synthetic
+  - name: fraccion_masica_metanol
+    value: 0.001
+    unit: dimensionless
+    source_type: synthetic
+  - name: presion_salida_valvula
+    value: 300000.0
+    unit: Pa
+    source_type: synthetic
+outputs:
+  - name: rendimiento_masico_vapor_flash
+    value: 0.104887751938762
+    unit: dimensionless
+    source_type: simulated
+  - name: recuperacion_metanol_vapor
+    value: 0.427934702295189
+    unit: dimensionless
+    source_type: simulated
+  - name: factor_enriquecimiento_metanol_vapor_liquido
+    value: 6.383981410295
+    unit: dimensionless
+    source_type: simulated
+  - name: coeficiente_determinacion_calibracion_gc_fid
+    value: 0.999971130804
+    unit: dimensionless
+    source_type: synthetic
+  - name: diferencia_duplicado_area
+    value: 0.02474822525728
+    unit: dimensionless
+    source_type: synthetic
+qc_rules:
+  - schema
+  - units
+  - completeness
+  - range
+  - naming
+  - referential_integrity
+  - checksum
+validation:
+  strategy: Balance global y por componente de la simulación, verificación de isoentalpía de la válvula, inspección del flowsheet, calibración cromatográfica sintética y comparación del duplicado. Las áreas se reconstruyen externamente por trapecios porque OpenChrom 1.6.14 no entregó un área distinta de cero para el cromatograma FID importado.
+  acceptance_criteria: Residuo de masa <= 0.01%; residuo de metanol <= 0.05%; fracción de vapor entre 0 y 1; enriquecimiento de metanol en vapor > 1; R2 de calibración >= 0.995; diferencia de duplicado <= 10%.
+traceability:
+  provenance_ref: provenance.json
+  derived_from:
+    - simulations/dwsim/002_recuperacion_vapor_flash_y_particion_de_volatiles.dwxmz
+    - data/raw/openchrom/
+si_units: true
+status: review

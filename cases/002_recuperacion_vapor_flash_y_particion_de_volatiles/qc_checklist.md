@@ -1,0 +1,25 @@
+# QC Checklist — 002_recuperacion_vapor_flash_y_particion_de_volatiles
+
+- [x] Archivo DWSIM nativo disponible y resoluble en DWSIM 9.0.5.
+- [x] Alimentación MSTR-201 líquida a 453.15 K y 1200000 Pa.
+- [x] Válvula especificada por presión de salida de 300000 Pa.
+- [x] MSTR-202 bifásica y salidas de vapor/líquido separadas correctamente.
+- [x] Residuo global de masa: `4.03E-07 %` (PASS).
+- [x] Residuo de metanol: `9.21E-04 %` (PASS).
+- [x] Recuperación de metanol al vapor mayor que el rendimiento másico de vapor.
+- [x] Flowsheet exportado a PNG.
+- [x] Exportación cruda de DWSIM conservada en `.xlsx`.
+- [x] Blanco GC-FID sintético sin pico significativo.
+- [x] Cinco estándares cromatográficos sintéticos disponibles.
+- [x] Pico de MSTR-203 detectado en OpenChrom con RT 2.140 min.
+- [x] Calibración externa sobre áreas reconstruidas: `R² = 0.99997113` (PASS).
+- [x] Duplicado de vapor: diferencia de área `2.4748 %` (PASS).
+- [x] Limitación del integrador OpenChrom documentada; no se atribuyen áreas externas a OpenChrom.
+- [x] Dataset de proceso y dataset cromatográfico con sidecars `.meta.yaml`.
+- [x] Comprobación estructural local de campos obligatorios, datasets y entidades de procedencia.
+- [x] SHA-256 generado y registrado en `provenance.json`.
+- [x] `scripts/validate_metadata.py` ejecutado con PyYAML y jsonschema disponibles (PASS).
+- [x] `scripts/unit_consistency_check.py` ejecutado contra el vocabulario controlado (PASS).
+- [x] `scripts/compute_checksums.py --verify` ejecutado sobre el caso (PASS).
+- [x] `scripts/enforce_naming.py` ejecutado sobre el caso (PASS).
+- [ ] Revisión final de documentación y status `validated`.
