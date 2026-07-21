@@ -1,0 +1,5 @@
+object_id,object_type,temperature_K,pressure_Pa,mass_flow_kg_s,molar_flow_mol_s,volumetric_flow_m3_s,density_kg_m3,vapor_molar_fraction,specific_enthalpy_kJ_kg,methanol_mass_fraction,methanol_mass_flow_kg_s,energy_flow_kW
+MSTR-301_CONDENSADO_CALIENTE,material_stream,406.649,300000.0,8.95112,496.724,0.00965193,927.392,0.0,-2052.33,0.000639089,0.00572056,-18370.654
+MSTR-302_AGUA_FRIA,material_stream,293.15,300000.0,5.0,277.542,0.00501203,997.599,0.0,-2656.99,0.0,0.0,-13284.95
+MSTR-303_CONDENSADO_ENFRIADO,material_stream,384.187,300000.0,8.95112,496.724,0.00942224,950.0,0.0,-2171.13,0.000639089,0.00572056,-19433.846
+MSTR-304_AGUA_PRECALENTADA,material_stream,333.15,300000.0,5.0,277.542,0.00508785,982.733,0.0,-2444.31,0.0,0.0,-12221.55

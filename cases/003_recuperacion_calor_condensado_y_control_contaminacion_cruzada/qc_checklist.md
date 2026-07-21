@@ -1,0 +1,25 @@
+# QC Checklist — 003_recuperacion_calor_condensado_y_control_contaminacion_cruzada
+
+- [x] `metadata.yaml` validado contra `schemas/case_metadata.schema.json`
+- [x] Dataset con sidecar `.meta.yaml`
+- [x] Unidades SI declaradas
+- [x] Sin nulos en campos obligatorios
+- [x] Rangos físicamente plausibles
+- [x] Integridad referencial entre simulación, dataset y metadatos
+- [x] Naming conforme a `docs/03_naming_conventions.md`
+- [x] SHA-256 del archivo DWSIM y dataset generado
+- [x] `provenance.json` con agentes, actividades y entidades principales
+- [x] Referencias técnicas en `references.bib` incluidas
+- [x] Balance global de masa PASS en ambos lados del intercambiador
+- [x] Balance global de energía PASS
+- [x] Réplica numérica de LMTD y ecuación de diseño térmico PASS
+- [x] Verificación del criterio de presiones contra contaminación cruzada PASS
+- [x] `validation_report.md` con veredicto declarado
+- [x] `CHANGELOG.md` del caso actualizado
+- [ ] Workflow `validate` del PR de integración en verde (pendiente de CI)
+- [ ] Workflow `lint` del PR de integración en verde (pendiente de CI)
+- [x] Archivo versionado inspeccionado y resuelto en DWSIM 9.0.5
+- [x] Resultados principales concordantes con la documentación
+- [x] Actividades de simulación y extracción registradas en `provenance.json`
+- [x] Status `review` declarado en `metadata.yaml`
+- [x] Flowsheet DWSIM exportado a PNG y añadido a `assets/figures/` (incluido en `provenance.json`)

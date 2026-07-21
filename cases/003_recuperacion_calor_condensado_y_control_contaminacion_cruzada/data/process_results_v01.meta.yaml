@@ -1,0 +1,36 @@
+dataset_id: process_results_v01
+case_id: 003_recuperacion_calor_condensado_y_control_contaminacion_cruzada
+title: Resultados de corrientes del escenario de recuperación de calor S001
+description: Resultados extraídos desde DWSIM 9.0.5 para el sistema de intercambio de calor entre condensado contaminado con metanol y agua de proceso limpia. Las unidades son SI salvo la entalpía específica y flujo de energía, que se conservan en kJ/kg y kW tal como fueron exportados por DWSIM.
+source_type: simulated
+license: CC0-1.0
+author: Roberto Flores
+variables:
+  - symbol: object_id
+    name: Identificador del objeto
+    unit: dimensionless
+    type: string
+  - symbol: T
+    name: Temperatura
+    unit: K
+    type: float
+    range: [250.0, 600.0]
+  - symbol: P
+    name: Presión absoluta
+    unit: Pa
+    type: float
+    range: [100000.0, 2000000.0]
+  - symbol: m_dot
+    name: Caudal másico
+    unit: kg/s
+    type: float
+    range: [0.0, 100.0]
+  - symbol: w_MeOH
+    name: Fracción másica de metanol
+    unit: dimensionless
+    type: float
+    range: [0.0, 1.0]
+created_at: '2026-07-21T01:28:48Z'
+version: 0.1.0
+checksum_sha256: 791a4c40857b1c1a3e319868d01dfe9d9eb253a8fd864ea6ef8c0a181bd69473
+provenance_ref: ../provenance.json

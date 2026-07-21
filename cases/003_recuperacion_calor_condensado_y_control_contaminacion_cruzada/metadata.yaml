@@ -1,0 +1,103 @@
+case_id: 003_recuperacion_calor_condensado_y_control_contaminacion_cruzada
+title: Recuperación de calor de condensado y control de contaminación cruzada
+phenomenon: Transferencia de calor sensible entre condensado de vapor industrial (corriente caliente con trazas de metanol) y agua de proceso (corriente fría limpia) en un intercambiador de calor de carcasa y tubos en régimen estacionario, analizando el riesgo de contaminación cruzada por fugas físicas.
+objective: Determinar la carga térmica del intercambiador HX-301, la temperatura de salida del condensado y verificar que la presión en el lado frío (limpio) es igual o superior al lado caliente para prevenir fugas contaminantes del trazador metanol hacia el agua limpia en caso de falla de integridad mecánica.
+authors:
+  - name: Roberto Flores
+    email: roberto.flores.n1987@gmail.com
+created_at: '2026-07-21T01:29:14Z'
+version: 0.1.0
+license_code: MIT
+license_docs: CC-BY-4.0
+software_stack:
+  - name: DWSIM
+    version: 9.0.5
+    license: GPL-3.0
+    purpose: Simulación estacionaria del intercambiador de calor
+  - name: Python
+    version: 3.13.5
+    license: PSF
+    purpose: Procesamiento de datos y validación de balances de masa/energía
+inputs:
+  - name: caudal_masico_caliente
+    value: 8.95112
+    unit: kg/s
+    source_type: simulated
+  - name: temperatura_entrada_caliente
+    value: 406.649
+    unit: K
+    source_type: simulated
+  - name: presion_entrada_caliente
+    value: 300000.0
+    unit: Pa
+    source_type: simulated
+  - name: fraccion_masica_metanol_caliente
+    value: 0.000639089
+    unit: dimensionless
+    source_type: simulated
+  - name: caudal_masico_frio
+    value: 5.0
+    unit: kg/s
+    source_type: synthetic
+  - name: temperatura_entrada_frio
+    value: 293.15
+    unit: K
+    source_type: synthetic
+  - name: presion_entrada_frio
+    value: 300000.0
+    unit: Pa
+    source_type: synthetic
+  - name: area_intercambio
+    value: 1.0
+    unit: m^2
+    source_type: synthetic
+  - name: coeficiente_global_U
+    value: 12975.4
+    unit: W/(m^2·K)
+    source_type: simulated
+outputs:
+  - name: carga_termica_exchanger
+    value: 1063410.0
+    unit: W
+    source_type: simulated
+  - name: temperatura_salida_caliente
+    value: 384.187
+    unit: K
+    source_type: simulated
+  - name: temperatura_salida_frio
+    value: 333.15
+    unit: K
+    source_type: simulated
+  - name: presion_salida_caliente
+    value: 300000.0
+    unit: Pa
+    source_type: simulated
+  - name: presion_salida_frio
+    value: 300000.0
+    unit: Pa
+    source_type: simulated
+  - name: residuo_balance_masa
+    value: 0.0
+    unit: kg/s
+    source_type: simulated
+  - name: residuo_balance_energia
+    value: -7.0
+    unit: W
+    source_type: simulated
+qc_rules:
+  - schema
+  - units
+  - completeness
+  - range
+  - naming
+  - referential_integrity
+  - checksum
+validation:
+  strategy: Balances de materia y energía en el intercambiador; validación del balance entálpico de cada corriente; réplica analítica aproximada de la carga térmica mediante la ecuación de diseño Q = U * A * F * LMTD; y comprobación del diferencial de presión para la prevención de la contaminación cruzada.
+  acceptance_criteria: Error en balance de masa en cada lado de 0.0%; residuo en balance de energía <= 0.1% respecto a la carga térmica total; desviación en la réplica analítica de LMTD <= 1.0%; y verificación de que el diferencial de presión P_frio - P_caliente sea >= 0 Pa para minimizar la fuerza impulsora de fuga del condensado contaminado con metanol.
+traceability:
+  provenance_ref: provenance.json
+  derived_from:
+    - simulations/dwsim/003_recuperacion_calor_condensado_y_control_contaminacion_cruzada.dwxmz
+si_units: true
+status: review

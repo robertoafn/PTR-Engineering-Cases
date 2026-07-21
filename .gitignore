@@ -12,6 +12,8 @@ build/
 *.bak
 *.tmp
 *.log
+*backup.dwxmz
+
 
 # Power BI
 *.pbix.tmp

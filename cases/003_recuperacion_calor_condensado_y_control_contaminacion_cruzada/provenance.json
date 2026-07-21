@@ -1,0 +1,89 @@
+{
+  "case_id": "003_recuperacion_calor_condensado_y_control_contaminacion_cruzada",
+  "generated_at": "2026-07-21T01:29:14Z",
+  "agents": [
+    {
+      "id": "agent:author",
+      "type": "person",
+      "name": "Roberto Flores"
+    },
+    {
+      "id": "agent:assistant",
+      "type": "software",
+      "name": "Gemini 3.5 Flash"
+    }
+  ],
+  "activities": [
+    {
+      "id": "act:dwsim_simulation",
+      "started_at": "2026-07-20T21:14:00Z",
+      "ended_at": "2026-07-20T21:20:00Z",
+      "software": "DWSIM 9.0.5",
+      "parameters": {
+        "property_package": "NRTL",
+        "equilibrium_mode": "VLE",
+        "flash_algorithm": "Nested Loops",
+        "regime": "steady_state"
+      },
+      "used": [
+        "entity:dwsim_export_s001_raw"
+      ],
+      "generated": [
+        "entity:dwsim_simulation"
+      ]
+    },
+    {
+      "id": "act:results_extraction",
+      "started_at": "2026-07-21T01:28:00Z",
+      "ended_at": "2026-07-21T01:29:00Z",
+      "software": "Python 3.13.5",
+      "parameters": {
+        "operations": [
+          "inspect_xlsx",
+          "extract_stream_properties",
+          "calculate_heat_exchanger_residuals",
+          "compute_sha256"
+        ]
+      },
+      "used": [
+        "entity:dwsim_simulation",
+        "entity:dwsim_export_s001_raw"
+      ],
+      "generated": [
+        "entity:process_results"
+      ]
+    }
+  ],
+  "entities": [
+    {
+      "id": "entity:dwsim_simulation",
+      "path": "simulations/dwsim/003_recuperacion_calor_condensado_y_control_contaminacion_cruzada.dwxmz",
+      "checksum_sha256": "82aee6a63c464e513f51bb231e4ff99b0ac62592c3fc26dfdf76cf95b85b053a",
+      "derived_from": [
+        "entity:dwsim_export_s001_raw"
+      ]
+    },
+    {
+      "id": "entity:flowsheet_figure",
+      "path": "assets/figures/fig_003_01_flowsheet.png",
+      "checksum_sha256": "584a0f8b4a04baff6e9e6dba7d6f3cb38349d8b6bbe9a2f428d43a652e025910",
+      "derived_from": [
+        "entity:dwsim_simulation"
+      ]
+    },
+    {
+      "id": "entity:dwsim_export_s001_raw",
+      "path": "data/processed/dwsim_export_s001_raw.xlsx",
+      "checksum_sha256": "c19bf60361d80ab533833be44e703fa4bab663c44ee523d9be34de5ca31d3234",
+      "derived_from": []
+    },
+    {
+      "id": "entity:process_results",
+      "path": "data/process_results_v01.csv",
+      "checksum_sha256": "791a4c40857b1c1a3e319868d01dfe9d9eb253a8fd864ea6ef8c0a181bd69473",
+      "derived_from": [
+        "entity:dwsim_simulation"
+      ]
+    }
+  ]
+}
