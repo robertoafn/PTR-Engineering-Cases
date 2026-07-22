@@ -2,10 +2,26 @@
   "case_id": "002_recuperacion_vapor_flash_y_particion_de_volatiles",
   "generated_at": "2026-07-18T00:00:00Z",
   "agents": [
-    {"id": "agent:author", "type": "person", "name": "Roberto Flores"},
-    {"id": "agent:dwsim", "type": "software", "name": "DWSIM 9.0.5"},
-    {"id": "agent:openchrom", "type": "software", "name": "OpenChrom 1.6.14"},
-    {"id": "agent:python", "type": "software", "name": "Python 3.13.5"}
+    {
+      "id": "agent:author",
+      "type": "person",
+      "name": "Roberto Flores"
+    },
+    {
+      "id": "agent:dwsim",
+      "type": "software",
+      "name": "DWSIM 9.0.5"
+    },
+    {
+      "id": "agent:openchrom",
+      "type": "software",
+      "name": "OpenChrom 1.6.14"
+    },
+    {
+      "id": "agent:python",
+      "type": "software",
+      "name": "Python 3.13.5"
+    }
   ],
   "activities": [
     {
@@ -13,36 +29,111 @@
       "started_at": "2026-07-18T00:00:00Z",
       "ended_at": "2026-07-18T00:00:00Z",
       "software": "DWSIM 9.0.5",
-      "parameters": {"property_package": "NRTL", "flash_algorithm": "Nested Loops", "outlet_pressure_Pa": 300000.0},
-      "used": ["entity:synthetic_inputs"],
-      "generated": ["entity:dwsim_simulation", "entity:dwsim_raw_export"]
+      "parameters": {
+        "property_package": "NRTL",
+        "flash_algorithm": "Nested Loops",
+        "outlet_pressure_Pa": 300000.0
+      },
+      "used": [
+        "entity:synthetic_inputs"
+      ],
+      "generated": [
+        "entity:dwsim_simulation",
+        "entity:dwsim_raw_export"
+      ]
     },
     {
       "id": "act:openchrom_review",
       "started_at": "2026-07-18T00:00:00Z",
       "ended_at": "2026-07-18T00:00:00Z",
       "software": "OpenChrom 1.6.14",
-      "parameters": {"detector": "First Derivative", "detector_type": "VV (Valley)", "sample": "OC-MSTR-203"},
-      "used": ["entity:raw_xy_chromatograms"],
-      "generated": ["entity:openchrom_native", "entity:openchrom_peak_report"]
+      "parameters": {
+        "detector": "First Derivative",
+        "detector_type": "VV (Valley)",
+        "sample": "OC-MSTR-203"
+      },
+      "used": [
+        "entity:raw_xy_chromatograms"
+      ],
+      "generated": [
+        "entity:openchrom_native",
+        "entity:openchrom_peak_report"
+      ]
     },
     {
       "id": "act:external_area_reconstruction",
       "started_at": "2026-07-18T00:00:00Z",
       "ended_at": "2026-07-18T00:00:00Z",
       "software": "Python 3.13.5",
-      "parameters": {"method": "baseline_corrected_trapezoidal", "source": "OpenChrom XY"},
-      "used": ["entity:raw_xy_chromatograms"],
-      "generated": ["entity:chromatography_results"]
+      "parameters": {
+        "method": "baseline_corrected_trapezoidal",
+        "source": "OpenChrom XY"
+      },
+      "used": [
+        "entity:raw_xy_chromatograms"
+      ],
+      "generated": [
+        "entity:chromatography_results"
+      ]
     }
   ],
   "entities": [
-    {"id": "entity:dwsim_simulation", "path": "simulations/dwsim/002_recuperacion_vapor_flash_y_particion_de_volatiles.dwxmz", "checksum_sha256": "1129c47be73e43ee90c5203418160fb931c069cf93104d57d2adc8a06365675a", "derived_from": ["entity:synthetic_inputs"]},
-    {"id": "entity:dwsim_raw_export", "path": "data/raw/dwsim/dwsim_export_s001_raw.xlsx", "checksum_sha256": "9a197e2645b5efe1139560c9eef09f57adf1d31e680cc67b6ff5a37c8682b1cd", "derived_from": ["entity:dwsim_simulation"]},
-    {"id": "entity:raw_xy_chromatograms", "path": "data/raw/openchrom/OC-MSTR-203.xy", "checksum_sha256": "e5899995cce1deb28533c88bd039868674da6fdaca3a4489733043df58d0df42", "derived_from": ["entity:synthetic_chromatogram_generator"]},
-    {"id": "entity:openchrom_native", "path": "data/processed/openchrom/OC-MSTR-203.ocb", "checksum_sha256": "b0788c1d1beecd5b9719ed446cbbcf3b2e4fe0119789b0f3ee1db619a7b54af8", "derived_from": ["entity:raw_xy_chromatograms"]},
-    {"id": "entity:openchrom_peak_report", "path": "data/processed/openchrom/OC-MSTR-203_peak_report.csv", "checksum_sha256": "4f9908001f8f9ab3f1d04f15efbaabbfa533dc29d0cbfbdcc620fc7b7db62690", "derived_from": ["entity:openchrom_native"]},
-    {"id": "entity:process_results", "path": "data/process_results_v01.csv", "checksum_sha256": "d719622968563344021efe373175eed2836f79623ebe5c7b1888882be228119d", "derived_from": ["entity:dwsim_raw_export"]},
-    {"id": "entity:chromatography_results", "path": "data/chromatography_results_v01.csv", "checksum_sha256": "390201853de0e38fa1ccd6586e4c2e1763cc3fc408ca3995483156d2dc99ad48", "derived_from": ["entity:raw_xy_chromatograms", "entity:openchrom_peak_report"]}
+    {
+      "id": "entity:dwsim_simulation",
+      "path": "simulations/dwsim/002_recuperacion_vapor_flash_y_particion_de_volatiles.dwxmz",
+      "checksum_sha256": "1129c47be73e43ee90c5203418160fb931c069cf93104d57d2adc8a06365675a",
+      "derived_from": [
+        "entity:synthetic_inputs"
+      ]
+    },
+    {
+      "id": "entity:dwsim_raw_export",
+      "path": "data/raw/dwsim/dwsim_export_s001_raw.xlsx",
+      "checksum_sha256": "9a197e2645b5efe1139560c9eef09f57adf1d31e680cc67b6ff5a37c8682b1cd",
+      "derived_from": [
+        "entity:dwsim_simulation"
+      ]
+    },
+    {
+      "id": "entity:raw_xy_chromatograms",
+      "path": "data/raw/openchrom/OC-MSTR-203.xy",
+      "checksum_sha256": "e5899995cce1deb28533c88bd039868674da6fdaca3a4489733043df58d0df42",
+      "derived_from": [
+        "entity:synthetic_chromatogram_generator"
+      ]
+    },
+    {
+      "id": "entity:openchrom_native",
+      "path": "data/processed/openchrom/OC-MSTR-203.ocb",
+      "checksum_sha256": "b0788c1d1beecd5b9719ed446cbbcf3b2e4fe0119789b0f3ee1db619a7b54af8",
+      "derived_from": [
+        "entity:raw_xy_chromatograms"
+      ]
+    },
+    {
+      "id": "entity:openchrom_peak_report",
+      "path": "data/processed/openchrom/OC-MSTR-203_peak_report.csv",
+      "checksum_sha256": "4f9908001f8f9ab3f1d04f15efbaabbfa533dc29d0cbfbdcc620fc7b7db62690",
+      "derived_from": [
+        "entity:openchrom_native"
+      ]
+    },
+    {
+      "id": "entity:process_results",
+      "path": "data/process_results_v01.csv",
+      "checksum_sha256": "d719622968563344021efe373175eed2836f79623ebe5c7b1888882be228119d",
+      "derived_from": [
+        "entity:dwsim_raw_export"
+      ]
+    },
+    {
+      "id": "entity:chromatography_results",
+      "path": "data/chromatography_results_v01.csv",
+      "checksum_sha256": "390201853de0e38fa1ccd6586e4c2e1763cc3fc408ca3995483156d2dc99ad48",
+      "derived_from": [
+        "entity:raw_xy_chromatograms",
+        "entity:openchrom_peak_report"
+      ]
+    }
   ]
 }

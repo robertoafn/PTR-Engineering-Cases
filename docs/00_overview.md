@@ -25,5 +25,11 @@ ingeniería química industrial, donde cada caso documenta la cadena completa:
 - Comunidad académica y open-source.
 
 ## Estado actual
-v0.2.0 (pendiente de release formal) — Arquitectura fundacional (v0.1.0)
-completa. Dos casos integrados: 001 `validated`, 002 `review`.
+v0.3.0 (en desarrollo) — Arquitectura fundacional (v0.1.0) completa y tres
+casos integrados: 001 `validated`, 002 `review` y 003 `review`.
+
+El Caso 003 extiende la secuencia del Caso 002: reutiliza el condensado líquido
+caliente con trazas de metanol como fuente térmica para precalentar agua limpia
+en el intercambiador HX-301. Además de los balances de materia y energía,
+documenta la condición hidráulica `P_frío - P_caliente >= 0 Pa` como criterio
+de control de contaminación cruzada ante una eventual falla de integridad.

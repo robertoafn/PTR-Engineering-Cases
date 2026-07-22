@@ -3,7 +3,7 @@
 > Portafolio técnico de casos reproducibles de ingeniería química industrial.
 > Stack open source · FAIR · SI · IUPAC · ISO 8000 · VIM · trazabilidad SHA-256.
 
-[![status](https://img.shields.io/badge/status-case--portfolio--v0.2.0-blue)](./CHANGELOG.md)
+[![status](https://img.shields.io/badge/status-case--portfolio--v0.3.0-blue)](./CHANGELOG.md)
 [![license-code](https://img.shields.io/badge/code-MIT-green)](./LICENSE)
 [![license-docs](https://img.shields.io/badge/docs-CC--BY--4.0-lightgrey)](./LICENSE-docs)
 
@@ -86,6 +86,7 @@ de cada caso.
 |---|---|---|---|---|---|
 | [001](./cases/001_acondicionamiento_agua_lavado_pulpa_kraft/) | Acondicionamiento de agua para lavado de pulpa Kraft | Bombeo y calentamiento de agua | Bomba centrífuga, calentador | DWSIM 9.0.5, Python 3.13.5 | `validated` |
 | [002](./cases/002_recuperacion_vapor_flash_y_particion_de_volatiles/) | Recuperación de vapor flash y partición de compuestos volátiles | Flash isoentálpico y equilibrio vapor-líquido | Válvula, separador gas-líquido | DWSIM 9.0.5, OpenChrom 1.6.14, Python 3.13.5 | `review` |
+| [003](./cases/003_recuperacion_calor_condensado_y_control_contaminacion_cruzada/) | Recuperación de calor de condensado y control de contaminación cruzada | Transferencia de calor y control hidráulico de contaminación | Intercambiador de carcasa y tubos (HX-301) | DWSIM 9.0.5, Python 3.13.5 | `review` |
 
 ### Caso fundacional 001
 
@@ -119,19 +120,35 @@ mantiene en estado `review`: sus activos técnicos y resultados están
 disponibles, pero aún no debe interpretarse como una validación experimental o
 industrial. Ver [Caso 002](./cases/002_recuperacion_vapor_flash_y_particion_de_volatiles/).
 
+### Caso 003 — Recuperación de calor de condensado y control de contaminación cruzada
+
+El tercer caso continúa la cadena de proceso desde el condensado líquido
+caliente del Caso 002. Modela el intercambiador de carcasa y tubos HX-301 para
+precalentar agua limpia de proceso y evalúa el diferencial de presión como
+barrera operativa frente a una eventual fuga de condensado con trazas de
+metanol.
+
+El escenario simulado entrega una carga térmica de `1.063410 MW`: el agua
+limpia se precalienta de `293.150 K` a `333.150 K` y el condensado se enfría de
+`406.649 K` a `384.187 K`. El diferencial de seguridad calculado es `0 Pa`
+(`P_frío - P_caliente`), cumpliendo el criterio definido para no favorecer el
+flujo del lado contaminado al lado limpio. El caso permanece en `review`; sus
+entradas y resultados son sintéticos o simulados y no representan condiciones
+operacionales reales. Ver [Caso 003](./cases/003_recuperacion_calor_condensado_y_control_contaminacion_cruzada/).
+
 ## Roadmap
 
 | Release | Alcance |
 |---|---|
 | **v0.1.0** | Arquitectura fundacional: plantillas, schemas, scripts, CI y gobernanza |
 | **v0.2.0** | Primer caso integrado, índice de casos y sincronización documental |
-| **v0.3.0** | Incorporación y revisión de nuevos casos contextuales; endurecimiento de validadores de datasets, unidades y checksums |
+| **v0.3.0** | Incorporación del Caso 003, revisión de casos contextuales y endurecimiento de validadores de datasets, unidades y checksums |
 | **v0.4.0** | Visualizaciones técnicas, automatización del índice y cobertura de tests ≥ 80 % |
 | **v1.0.0** | Portafolio inicial validado y publicado con varios casos reproducibles |
 
 Próximas líneas de desarrollo previstas:
 
-1. recuperación de calor y precalentamiento de corrientes a partir del líquido residual del Caso 002;
+1. análisis de sensibilidad termo-hidráulica y de integridad para el Caso 003;
 2. recirculación de agua con purga y make-up;
 3. operaciones unitarias Kraft de complejidad progresiva.
 

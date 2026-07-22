@@ -7,6 +7,19 @@ y este proyecto adhiere a [Semantic Versioning 2.0.0](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+- Caso `003_recuperacion_calor_condensado_y_control_contaminacion_cruzada`, en
+  estado `review`, con simulación DWSIM del intercambiador HX-301, resultados
+  de proceso, figura de flowsheet, metadatos, procedencia, supuestos,
+  checklist QC, informe de validación y referencias.
+
+### Changed
+- Actualizados el índice de casos, el resumen técnico y el roadmap del README
+  para incorporar el Caso 003 como continuación del condensado residual del
+  Caso 002.
+- Actualizado `docs/00_overview.md` para reflejar los tres casos integrados y
+  el criterio de control hidráulico de contaminación cruzada del Caso 003.
+
 ## [0.2.0] - 2026-07-18
 
 ### Added

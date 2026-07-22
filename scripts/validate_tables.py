@@ -44,10 +44,13 @@ def check_variables(df: pd.DataFrame, meta: dict) -> list[str]:
 def main(target: Path) -> int:
     failures: dict[str, list[str]] = {}
     checked = 0
-    for csv in target.rglob("*.csv"):
+    root_resolved = ROOT.resolve()
+    target_resolved = target.resolve()
+    for csv in target_resolved.rglob("*.csv"):
         meta = load_sidecar(csv)
+        rel_path = str(csv.relative_to(root_resolved))
         if meta is None:
-            failures[str(csv.relative_to(ROOT))] = [
+            failures[rel_path] = [
                 f"falta sidecar: {csv.with_suffix('.meta.yaml').name}"
             ]
             continue
@@ -55,7 +58,7 @@ def main(target: Path) -> int:
         df = pd.read_csv(csv)
         errs = check_variables(df, meta)
         if errs:
-            failures[str(csv.relative_to(ROOT))] = errs
+            failures[rel_path] = errs
 
     if failures:
         print(json.dumps(failures, indent=2))
