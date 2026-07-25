@@ -1,9 +1,9 @@
 # 003_recuperacion_calor_condensado_y_control_contaminacion_cruzada — Recuperación de calor de condensado y control de contaminación cruzada
 
 > **Status:** review  
-> **Versión:** 0.1.0  
+> **Versión:** 0.1.1<br>
 > **Aviso de datos:** entradas y resultados sintéticos o simulados.  
-> **No representa condiciones operacionales reales, datos internos ni procedimientos oficiales de CMPC.**
+> **No representa condiciones operacionales reales, datos propietarios ni procedimientos de una instalación específica.**
 
 ---
 
@@ -23,14 +23,32 @@ El caso representa la recuperación térmica de calor sensible desde el condensa
 
 El objetivo de ingeniería es:
 1. Determinar la carga térmica requerida ($Q$) para precalentar el agua limpia de 293.15 K a 333.15 K utilizando el condensado caliente, y calcular la temperatura final de enfriamiento del condensado.
-2. Analizar hidráulicamente el control de contaminación cruzada. Para prevenir que el metanol (contaminante) fugue hacia la corriente de agua limpia en caso de una falla en la integridad física de los tubos o uniones, se evalúa la fuerza impulsora hidráulica, requiriéndose que la presión del lado limpio sea igual o superior a la del lado caliente:
-   $$\Delta P_{safety} = P_{cold} - P_{hot} \geq 0 \, \text{Pa}$$
+2. Evaluar la relación de presiones ante una pérdida hipotética de integridad. Se define:
+   $$\Delta P_{clean} = P_{clean} - P_{contaminated}$$
+   Para orientar una fuga desde el lado limpio hacia el contaminado se requiere
+   $\Delta P_{clean} > 0$ durante todo el dominio operativo, con un margen
+   mínimo definido por el análisis de riesgos, la instrumentación y los
+   transitorios de la instalación. El valor $0$ Pa es solo la frontera entre
+   direcciones de flujo y no constituye un margen de seguridad.
 
 ## 2. Contexto y límites
 
 En las plantas de celulosa Kraft, el condensado de vapor secundario (evaporadores, digestores) recupera calor hacia corrientes de agua fresca o de alimentación de calderas. Sin embargo, estos condensados suelen arrastrar impurezas volátiles de proceso como metanol y compuestos sulfurados de bajo punto de ebullición (TRS). 
 
-El intercambiador de calor HX-301 actúa como acoplamiento térmico. La contaminación cruzada del agua limpia se controla mediante un diferencial de presiones operacionales ($\Delta P_{safety} \geq 0$), lo que garantiza que ante una rotura o poro, el agua limpia fluya hacia el condensado y no al revés.
+En la cadena conceptual del portafolio, este caso se ubica después de la
+separación flash del Caso 002. Toma como base redondeada el caudal, la
+temperatura, la presión y la composición de `MSTR-204` para definir `MSTR-301`;
+las propiedades restantes se resuelven en el modelo del Caso 003. HX-301 transfiere calor a
+agua limpia sin mezclar intencionalmente ambas corrientes. El destino posterior
+del condensado enfriado y del agua precalentada queda fuera del modelo.
+
+El intercambiador de calor HX-301 actúa como acoplamiento térmico. Una presión
+mayor y monitoreada en el lado limpio puede orientar una fuga hacia el lado
+contaminado, pero no sustituye la integridad mecánica ni garantiza por sí sola
+la ausencia de contaminación. La evaluación real debe considerar presión local
+a ambos lados de la posible falla, pérdidas de carga, arranques y paradas,
+instrumentación, detección de fugas, aislamiento y alternativas como doble
+placa tubular.
 
 ## 3. Modelo de ingeniería
 
@@ -70,12 +88,26 @@ A continuación se resume la nomenclatura técnica en inglés y las propiedades 
 - **Heat Load ($Q$):** $1063.41$ kW ($1063410$ W)
 - **LMTD:** $81.9556$ K
 - **Product UA:** $12.9754$ kW/K
-- **Diferencial de Presión de Seguridad ($\Delta P_{safety}$):**
-  $$\Delta P_{safety} = P_{\text{cold,in}} - P_{\text{hot,in}} = 300000 - 300000 = 0 \, \text{Pa}$$
+- **Diferencial limpio-contaminado ($\Delta P_{clean}$):**
+  $$\Delta P_{clean} = P_{\text{clean,in}} - P_{\text{contaminated,in}} = 300000 - 300000 = 0 \, \text{Pa}$$
 
 ## 5. Control de contaminación cruzada
 
-El diferencial de presión $\Delta P_{safety}$ es de 0 Pa en el modelo estacionario ideal. Aunque el flujo impulsivo de fuga por diferencial de presión neto es nulo, para garantizar seguridad operacional frente a transitorios en planta real, se requiere que la presión del lado de tubos (limpio) sea controlada dinámicamente por encima del lado de carcasa ($P_{cold} > P_{hot}$). Esto asegura una dirección de fuga unidireccional de agua limpia hacia el condensado contaminado, controlando activamente el riesgo de contaminación cruzada.
+El modelo estacionario ideal entrega $\Delta P_{clean}=0$ Pa porque asigna
+300000 Pa y caída nula a ambos lados. En esas condiciones no existe fuerza
+impulsora neta en el punto idealizado, pero tampoco existe margen: una
+perturbación arbitrariamente pequeña puede invertir la dirección de una fuga.
+Por tanto, el escenario base **no demuestra control operacional de
+contaminación cruzada**.
+
+La aplicación industrial exigiría demostrar $P_{clean}>P_{contaminated}$ en la
+ubicación de interés y durante operación normal, transitorios y fallas
+consideradas, con un margen positivo específico del diseño y monitoreo del
+diferencial. La presión es solo una capa. La guía FDA sobre intercambiadores con
+fluidos de distinta calidad también plantea monitoreo continuo o diseños como
+doble placa tubular; HSE incorpora inspección, detección de fugas, aislamiento
+y análisis de modos de falla. Este caso no dimensiona ni valida esas
+salvaguardas.
 
 ## 6. Activos y reproducibilidad
 
@@ -85,6 +117,7 @@ El diferencial de presión $\Delta P_{safety}$ es de 0 Pa en el modelo estaciona
 4. Validar los balances térmicos y de masa mediante los scripts automáticos del repositorio:
    ```bash
    python scripts/validate_metadata.py cases/003_recuperacion_calor_condensado_y_control_contaminacion_cruzada/
+   python scripts/validate_tables.py cases/003_recuperacion_calor_condensado_y_control_contaminacion_cruzada/
    python scripts/unit_consistency_check.py cases/003_recuperacion_calor_condensado_y_control_contaminacion_cruzada/
    python scripts/compute_checksums.py --verify cases/003_recuperacion_calor_condensado_y_control_contaminacion_cruzada/
    ```
@@ -92,13 +125,18 @@ El diferencial de presión $\Delta P_{safety}$ es de 0 Pa en el modelo estaciona
 ## 7. Limitaciones
 
 - No se modelan las caídas de presión dinámicas en las boquillas ni la hidráulica detallada de las tuberías.
+- No se simula una fuga, su ubicación, su área ni su caudal; tampoco se ejecuta un análisis dinámico, HAZOP o LOPA.
+- No se define un margen mínimo de presión, arquitectura de control, alarma, trip, aislamiento ni sistema de detección de fugas.
 - Los coeficientes de transferencia de calor y ensuciamiento se consideran constantes y nulos respectivamente.
 - No se modelan otros compuestos volátiles reales del condensado Kraft (como TRS, metilmercaptano o dimetilsulfuro).
 - La calibración física del equipo requiere de su dimensionamiento real (número de pasos, deflectores y diámetro) para comprobar el valor de $U$ calculado.
+- DWSIM reporta ambas corrientes como líquidas en el escenario resuelto, pero no se presenta una verificación independiente del margen respecto al punto de burbuja.
 
 ## 8. Estado
 
-El caso se encuentra en estado `review` para la integración del portafolio.
+El caso se encuentra integrado en el portafolio con estado `review`. Los
+balances térmicos pasan; la suficiencia de las salvaguardas contra
+contaminación cruzada queda fuera del alcance demostrado.
 
 ## 9. Referencias
 

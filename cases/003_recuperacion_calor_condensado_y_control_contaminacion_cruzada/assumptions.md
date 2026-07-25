@@ -26,12 +26,12 @@
 
 ## 5. Comportamiento en fase líquida monofásica
 - **Enunciado:** Ambas corrientes permanecen en fase líquida (fracciones de vapor = 0.0) a lo largo de todo el intercambiador de calor.
-- **Justificación:** La presión del sistema (3.0 bar) es lo suficientemente alta para evitar la ebullición del metanol y el agua en las temperaturas de trabajo del intercambiador (hasta 133.5 °C).
+- **Justificación:** DWSIM reporta fracción de vapor 0.0 para las corrientes resueltas con NRTL a 3.0 bar. El caso adopta ese resultado, pero no aporta una verificación independiente del punto de burbuja ni del margen de subenfriamiento.
 - **Impacto si se viola:** El cambio de fase induciría coeficientes de transferencia y caídas de presión drásticamente distintos, típicos de un evaporador o condensador.
 - **Referencia:** IAPWS-IF97 / NRTL.
 
 ## 6. Diferencial de presión nulo y caída de presión nula en la simulación base
 - **Enunciado:** La caída de presión en el lado frío y caliente de la simulación base es de 0 Pa, y ambas corrientes operan a una presión de entrada de 300,000 Pa.
-- **Justificación:** Simplificación para enfocar la simulación en el balance térmico primario. El control de contaminación cruzada se analiza conceptual y teóricamente como criterio de operación física (manteniendo P_frio > P_caliente).
-- **Impacto si se viola:** La caída de presión real afectaría el consumo energético de bombeo de corrientes y la fuerza impulsora hidráulica de posibles fugas.
-- **Referencia:** Criterios clásicos de prevención de contaminación cruzada.
+- **Justificación:** Simplificación para enfocar la simulación en el balance térmico primario. El valor $\Delta P_{clean}=0$ Pa no representa una salvaguarda ni un margen operativo.
+- **Impacto si se viola:** Las pérdidas de carga y los transitorios determinan la presión local a ambos lados de una falla y pueden invertir la dirección de fuga. Una aplicación real requiere $P_{clean}>P_{contaminated}$ con margen definido y monitoreado, además de capas de detección, aislamiento o diseño.
+- **Referencia:** FDA, *Heat Exchangers to Avoid Contamination*; HSE, *Heat exchangers*.

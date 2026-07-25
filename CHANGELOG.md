@@ -7,6 +7,8 @@ y este proyecto adhiere a [Semantic Versioning 2.0.0](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-07-25
+
 ### Added
 - Caso `003_recuperacion_calor_condensado_y_control_contaminacion_cruzada`, en
   estado `review`, con simulación DWSIM del intercambiador HX-301, resultados
@@ -19,6 +21,36 @@ y este proyecto adhiere a [Semantic Versioning 2.0.0](https://semver.org/).
   Caso 002.
 - Actualizado `docs/00_overview.md` para reflejar los tres casos integrados y
   el criterio de control hidráulico de contaminación cruzada del Caso 003.
+- Separada la validación térmica del Caso 003 de la evaluación de seguridad:
+  `P_limpio - P_contaminado = 0 Pa` se documenta como condición sin margen,
+  no como demostración de control operacional.
+- Los sidecars de datasets ahora enlazan cada símbolo científico con su columna
+  CSV mediante el campo `column`, documentan todas las columnas canónicas y
+  declaran su clave primaria.
+- Añadidos `scripts/preflight.py` y `requirements-ci.txt` para un control local
+  único y un entorno mínimo de gobernanza en GitHub Actions.
+- Eliminadas las referencias corporativas y documentada la ubicación
+  conceptual de cada caso dentro de una cadena productiva Kraft genérica.
+- Sincronizadas las versiones de los casos 001, 002 y 003 como `0.1.2`,
+  `0.1.1` y `0.1.1`, respectivamente, junto con sus datasets modificados.
+
+### Fixed
+- `compute_checksums.py` ahora verifica correctamente una ruta de caso
+  individual y falla ante rutas sin `provenance.json`.
+- `unit_consistency_check.py` valida los campos `unit` reales de entradas y
+  salidas de `metadata.yaml`.
+- CI valida los datasets canónicos bajo `cases/`; una ejecución con cero
+  datasets deja de producir un falso positivo.
+- Sincronizado el checksum obsoleto del sidecar de resultados del Caso 001 con
+  el CSV y su `provenance.json`.
+- Corregido el flujo de energía derivado de `MSTR-303` en el dataset del Caso
+  003 para que sea consistente con caudal y entalpía específica publicados.
+
+### Validation
+- Preflight integral aprobado para los tres casos.
+- 3 metadatos y 4 datasets canónicos validados.
+- Unidades verificadas en 7 archivos y checksums SHA-256 conformes.
+- 28 pruebas automatizadas y Ruff: PASS.
 
 ## [0.2.0] - 2026-07-18
 
@@ -44,7 +76,8 @@ y este proyecto adhiere a [Semantic Versioning 2.0.0](https://semver.org/).
 
 ### Notes
 - Los datos y cromatogramas de los casos 001 y 002 son sintéticos y no
-  representan condiciones operacionales ni información interna de CMPC.
+  representan condiciones operacionales ni información de una instalación
+  industrial específica.
 
 ## [0.1.0] - 2026-05-15
 
@@ -74,6 +107,7 @@ y este proyecto adhiere a [Semantic Versioning 2.0.0](https://semver.org/).
 - Solo se incluía el placeholder `000_template`.
 - Esta versión constituye la arquitectura base para las iteraciones posteriores.
 
-[Unreleased]: https://github.com/robertoafn/PTR-Engineering-Cases/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/robertoafn/PTR-Engineering-Cases/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/robertoafn/PTR-Engineering-Cases/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/robertoafn/PTR-Engineering-Cases/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/robertoafn/PTR-Engineering-Cases/releases/tag/v0.1.0

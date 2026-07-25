@@ -2,7 +2,12 @@
 
 ## 1. Alcance de la validación
 
-Se valida la consistencia termodinámica y el desempeño hidráulico/térmico del intercambiador de calor de carcasa y tubos HX-301 modelado en DWSIM 9.0.5. Se verifican los balances de materia y energía de ambas corrientes (lado caliente y lado frío), se realiza una réplica analítica del dimensionamiento térmico (LMTD y Q) y se evalúa el criterio de presión para la prevención de contaminación cruzada.
+Se valida la consistencia termodinámica del intercambiador de calor de carcasa
+y tubos HX-301 modelado en DWSIM 9.0.5. Se verifican los balances de materia y
+energía de ambas corrientes, se realiza una réplica analítica de LMTD y $Q$, y
+se aplica un tamiz conceptual a la relación de presiones. No se valida la
+integridad mecánica del equipo, un escenario de fuga ni un sistema industrial
+de protección contra contaminación cruzada.
 
 Dominio simulado:
 - Lado caliente (condensado contaminado): 8.95112 kg/s de mezcla agua-metanol (~639 ppm mass), enfriado desde 406.649 K hasta 384.187 K a 3.0 bar.
@@ -14,7 +19,8 @@ Dominio simulado:
 - [x] Balance global de energía en el intercambiador.
 - [x] Réplica analítica de la diferencia de temperatura media logarítmica (LMTD).
 - [x] Réplica analítica de la ecuación de diseño térmico: $Q = U \cdot A \cdot F \cdot \text{LMTD}$.
-- [x] Verificación física del criterio hidráulico de seguridad contra contaminación cruzada ($\Delta P_{safety} = P_{cold} - P_{hot} \geq 0$).
+- [x] Evaluación del diferencial limpio-contaminado
+  ($\Delta P_{clean}=P_{clean}-P_{contaminated}$) y de sus limitaciones.
 - [x] Ejecución de pruebas de conformidad de metadatos y nomenclatura local.
 
 ## 3. Criterios de aceptación
@@ -25,9 +31,9 @@ Dominio simulado:
 | Residuo global de energía | $\leq 0.1$ % | Ley de Conservación de la Energía (aislamiento adiabático) |
 | Desviación en LMTD | $\leq 0.5$ % | Réplica analítica independiente |
 | Desviación en carga térmica ($Q$) | $\leq 0.5$ % | Réplica analítica independiente frente a DWSIM |
-| Diferencial de presión de seguridad ($\Delta P_{safety}$) | $\geq 0$ Pa | Control de contaminación cruzada por barrera hidráulica |
+| Diferencial limpio-contaminado ($\Delta P_{clean}$) | $>0$ Pa y margen definido por análisis de riesgos | Orientación hidráulica de una fuga hipotética; requiere monitoreo y capas adicionales |
 | Nomenclatura del caso | 100% conforme | Trazabilidad del repositorio |
-| Veredicto de validación del autor | PASS | Integridad operacional confirmada |
+| Alcance del veredicto | Separado por dominio | No confundir consistencia térmica con seguridad operacional |
 
 ## 4. Resultados cuantitativos
 
@@ -64,19 +70,41 @@ Dominio simulado:
   $$Q_{calc} = U \cdot A \cdot F \cdot \text{LMTD} = 12.9754 \cdot 1.0 \cdot 1.0 \cdot 81.9556 = 1063.407 \, \text{kW}$$
   El valor reportado por DWSIM es $1063.41 \, \text{kW}$ (desviación de $-0.00028\%$, PASS).
 
-### 4.4 Evaluación de Contaminación Cruzada
+### 4.4 Tamiz de contaminación cruzada
 - Presión en el lado limpio de agua fría: $P_{cold} = 300000 \, \text{Pa}$
 - Presión en el lado contaminado de condensado: $P_{hot} = 300000 \, \text{Pa}$
-- Diferencial de presión de seguridad:
-  $$\Delta P_{safety} = P_{cold} - P_{hot} = 300000 - 300000 = 0 \, \text{Pa}$$
-  El diferencial es de exactamente 0 Pa. Físicamente, esto cumple con el umbral no negativo ($\geq 0$ Pa), lo que minimiza la fuerza impulsora para la contaminación cruzada. Sin embargo, para una operación industrial real robusta frente a perturbaciones dinámicas, se recomendaría instrumentar y controlar el sistema de manera que $P_{cold}$ sea siempre ligeramente superior a $P_{hot}$ (por ejemplo, $\Delta P_{safety} \geq 20000$ Pa) mediante una válvula reguladora de presión en la descarga del agua fría.
+- Diferencial limpio-contaminado:
+  $$\Delta P_{clean} = P_{clean} - P_{contaminated} = 300000 - 300000 = 0 \, \text{Pa}$$
+
+El resultado es una condición límite sin dirección hidráulica preferente ni
+margen frente a incertidumbre o transitorios. No satisface el criterio robusto
+$\Delta P_{clean}>0$ y, por tanto, **no demuestra** que una fuga hipotética se
+oriente desde el agua limpia hacia el condensado.
+
+Una aplicación real debe definir el margen mínimo mediante análisis de riesgos
+y pérdidas de carga, medir el diferencial en puntos representativos y
+considerar arranques, paradas y fallas de control. La FDA identifica el
+monitoreo continuo del diferencial con mayor presión en el lado limpio o el uso
+de doble placa tubular como medidas frente a contaminación por fugas. HSE
+incluye además inspección, detección de fugas, aislamiento y evaluación de modos
+de falla. El presente modelo no valida esas capas.
 
 ## 5. Análisis de residuales e incertidumbre
 
-Los residuales de conservación y desviaciones analíticas son inferiores al $0.01\%$, lo que demuestra la excelente consistencia matemática de la simulación estacionaria. La incertidumbre conceptual principal radica en la suposición de factores de ensuciamiento nulos y la simplificación de la mezcla binaria. La composición real del condensado Kraft presentaría mayores resistencias conductivas debidas a incrustaciones con el tiempo, disminuyendo el coeficiente $U$ real.
+Los residuales de conservación y desviaciones analíticas son inferiores al
+$0.01\%$, lo que respalda la consistencia matemática de la simulación
+estacionaria dentro de la precisión publicada. Las incertidumbres conceptuales
+principales son los factores de ensuciamiento nulos, la mezcla binaria, las
+entalpías exportadas con precisión limitada y la ausencia de hidráulica,
+dinámica y degradación mecánica. La composición real del condensado Kraft y la
+deposición con el tiempo pueden reducir el coeficiente $U$.
 
 ## 6. Veredicto
 
-**PASS para los balances termodinámicos, la réplica analítica de diseño del intercambiador y el control de presiones operacionales contra contaminación cruzada.**
+- **PASS:** balances de masa y energía y réplica analítica de LMTD y carga térmica.
+- **NOT DEMONSTRATED:** margen hidráulico, detección de fugas, integridad
+  mecánica y control operacional de contaminación cruzada.
 
-El archivo de simulación cumple con todos los requisitos técnicos cuantitativos y formales. El caso se declara en estado `review` para ser subido al repositorio y verificado en la integración continua.
+El caso permanece en `review`. Es reproducible como estudio térmico
+estacionario y como tamiz conceptual de presión; no es una validación de diseño,
+seguridad o operación industrial.

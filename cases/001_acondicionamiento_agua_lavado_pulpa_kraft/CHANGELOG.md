@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [0.1.2] - 2026-07-25
+
 ### Added
 - Figura exportada del flowsheet DWSIM en
   `assets/figures/fig_001_01_flowsheet.png`.
@@ -10,6 +12,11 @@
 - README del caso actualizado para referenciar la figura junto con la
   topología y los resultados documentados.
 - Procedencia actualizada con el checksum SHA-256 de la figura.
+- Corregido el checksum declarado por el sidecar del dataset y actualizada su
+  versión a `0.1.1`.
+- Eliminada la referencia corporativa y precisada la ubicación del servicio de
+  agua antes del lavado de pulpa.
+- Versión del caso actualizada de `0.1.1` a `0.1.2`.
 
 ## [0.1.1] - 2026-07-17
 

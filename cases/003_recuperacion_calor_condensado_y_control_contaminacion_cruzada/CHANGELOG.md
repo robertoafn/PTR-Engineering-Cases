@@ -2,6 +2,24 @@
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-07-25
+
+### Changed
+- Separada la validación térmica del tamiz de seguridad operacional.
+- Reclasificado $\Delta P_{clean}=0$ Pa como condición límite sin margen; el
+  control de contaminación cruzada queda `NOT DEMONSTRATED`.
+- Añadidas limitaciones sobre dinámica, pérdidas de carga, fuga, integridad
+  mecánica, instrumentación y análisis de riesgos.
+- Precisada la transferencia conceptual de caudal, temperatura, presión y
+  composición desde `MSTR-204` del Caso 002 hacia `MSTR-301`.
+- Eliminadas las referencias corporativas.
+- Versión del caso actualizada de `0.1.0` a `0.1.1`.
+
+### Fixed
+- Corregido `energy_flow_kW` de `MSTR-303` para mantener consistencia con el
+  caudal másico y la entalpía específica publicados.
+- Versión del dataset de resultados actualizada a `0.1.1`.
+
 ## [0.1.0] - 2026-07-21
 
 ### Added
@@ -16,7 +34,8 @@
 - Balance global de masa: PASS (0.0% error).
 - Balance global de energía: PASS (0.00066% error).
 - Réplica analítica de LMTD y ecuación de diseño térmico del intercambiador: PASS (desviación < 0.01%).
-- Criterio de presión no negativa para seguridad de contaminación cruzada: PASS ($\Delta P_{safety} = 0$ Pa).
+- Tamiz inicial de presión: $\Delta P_{clean}=0$ Pa, posteriormente
+  reclasificado en `0.1.1` como condición sin margen.
 
 ### Notes
 - Datos sintéticos y didácticos basados en la corriente residual líquida del Caso 002.

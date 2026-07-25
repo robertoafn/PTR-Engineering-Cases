@@ -7,41 +7,90 @@ license: CC0-1.0
 author: Roberto Flores
 variables:
   - symbol: case_id
+    column: case_id
     name: Identificador de caso
     unit: dimensionless
     type: string
+  - symbol: scenario_id
+    column: scenario_id
+    name: Identificador de escenario
+    unit: dimensionless
+    type: string
   - symbol: stream_id
+    column: stream_id
     name: Identificador de corriente
     unit: dimensionless
     type: string
     nullable: true
   - symbol: sample_id
+    column: sample_id
     name: Identificador de muestra
     unit: dimensionless
     type: string
+  - symbol: analyte
+    column: analyte
+    name: Analito
+    unit: dimensionless
+    type: string
   - symbol: t_R
+    column: retention_time_s
     name: Tiempo de retención
     unit: s
     type: float
     range: [0.0, 300.0]
     nullable: true
+  - symbol: H
+    column: peak_height_signal
+    name: Altura de pico
+    unit: dimensionless
+    type: float
+    range: [0.0, 100000.0]
+    nullable: true
   - symbol: A
+    column: integrated_area_signal_s
     name: Área integrada de respuesta relativa
     unit: dimensionless
     type: float
     range: [0.0, 100000.0]
     nullable: true
   - symbol: C_vial
+    column: concentration_vial_kg_m3
     name: Concentración en vial
     unit: kg/m^3
     type: float
     range: [0.0, 10.0]
   - symbol: C_stream
+    column: concentration_stream_kg_m3
     name: Concentración de corriente reconstruida
     unit: kg/m^3
     type: float
     range: [0.0, 10.0]
+  - symbol: DF
+    column: dilution_factor
+    name: Factor de dilución
+    unit: dimensionless
+    type: float
+    range: [1.0, 100000.0]
+  - symbol: peak_status
+    column: peak_status
+    name: Estado del pico
+    unit: dimensionless
+    type: string
+  - symbol: integration_method
+    column: integration_method
+    name: Método de integración
+    unit: dimensionless
+    type: string
+  - symbol: source_system
+    column: source_system
+    name: Sistema de origen
+    unit: dimensionless
+    type: string
+primary_key:
+  - case_id
+  - scenario_id
+  - sample_id
 created_at: '2026-07-18T00:00:00Z'
-version: 0.1.0
+version: 0.1.1
 checksum_sha256: 390201853de0e38fa1ccd6586e4c2e1763cc3fc408ca3995483156d2dc99ad48
 provenance_ref: ../provenance.json

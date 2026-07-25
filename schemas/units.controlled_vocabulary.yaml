@@ -15,6 +15,7 @@ derived_si:
   - {symbol: Hz,         quantity: frequency,             definition: "1/s"}
   - {symbol: m^2,        quantity: area}
   - {symbol: m^3,        quantity: volume}
+  - {symbol: m^3/s,      quantity: volumetric_flow_rate}
   - {symbol: m/s,        quantity: velocity}
   - {symbol: kg/s,       quantity: mass_flow_rate}
   - {symbol: mol/s,      quantity: molar_flow_rate}
@@ -25,6 +26,8 @@ derived_si:
   - {symbol: J/(kg·K),   quantity: specific_heat_capacity}
   - {symbol: W/(m·K),    quantity: thermal_conductivity}
   - {symbol: W/(m^2·K),  quantity: heat_transfer_coefficient}
+  - {symbol: kJ/kg,      quantity: specific_energy}
+  - {symbol: kW,         quantity: power}
   - {symbol: Pa·s,       quantity: dynamic_viscosity}
   - {symbol: m^2/s,      quantity: kinematic_viscosity_or_diffusivity}
   - {symbol: dimensionless, quantity: dimensionless}

@@ -3,7 +3,7 @@
 > Portafolio técnico de casos reproducibles de ingeniería química industrial.
 > Stack open source · FAIR · SI · IUPAC · ISO 8000 · VIM · trazabilidad SHA-256.
 
-[![status](https://img.shields.io/badge/status-case--portfolio--v0.3.0-blue)](./CHANGELOG.md)
+[![release](https://img.shields.io/badge/release-v0.3.0-blue)](./CHANGELOG.md)
 [![license-code](https://img.shields.io/badge/code-MIT-green)](./LICENSE)
 [![license-docs](https://img.shields.io/badge/docs-CC--BY--4.0-lightgrey)](./LICENSE-docs)
 
@@ -70,7 +70,11 @@ source .venv/bin/activate
 .venv\Scripts\activate
 
 pip install -r requirements.txt
+python scripts/preflight.py cases/<NNN_slug>
+
+# Controles individuales equivalentes
 python scripts/validate_metadata.py cases/<NNN_slug>
+python scripts/validate_tables.py cases/<NNN_slug>
 python scripts/unit_consistency_check.py cases/<NNN_slug>
 python scripts/compute_checksums.py --verify cases/<NNN_slug>
 pytest tests/ -q
@@ -88,11 +92,24 @@ de cada caso.
 | [002](./cases/002_recuperacion_vapor_flash_y_particion_de_volatiles/) | Recuperación de vapor flash y partición de compuestos volátiles | Flash isoentálpico y equilibrio vapor-líquido | Válvula, separador gas-líquido | DWSIM 9.0.5, OpenChrom 1.6.14, Python 3.13.5 | `review` |
 | [003](./cases/003_recuperacion_calor_condensado_y_control_contaminacion_cruzada/) | Recuperación de calor de condensado y control de contaminación cruzada | Transferencia de calor y control hidráulico de contaminación | Intercambiador de carcasa y tubos (HX-301) | DWSIM 9.0.5, Python 3.13.5 | `review` |
 
+### Ubicación conceptual en el proceso productivo Kraft
+
+Los casos representan operaciones unitarias y servicios auxiliares de una
+cadena didáctica; no constituyen una simulación integrada de una planta
+completa.
+
+| Caso | Área o etapa representada | Función productiva | Relación entre casos |
+|---|---|---|---|
+| 001 | Servicio auxiliar previo al lavado de pulpa | Bombear y calentar agua que podría alimentar una operación de desplazamiento de licor negro | Caso independiente; no intercambia corrientes con 002–003 |
+| 002 | Gestión de condensados calientes asociada a evaporación y recuperación | Reducir presión, generar vapor flash y separar una fase líquida con trazas de metanol | Produce conceptualmente el condensado líquido utilizado por el Caso 003 |
+| 003 | Recuperación indirecta de calor desde condensado residual | Precalentar agua limpia mediante HX-301 y evaluar la dirección hidráulica de una fuga hipotética | Usa el caudal, la temperatura, la presión y la fracción másica de metanol de `MSTR-204` como base redondeada para `MSTR-301`; las propiedades restantes se recalculan en el Caso 003 |
+
 ### Caso fundacional 001
 
 El primer caso implementado establece el patrón canónico del portafolio. Modela
 una línea auxiliar simplificada de agua asociada conceptualmente al lavado de
-pulpa Kraft, con datos sintéticos y sin información operacional interna de CMPC.
+pulpa Kraft, con datos sintéticos y sin información operacional de una
+instalación real.
 Incluye:
 
 - archivo de simulación DWSIM versionado;
@@ -130,10 +147,13 @@ metanol.
 
 El escenario simulado entrega una carga térmica de `1.063410 MW`: el agua
 limpia se precalienta de `293.150 K` a `333.150 K` y el condensado se enfría de
-`406.649 K` a `384.187 K`. El diferencial de seguridad calculado es `0 Pa`
-(`P_frío - P_caliente`), cumpliendo el criterio definido para no favorecer el
-flujo del lado contaminado al lado limpio. El caso permanece en `review`; sus
-entradas y resultados son sintéticos o simulados y no representan condiciones
+`406.649 K` a `384.187 K`. El diferencial calculado entre el lado limpio y el
+contaminado es `0 Pa`; este valor es un límite sin margen y no demuestra control
+operacional de contaminación cruzada. Una aplicación real requiere presión
+mayor en el lado limpio durante todo el dominio operativo, monitoreo del
+diferencial y medidas adicionales de detección, aislamiento o diseño mecánico
+según el análisis de riesgos. El caso permanece en `review`; sus entradas y
+resultados son sintéticos o simulados y no representan condiciones
 operacionales reales. Ver [Caso 003](./cases/003_recuperacion_calor_condensado_y_control_contaminacion_cruzada/).
 
 ## Roadmap
@@ -142,7 +162,7 @@ operacionales reales. Ver [Caso 003](./cases/003_recuperacion_calor_condensado_y
 |---|---|
 | **v0.1.0** | Arquitectura fundacional: plantillas, schemas, scripts, CI y gobernanza |
 | **v0.2.0** | Primer caso integrado, índice de casos y sincronización documental |
-| **v0.3.0** | Incorporación del Caso 003, revisión de casos contextuales y endurecimiento de validadores de datasets, unidades y checksums |
+| **v0.3.0 (actual)** | Incorporación del Caso 003, revisión de casos contextuales y endurecimiento de validadores de datasets, unidades y checksums |
 | **v0.4.0** | Visualizaciones técnicas, automatización del índice y cobertura de tests ≥ 80 % |
 | **v1.0.0** | Portafolio inicial validado y publicado con varios casos reproducibles |
 

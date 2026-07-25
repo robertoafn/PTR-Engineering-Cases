@@ -7,6 +7,8 @@ from pathlib import Path
 import yaml
 from jsonschema import Draft202012Validator
 
+from scripts.validate_metadata import iter_metadata, validate
+
 ROOT = Path(__file__).resolve().parents[1]
 SCHEMA = ROOT / "schemas" / "case_metadata.schema.json"
 TEMPLATE = ROOT / "templates" / "case_template" / "metadata.yaml"
@@ -36,3 +38,13 @@ def test_invalid_metadata_missing_required_fields_fails() -> None:
     del data["case_id"]
     errors = list(_validator().iter_errors(data))
     assert len(errors) >= 1
+
+
+def test_validate_rejects_empty_target(tmp_path: Path) -> None:
+    assert validate(tmp_path) == 1
+
+
+def test_iter_metadata_ignores_unrelated_file(tmp_path: Path) -> None:
+    unrelated = tmp_path / "notes.yaml"
+    unrelated.write_text("title: notes\n", encoding="utf-8")
+    assert list(iter_metadata(unrelated)) == []

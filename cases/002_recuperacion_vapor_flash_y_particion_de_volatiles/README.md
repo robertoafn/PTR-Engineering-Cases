@@ -1,9 +1,9 @@
 # 002_recuperacion_vapor_flash_y_particion_de_volatiles — Recuperación de vapor flash y partición de compuestos volátiles
 
 > **Status:** review  
-> **Versión:** 0.1.0  
+> **Versión:** 0.1.1<br>
 > **Aviso de datos:** entradas, cromatogramas y resultados sintéticos.  
-> **No representa condiciones operacionales reales, datos internos ni procedimientos oficiales de CMPC.**
+> **No representa condiciones operacionales reales, datos propietarios ni procedimientos de una instalación específica.**
 
 ---
 
@@ -34,6 +34,13 @@ El objetivo es determinar el rendimiento de vapor flash y la recuperación de me
 El flujo está inspirado de manera didáctica en condensados calientes de áreas de evaporación o recuperación de una planta Kraft. No modela licor negro, fibras, sales, gases sulfurados, terpenos, ácidos orgánicos ni una composición industrial real. El metanol es únicamente un trazador sintético.
 
 La relación con gestión energética, control de condensados y QA/QC es metodológica. No constituye una certificación, criterio regulatorio ni procedimiento de planta.
+
+Dentro de la cadena productiva conceptual, el caso se ubica después de la
+generación de un condensado caliente: una reducción de presión recupera vapor
+flash y un separador entrega dos corrientes. El vapor representa una oportunidad
+de recuperación térmica; el líquido residual constituye la base de entrada del
+Caso 003. No se modelan los equipos que originan el condensado ni su retorno
+real al proceso.
 
 ## 3. Modelo de ingeniería
 

@@ -39,9 +39,11 @@ Ver `metadata.yaml > inputs`.
 
 ## 8. Procedimiento reproducible
 1. `python scripts/validate_metadata.py cases/NNN_slug`
-2. Abrir `simulations/dwsim/NNN_slug.dwxmz` y ejecutar.
-3. `jupyter nbconvert --execute notebooks/reporting/NN_<slug>.ipynb`
-4. `python scripts/compute_checksums.py cases/NNN_slug`
+2. `python scripts/validate_tables.py cases/NNN_slug`
+3. `python scripts/unit_consistency_check.py cases/NNN_slug`
+4. Abrir `simulations/dwsim/NNN_slug.dwxmz` y ejecutar.
+5. `jupyter nbconvert --execute notebooks/reporting/NN_<slug>.ipynb`
+6. `python scripts/compute_checksums.py --verify cases/NNN_slug`
 
 ## 9. Resultados
 Tabla y figuras clave (SI). Las figuras viven en `assets/figures/`.

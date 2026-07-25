@@ -40,12 +40,22 @@ def _check_units_dict(units: dict, source: str, allowed, forbidden) -> list[str]
 def scan_metadata(path: Path, allowed, forbidden) -> list[str]:
     meta = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
     bad: list[str] = []
-    for inp in meta.get("inputs", []) or []:
-        bad.extend(
-            _check_units_dict(
-                inp.get("units") or {}, str(path), allowed, forbidden
+    for section in ("inputs", "outputs"):
+        for item in meta.get(section, []) or []:
+            symbol = item.get("name", "<sin nombre>")
+            unit = item.get("unit")
+            if unit:
+                bad.extend(
+                    _check_units_dict(
+                        {symbol: unit}, str(path), allowed, forbidden
+                    )
+                )
+            # Compatibilidad con metadatos legados que usaban un mapa `units`.
+            bad.extend(
+                _check_units_dict(
+                    item.get("units") or {}, str(path), allowed, forbidden
+                )
             )
-        )
     return bad
 
 
@@ -66,17 +76,30 @@ def scan_sidecar(path: Path, allowed, forbidden) -> list[str]:
 
 
 def main(target: Path) -> int:
+    if not target.exists():
+        print(f"[FAIL] objetivo inexistente: {target}")
+        return 1
     allowed, forbidden = _load_vocab()
     bad: list[str] = []
-    for p in target.rglob("metadata.yaml"):
+    metadata_files = sorted(target.rglob("metadata.yaml")) if target.is_dir() else []
+    sidecar_files = sorted(target.rglob("*.meta.yaml")) if target.is_dir() else []
+    if target.is_file() and target.name == "metadata.yaml":
+        metadata_files = [target]
+    elif target.is_file() and target.name.endswith(".meta.yaml"):
+        sidecar_files = [target]
+    checked = len(metadata_files) + len(sidecar_files)
+    if checked == 0:
+        print(f"[FAIL] no se encontraron archivos de unidades en: {target}")
+        return 1
+    for p in metadata_files:
         bad.extend(scan_metadata(p, allowed, forbidden))
-    for p in target.rglob("*.meta.yaml"):
+    for p in sidecar_files:
         bad.extend(scan_sidecar(p, allowed, forbidden))
     if bad:
         for b in bad:
             print(b)
         return 1
-    print("[OK] unidades consistentes con vocabulario SI.")
+    print(f"[OK] unidades consistentes en {checked} archivo(s).")
     return 0
 
 

@@ -5,10 +5,12 @@ Toda magnitud científica/ingenieril en este repositorio se expresa en
 **unidades SI**, salvo excepciones declaradas y justificadas.
 
 ## Unidades base
-kg, m, s, K, mol, A, cd. (Vocabulario en `schemas/units.controlled_vocabulary.yaml`.)
+kg, m, s, K, mol, A, cd. (Vocabulario en
+`schemas/units.controlled_vocabulary.yaml`.)
 
 ## Derivadas aceptadas
-Pa, J, W, N, Hz, m³, mol/m³, kg/m³, J/(mol·K), W/(m·K), Pa·s, entre otras.
+Pa, J, W, kW, N, Hz, m³, m³/s, mol/m³, kg/m³, kJ/kg, J/(mol·K),
+W/(m·K), Pa·s, entre otras.
 
 ## No-SI tolerados
 | Unidad | Condición |

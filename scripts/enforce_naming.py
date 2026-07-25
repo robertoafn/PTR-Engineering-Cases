@@ -42,11 +42,12 @@ def main() -> int:
             if not PATTERNS["cases"].match(p.name):
                 bad.append(f"cases: {p.relative_to(ROOT)}")
 
-    # Datasets CSV
-    processed = ROOT / "data" / "processed"
-    if processed.exists():
-        for p in processed.rglob("*.csv"):
-            if not PATTERNS["datasets"].match(p.name):
+    # Datasets canónicos: CSV con sidecar adyacente.
+    if cases_dir.exists():
+        for sidecar in cases_dir.rglob("*.meta.yaml"):
+            csv_name = sidecar.name.removesuffix(".meta.yaml") + ".csv"
+            p = sidecar.with_name(csv_name)
+            if p.is_file() and not PATTERNS["datasets"].match(p.name):
                 bad.append(f"datasets: {p.relative_to(ROOT)}")
 
     # Notebooks
@@ -66,10 +67,16 @@ def main() -> int:
                 bad.append(f"scripts: {p.relative_to(ROOT)}")
 
     # Figuras
-    figures = ROOT / "assets" / "figures"
-    if figures.exists():
-        for p in figures.rglob("*"):
-            if p.is_file() and p.suffix.lower() in {".png", ".svg", ".pdf"}:
+    figure_roots = [ROOT / "assets" / "figures"]
+    if cases_dir.exists():
+        figure_roots.extend(cases_dir.glob("*/assets/figures"))
+    for figures in figure_roots:
+        if figures.exists():
+            for p in figures.rglob("*"):
+                if not p.is_file():
+                    continue
+                if p.suffix.lower() not in {".png", ".svg", ".pdf"}:
+                    continue
                 if not PATTERNS["figures"].match(p.name):
                     bad.append(f"figures: {p.relative_to(ROOT)}")
 
