@@ -6,9 +6,17 @@ on:
   push:
     branches: [main]
 
+permissions:
+  contents: read
+
+concurrency:
+  group: validate-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   governance:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
 
@@ -16,26 +24,28 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements-ci.txt
 
-      - name: Install dependencies
+      - name: Install governance dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install -r requirements-ci.txt
 
       - name: Enforce naming conventions
         run: python scripts/enforce_naming.py
 
-      - name: Validate metadata (all cases)
+      - name: Validate metadata for all cases
         run: python scripts/validate_metadata.py cases/
 
-      - name: Validate tables
-        run: python scripts/validate_tables.py data/processed/
+      - name: Validate datasets for all cases
+        run: python scripts/validate_tables.py cases/
 
-      - name: Unit consistency check
+      - name: Check unit consistency
         run: python scripts/unit_consistency_check.py cases/
 
-      - name: Verify checksums
+      - name: Verify case checksums
         run: python scripts/compute_checksums.py --verify cases/
 
-      - name: Run unit tests
+      - name: Run regression tests
         run: pytest tests/ -q

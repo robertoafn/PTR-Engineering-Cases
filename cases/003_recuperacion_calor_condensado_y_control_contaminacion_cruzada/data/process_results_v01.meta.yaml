@@ -1,36 +1,88 @@
 dataset_id: process_results_v01
 case_id: 003_recuperacion_calor_condensado_y_control_contaminacion_cruzada
 title: Resultados de corrientes del escenario de recuperación de calor S001
-description: Resultados extraídos desde DWSIM 9.0.5 para el sistema de intercambio de calor entre condensado contaminado con metanol y agua de proceso limpia. Las unidades son SI salvo la entalpía específica y flujo de energía, que se conservan en kJ/kg y kW tal como fueron exportados por DWSIM.
+description: Resultados extraídos desde DWSIM 9.0.5 para el sistema de intercambio de calor entre condensado contaminado con metanol y agua de proceso limpia. Las unidades son SI salvo la entalpía específica en kJ/kg y el flujo de energía en kW; este último se deriva como caudal másico por entalpía específica a la precisión publicada.
 source_type: simulated
 license: CC0-1.0
 author: Roberto Flores
 variables:
   - symbol: object_id
+    column: object_id
     name: Identificador del objeto
     unit: dimensionless
     type: string
+  - symbol: object_type
+    column: object_type
+    name: Tipo de objeto
+    unit: dimensionless
+    type: string
   - symbol: T
+    column: temperature_K
     name: Temperatura
     unit: K
     type: float
     range: [250.0, 600.0]
   - symbol: P
+    column: pressure_Pa
     name: Presión absoluta
     unit: Pa
     type: float
     range: [100000.0, 2000000.0]
   - symbol: m_dot
+    column: mass_flow_kg_s
     name: Caudal másico
     unit: kg/s
     type: float
     range: [0.0, 100.0]
+  - symbol: n_dot
+    column: molar_flow_mol_s
+    name: Caudal molar
+    unit: mol/s
+    type: float
+    range: [0.0, 1000.0]
+  - symbol: V_dot
+    column: volumetric_flow_m3_s
+    name: Caudal volumétrico
+    unit: m^3/s
+    type: float
+    range: [0.0, 1.0]
+  - symbol: rho
+    column: density_kg_m3
+    name: Densidad
+    unit: kg/m^3
+    type: float
+    range: [0.0, 2000.0]
+  - symbol: z_v
+    column: vapor_molar_fraction
+    name: Fracción molar de vapor
+    unit: dimensionless
+    type: float
+    range: [0.0, 1.0]
+  - symbol: h
+    column: specific_enthalpy_kJ_kg
+    name: Entalpía específica
+    unit: kJ/kg
+    type: float
   - symbol: w_MeOH
+    column: methanol_mass_fraction
     name: Fracción másica de metanol
     unit: dimensionless
     type: float
     range: [0.0, 1.0]
+  - symbol: m_dot_MeOH
+    column: methanol_mass_flow_kg_s
+    name: Caudal másico de metanol
+    unit: kg/s
+    type: float
+    range: [0.0, 1.0]
+  - symbol: E_dot
+    column: energy_flow_kW
+    name: Flujo de energía
+    unit: kW
+    type: float
+primary_key:
+  - object_id
 created_at: '2026-07-21T01:28:48Z'
 version: 0.1.0
-checksum_sha256: 791a4c40857b1c1a3e319868d01dfe9d9eb253a8fd864ea6ef8c0a181bd69473
+checksum_sha256: ffb94f3f90e0a45945c127373b8aa1d46efd298d67c7536d117bbecb5de38cc7
 provenance_ref: ../provenance.json

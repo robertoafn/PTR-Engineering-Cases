@@ -1,6 +1,6 @@
 {
   "case_id": "003_recuperacion_calor_condensado_y_control_contaminacion_cruzada",
-  "generated_at": "2026-07-21T01:29:14Z",
+  "generated_at": "2026-07-25T19:08:17Z",
   "agents": [
     {
       "id": "agent:author",
@@ -11,6 +11,11 @@
       "id": "agent:assistant",
       "type": "software",
       "name": "Gemini 3.5 Flash"
+    },
+    {
+      "id": "agent:codex",
+      "type": "software",
+      "name": "OpenAI Codex"
     }
   ],
   "activities": [
@@ -52,6 +57,26 @@
       "generated": [
         "entity:process_results"
       ]
+    },
+    {
+      "id": "act:quality_audit_20260725",
+      "started_at": "2026-07-25T19:08:17Z",
+      "ended_at": "2026-07-25T19:08:17Z",
+      "software": "OpenAI Codex",
+      "parameters": {
+        "operations": [
+          "reconcile_energy_flow_from_published_mass_flow_and_enthalpy",
+          "review_pressure_differential_claims",
+          "update_dataset_checksum"
+        ]
+      },
+      "used": [
+        "entity:dwsim_export_s001_raw",
+        "entity:process_results"
+      ],
+      "generated": [
+        "entity:process_results"
+      ]
     }
   ],
   "entities": [
@@ -80,7 +105,7 @@
     {
       "id": "entity:process_results",
       "path": "data/process_results_v01.csv",
-      "checksum_sha256": "791a4c40857b1c1a3e319868d01dfe9d9eb253a8fd864ea6ef8c0a181bd69473",
+      "checksum_sha256": "ffb94f3f90e0a45945c127373b8aa1d46efd298d67c7536d117bbecb5de38cc7",
       "derived_from": [
         "entity:dwsim_simulation"
       ]

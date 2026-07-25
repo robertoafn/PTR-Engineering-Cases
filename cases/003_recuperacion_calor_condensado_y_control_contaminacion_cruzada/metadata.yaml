@@ -1,7 +1,7 @@
 case_id: 003_recuperacion_calor_condensado_y_control_contaminacion_cruzada
 title: Recuperación de calor de condensado y control de contaminación cruzada
 phenomenon: Transferencia de calor sensible entre condensado de vapor industrial (corriente caliente con trazas de metanol) y agua de proceso (corriente fría limpia) en un intercambiador de calor de carcasa y tubos en régimen estacionario, analizando el riesgo de contaminación cruzada por fugas físicas.
-objective: Determinar la carga térmica del intercambiador HX-301, la temperatura de salida del condensado y verificar que la presión en el lado frío (limpio) es igual o superior al lado caliente para prevenir fugas contaminantes del trazador metanol hacia el agua limpia en caso de falla de integridad mecánica.
+objective: Determinar la carga térmica del intercambiador HX-301 y la temperatura de salida del condensado; además, evaluar si el diferencial P_limpio - P_contaminado aporta un margen positivo para orientar una fuga hipotética sin confundir este tamiz con una validación de seguridad operacional.
 authors:
   - name: Roberto Flores
     email: roberto.flores.n1987@gmail.com
@@ -76,6 +76,10 @@ outputs:
     value: 300000.0
     unit: Pa
     source_type: simulated
+  - name: diferencial_presion_limpio_menos_contaminado
+    value: 0.0
+    unit: Pa
+    source_type: simulated
   - name: residuo_balance_masa
     value: 0.0
     unit: kg/s
@@ -93,8 +97,8 @@ qc_rules:
   - referential_integrity
   - checksum
 validation:
-  strategy: Balances de materia y energía en el intercambiador; validación del balance entálpico de cada corriente; réplica analítica aproximada de la carga térmica mediante la ecuación de diseño Q = U * A * F * LMTD; y comprobación del diferencial de presión para la prevención de la contaminación cruzada.
-  acceptance_criteria: Error en balance de masa en cada lado de 0.0%; residuo en balance de energía <= 0.1% respecto a la carga térmica total; desviación en la réplica analítica de LMTD <= 1.0%; y verificación de que el diferencial de presión P_frio - P_caliente sea >= 0 Pa para minimizar la fuerza impulsora de fuga del condensado contaminado con metanol.
+  strategy: Balances de materia y energía en el intercambiador; réplica analítica aproximada de la carga térmica mediante Q = U * A * F * LMTD; y tamiz conceptual del diferencial P_limpio - P_contaminado, sin modelar fuga, dinámica, integridad mecánica ni capas instrumentadas de protección.
+  acceptance_criteria: Error en balance de masa en cada lado de 0.0%; residuo en balance de energía <= 0.1% respecto a la carga térmica total; desviación en la réplica analítica de LMTD <= 1.0%. Para orientar una fuga hipotética se requiere P_limpio - P_contaminado > 0 Pa con un margen mínimo definido por análisis de riesgos y mantenido durante el dominio operativo; el escenario base de 0 Pa no demuestra ese control.
 traceability:
   provenance_ref: provenance.json
   derived_from:

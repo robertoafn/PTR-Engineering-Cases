@@ -31,5 +31,9 @@ casos integrados: 001 `validated`, 002 `review` y 003 `review`.
 El Caso 003 extiende la secuencia del Caso 002: reutiliza el condensado líquido
 caliente con trazas de metanol como fuente térmica para precalentar agua limpia
 en el intercambiador HX-301. Además de los balances de materia y energía,
-documenta la condición hidráulica `P_frío - P_caliente >= 0 Pa` como criterio
-de control de contaminación cruzada ante una eventual falla de integridad.
+evalúa la relación `P_limpio - P_contaminado`. El escenario base obtiene
+`0 Pa`, condición límite que no aporta margen ni demuestra seguridad
+operacional. El caso documenta que una aplicación real debe mantener un
+diferencial positivo definido por análisis de riesgos, vigilarlo de forma
+continua y complementar la presión con detección de fugas, aislamiento o una
+barrera mecánica apropiada.

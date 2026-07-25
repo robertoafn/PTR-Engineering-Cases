@@ -3,7 +3,7 @@
 > Portafolio técnico de casos reproducibles de ingeniería química industrial.
 > Stack open source · FAIR · SI · IUPAC · ISO 8000 · VIM · trazabilidad SHA-256.
 
-[![status](https://img.shields.io/badge/status-case--portfolio--v0.3.0-blue)](./CHANGELOG.md)
+[![status](https://img.shields.io/badge/status-development--v0.3.0-blue)](./CHANGELOG.md)
 [![license-code](https://img.shields.io/badge/code-MIT-green)](./LICENSE)
 [![license-docs](https://img.shields.io/badge/docs-CC--BY--4.0-lightgrey)](./LICENSE-docs)
 
@@ -70,7 +70,11 @@ source .venv/bin/activate
 .venv\Scripts\activate
 
 pip install -r requirements.txt
+python scripts/preflight.py cases/<NNN_slug>
+
+# Controles individuales equivalentes
 python scripts/validate_metadata.py cases/<NNN_slug>
+python scripts/validate_tables.py cases/<NNN_slug>
 python scripts/unit_consistency_check.py cases/<NNN_slug>
 python scripts/compute_checksums.py --verify cases/<NNN_slug>
 pytest tests/ -q
@@ -130,10 +134,13 @@ metanol.
 
 El escenario simulado entrega una carga térmica de `1.063410 MW`: el agua
 limpia se precalienta de `293.150 K` a `333.150 K` y el condensado se enfría de
-`406.649 K` a `384.187 K`. El diferencial de seguridad calculado es `0 Pa`
-(`P_frío - P_caliente`), cumpliendo el criterio definido para no favorecer el
-flujo del lado contaminado al lado limpio. El caso permanece en `review`; sus
-entradas y resultados son sintéticos o simulados y no representan condiciones
+`406.649 K` a `384.187 K`. El diferencial calculado entre el lado limpio y el
+contaminado es `0 Pa`; este valor es un límite sin margen y no demuestra control
+operacional de contaminación cruzada. Una aplicación real requiere presión
+mayor en el lado limpio durante todo el dominio operativo, monitoreo del
+diferencial y medidas adicionales de detección, aislamiento o diseño mecánico
+según el análisis de riesgos. El caso permanece en `review`; sus entradas y
+resultados son sintéticos o simulados y no representan condiciones
 operacionales reales. Ver [Caso 003](./cases/003_recuperacion_calor_condensado_y_control_contaminacion_cruzada/).
 
 ## Roadmap

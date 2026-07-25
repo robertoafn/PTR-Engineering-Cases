@@ -19,6 +19,26 @@ y este proyecto adhiere a [Semantic Versioning 2.0.0](https://semver.org/).
   Caso 002.
 - Actualizado `docs/00_overview.md` para reflejar los tres casos integrados y
   el criterio de control hidráulico de contaminación cruzada del Caso 003.
+- Separada la validación térmica del Caso 003 de la evaluación de seguridad:
+  `P_limpio - P_contaminado = 0 Pa` se documenta como condición sin margen,
+  no como demostración de control operacional.
+- Los sidecars de datasets ahora enlazan cada símbolo científico con su columna
+  CSV mediante el campo `column`, documentan todas las columnas canónicas y
+  declaran su clave primaria.
+- Añadidos `scripts/preflight.py` y `requirements-ci.txt` para un control local
+  único y un entorno mínimo de gobernanza en GitHub Actions.
+
+### Fixed
+- `compute_checksums.py` ahora verifica correctamente una ruta de caso
+  individual y falla ante rutas sin `provenance.json`.
+- `unit_consistency_check.py` valida los campos `unit` reales de entradas y
+  salidas de `metadata.yaml`.
+- CI valida los datasets canónicos bajo `cases/`; una ejecución con cero
+  datasets deja de producir un falso positivo.
+- Sincronizado el checksum obsoleto del sidecar de resultados del Caso 001 con
+  el CSV y su `provenance.json`.
+- Corregido el flujo de energía derivado de `MSTR-303` en el dataset del Caso
+  003 para que sea consistente con caudal y entalpía específica publicados.
 
 ## [0.2.0] - 2026-07-18
 

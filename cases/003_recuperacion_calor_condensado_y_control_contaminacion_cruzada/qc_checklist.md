@@ -13,11 +13,12 @@
 - [x] Balance global de masa PASS en ambos lados del intercambiador
 - [x] Balance global de energía PASS
 - [x] Réplica numérica de LMTD y ecuación de diseño térmico PASS
-- [x] Verificación del criterio de presiones contra contaminación cruzada PASS
+- [x] Diferencial limpio-contaminado evaluado y limitaciones documentadas
+- [ ] Margen hidráulico positivo contra contaminación cruzada demostrado
 - [x] `validation_report.md` con veredicto declarado
 - [x] `CHANGELOG.md` del caso actualizado
-- [ ] Workflow `validate` del PR de integración en verde (pendiente de CI)
-- [ ] Workflow `lint` del PR de integración en verde (pendiente de CI)
+- [x] Workflow `validate` de la integración original en verde
+- [x] Workflow `lint` de la integración original en verde
 - [x] Archivo versionado inspeccionado y resuelto en DWSIM 9.0.5
 - [x] Resultados principales concordantes con la documentación
 - [x] Actividades de simulación y extracción registradas en `provenance.json`

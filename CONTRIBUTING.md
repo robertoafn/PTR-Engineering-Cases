@@ -14,19 +14,22 @@ en `docs/`.
    - `release/vX.Y.Z` para preparación de release.
 3. Hacer commits **convencionales** (`feat:`, `fix:`, `docs:`, `chore:`,
    `refactor:`, `test:`).
-4. Abrir Pull Request hacia `main`.
-5. CI (`.github/workflows/validate.yml`) debe estar **verde**.
-6. Revisión y merge.
+4. Ejecutar `python scripts/preflight.py cases/` o sobre el caso modificado.
+5. Abrir Pull Request hacia `main`.
+6. CI (`validate` y `lint`) debe estar **verde**.
+7. Revisión y merge.
 
 ## Requisitos para PR
 
 - [ ] `metadata.yaml` válido (si toca un caso).
+- [ ] Sidecars y datasets canónicos válidos.
 - [ ] Checksums actualizados en `provenance.json`.
 - [ ] QC checklist completado (`qc_checklist.md`).
 - [ ] Status declarado: `draft | review | validated | published`.
 - [ ] Naming conforme a `docs/03_naming_conventions.md`.
 - [ ] Unidades SI verificadas (`scripts/unit_consistency_check.py`).
 - [ ] `CHANGELOG.md` actualizado (raíz y caso si aplica).
+- [ ] `python scripts/preflight.py cases/` ejecutado sin errores.
 
 ## Reglas Git
 

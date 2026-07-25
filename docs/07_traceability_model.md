@@ -29,7 +29,7 @@
   "entities": [
     {
       "id": "ent:output_table",
-      "path": "data/processed/...csv",
+      "path": "data/process_results_v01.csv",
       "checksum_sha256": "...",
       "derived_from": ["ent:input_dataset"]
     }
@@ -44,4 +44,9 @@
 
 ## Verificación
 `compute_checksums.py --verify` falla si el hash recalculado no coincide
-con el declarado.
+con el declarado. Acepta tanto el contenedor completo como un caso individual:
+
+```bash
+python scripts/compute_checksums.py --verify cases/
+python scripts/compute_checksums.py --verify cases/003_slug/
+```
