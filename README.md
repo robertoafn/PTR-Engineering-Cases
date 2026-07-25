@@ -3,7 +3,7 @@
 > Portafolio técnico de casos reproducibles de ingeniería química industrial.
 > Stack open source · FAIR · SI · IUPAC · ISO 8000 · VIM · trazabilidad SHA-256.
 
-[![status](https://img.shields.io/badge/status-development--v0.3.0-blue)](./CHANGELOG.md)
+[![release](https://img.shields.io/badge/release-v0.3.0-blue)](./CHANGELOG.md)
 [![license-code](https://img.shields.io/badge/code-MIT-green)](./LICENSE)
 [![license-docs](https://img.shields.io/badge/docs-CC--BY--4.0-lightgrey)](./LICENSE-docs)
 
@@ -162,7 +162,7 @@ operacionales reales. Ver [Caso 003](./cases/003_recuperacion_calor_condensado_y
 |---|---|
 | **v0.1.0** | Arquitectura fundacional: plantillas, schemas, scripts, CI y gobernanza |
 | **v0.2.0** | Primer caso integrado, índice de casos y sincronización documental |
-| **v0.3.0** | Incorporación del Caso 003, revisión de casos contextuales y endurecimiento de validadores de datasets, unidades y checksums |
+| **v0.3.0 (actual)** | Incorporación del Caso 003, revisión de casos contextuales y endurecimiento de validadores de datasets, unidades y checksums |
 | **v0.4.0** | Visualizaciones técnicas, automatización del índice y cobertura de tests ≥ 80 % |
 | **v1.0.0** | Portafolio inicial validado y publicado con varios casos reproducibles |
 

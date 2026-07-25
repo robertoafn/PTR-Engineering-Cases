@@ -1,7 +1,7 @@
 # 003_recuperacion_calor_condensado_y_control_contaminacion_cruzada — Recuperación de calor de condensado y control de contaminación cruzada
 
 > **Status:** review  
-> **Versión:** 0.1.0  
+> **Versión:** 0.1.1<br>
 > **Aviso de datos:** entradas y resultados sintéticos o simulados.  
 > **No representa condiciones operacionales reales, datos propietarios ni procedimientos de una instalación específica.**
 

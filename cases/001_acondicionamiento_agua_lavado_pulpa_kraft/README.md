@@ -1,7 +1,7 @@
 # 001_acondicionamiento_agua_lavado_pulpa_kraft — Acondicionamiento de agua para lavado de pulpa Kraft
 
 > **Status:** validated  
-> **Versión:** 0.1.1  
+> **Versión:** 0.1.2<br>
 > **Aviso de datos:** entradas sintéticas y resultados simulados.  
 > **No representa condiciones operacionales reales ni datos de una instalación específica.**
 

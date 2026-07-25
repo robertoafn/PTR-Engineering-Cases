@@ -25,8 +25,9 @@ ingeniería química industrial, donde cada caso documenta la cadena completa:
 - Comunidad académica y open-source.
 
 ## Estado actual
-v0.3.0 (en desarrollo) — Arquitectura fundacional (v0.1.0) completa y tres
-casos integrados: 001 `validated`, 002 `review` y 003 `review`.
+v0.3.0 — Release publicado del portafolio con la arquitectura fundacional
+(v0.1.0) completa y tres casos integrados: 001 `validated`, 002 `review` y 003
+`review`.
 
 El Caso 003 extiende la secuencia del Caso 002: reutiliza el condensado líquido
 caliente con trazas de metanol como fuente térmica para precalentar agua limpia

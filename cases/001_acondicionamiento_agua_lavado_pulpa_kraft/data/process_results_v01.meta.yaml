@@ -68,6 +68,6 @@ variables:
 primary_key:
 - object_id
 created_at: '2026-07-17T02:30:42Z'
-version: 0.1.0
+version: 0.1.1
 checksum_sha256: a5f614093066bca6fc97feb6518edc3ecb9d5e83e8879b0f2f94ddbc5ab9091e
 provenance_ref: ../provenance.json

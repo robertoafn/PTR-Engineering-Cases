@@ -91,6 +91,6 @@ primary_key:
   - scenario_id
   - sample_id
 created_at: '2026-07-18T00:00:00Z'
-version: 0.1.0
+version: 0.1.1
 checksum_sha256: 390201853de0e38fa1ccd6586e4c2e1763cc3fc408ca3995483156d2dc99ad48
 provenance_ref: ../provenance.json
