@@ -3,7 +3,7 @@
 > **Status:** review  
 > **Versión:** 0.1.0  
 > **Aviso de datos:** entradas y resultados sintéticos o simulados.  
-> **No representa condiciones operacionales reales, datos internos ni procedimientos oficiales de CMPC.**
+> **No representa condiciones operacionales reales, datos propietarios ni procedimientos de una instalación específica.**
 
 ---
 
@@ -34,6 +34,13 @@ El objetivo de ingeniería es:
 ## 2. Contexto y límites
 
 En las plantas de celulosa Kraft, el condensado de vapor secundario (evaporadores, digestores) recupera calor hacia corrientes de agua fresca o de alimentación de calderas. Sin embargo, estos condensados suelen arrastrar impurezas volátiles de proceso como metanol y compuestos sulfurados de bajo punto de ebullición (TRS). 
+
+En la cadena conceptual del portafolio, este caso se ubica después de la
+separación flash del Caso 002. Toma como base redondeada el caudal, la
+temperatura, la presión y la composición de `MSTR-204` para definir `MSTR-301`;
+las propiedades restantes se resuelven en el modelo del Caso 003. HX-301 transfiere calor a
+agua limpia sin mezclar intencionalmente ambas corrientes. El destino posterior
+del condensado enfriado y del agua precalentada queda fuera del modelo.
 
 El intercambiador de calor HX-301 actúa como acoplamiento térmico. Una presión
 mayor y monitoreada en el lado limpio puede orientar una fuga hacia el lado

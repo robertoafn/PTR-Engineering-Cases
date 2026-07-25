@@ -36,4 +36,5 @@
 - **Impacto si se viola:** La presión de salida y el requerimiento total de bombeo variarían.
 - **Referencia:** Supuesto sintético.
 
-> Los supuestos son didácticos y no representan datos operacionales de CMPC.
+> Los supuestos son didácticos y no representan datos operacionales de una
+> instalación industrial específica.

@@ -92,11 +92,24 @@ de cada caso.
 | [002](./cases/002_recuperacion_vapor_flash_y_particion_de_volatiles/) | Recuperación de vapor flash y partición de compuestos volátiles | Flash isoentálpico y equilibrio vapor-líquido | Válvula, separador gas-líquido | DWSIM 9.0.5, OpenChrom 1.6.14, Python 3.13.5 | `review` |
 | [003](./cases/003_recuperacion_calor_condensado_y_control_contaminacion_cruzada/) | Recuperación de calor de condensado y control de contaminación cruzada | Transferencia de calor y control hidráulico de contaminación | Intercambiador de carcasa y tubos (HX-301) | DWSIM 9.0.5, Python 3.13.5 | `review` |
 
+### Ubicación conceptual en el proceso productivo Kraft
+
+Los casos representan operaciones unitarias y servicios auxiliares de una
+cadena didáctica; no constituyen una simulación integrada de una planta
+completa.
+
+| Caso | Área o etapa representada | Función productiva | Relación entre casos |
+|---|---|---|---|
+| 001 | Servicio auxiliar previo al lavado de pulpa | Bombear y calentar agua que podría alimentar una operación de desplazamiento de licor negro | Caso independiente; no intercambia corrientes con 002–003 |
+| 002 | Gestión de condensados calientes asociada a evaporación y recuperación | Reducir presión, generar vapor flash y separar una fase líquida con trazas de metanol | Produce conceptualmente el condensado líquido utilizado por el Caso 003 |
+| 003 | Recuperación indirecta de calor desde condensado residual | Precalentar agua limpia mediante HX-301 y evaluar la dirección hidráulica de una fuga hipotética | Usa el caudal, la temperatura, la presión y la fracción másica de metanol de `MSTR-204` como base redondeada para `MSTR-301`; las propiedades restantes se recalculan en el Caso 003 |
+
 ### Caso fundacional 001
 
 El primer caso implementado establece el patrón canónico del portafolio. Modela
 una línea auxiliar simplificada de agua asociada conceptualmente al lavado de
-pulpa Kraft, con datos sintéticos y sin información operacional interna de CMPC.
+pulpa Kraft, con datos sintéticos y sin información operacional de una
+instalación real.
 Incluye:
 
 - archivo de simulación DWSIM versionado;

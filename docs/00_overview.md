@@ -37,3 +37,13 @@ operacional. El caso documenta que una aplicación real debe mantener un
 diferencial positivo definido por análisis de riesgos, vigilarlo de forma
 continua y complementar la presión con detección de fugas, aislamiento o una
 barrera mecánica apropiada.
+
+## Relación con el proceso productivo
+
+El portafolio no representa una planta Kraft integrada. El Caso 001 modela un
+servicio auxiliar de agua previo al lavado de pulpa y es independiente de los
+otros casos. Los casos 002 y 003 sí forman una secuencia conceptual: expansión
+y separación flash de un condensado caliente, seguida por recuperación
+indirecta de calor desde la fase líquida residual para precalentar agua limpia.
+Todas las condiciones son sintéticas o simuladas y no se atribuyen a una
+instalación industrial específica.

@@ -3,7 +3,7 @@
 > **Status:** validated  
 > **Versión:** 0.1.1  
 > **Aviso de datos:** entradas sintéticas y resultados simulados.  
-> **No representa condiciones operacionales reales ni datos internos de CMPC.**
+> **No representa condiciones operacionales reales ni datos de una instalación específica.**
 
 ---
 
@@ -37,8 +37,10 @@ etapas posteriores y recuperar materia orgánica y químicos hacia el circuito d
 
 Este caso no simula el lavador, la suspensión de fibras ni el licor negro. Representa
 únicamente un sistema auxiliar simplificado de bombeo y acondicionamiento térmico de agua.
-La asociación con CMPC es contextual y didáctica; no se utilizan datos propietarios ni
-condiciones de una planta específica.
+Su ubicación productiva es previa al equipo de lavado: entrega una corriente de agua con
+presión y temperatura especificadas, pero no calcula eficiencia de lavado, desplazamiento
+de licor ni recuperación química. No se utilizan datos propietarios ni condiciones de una
+planta específica.
 
 ## 4. Fundamento científico
 

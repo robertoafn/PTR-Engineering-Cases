@@ -27,6 +27,8 @@ y este proyecto adhiere a [Semantic Versioning 2.0.0](https://semver.org/).
   declaran su clave primaria.
 - Añadidos `scripts/preflight.py` y `requirements-ci.txt` para un control local
   único y un entorno mínimo de gobernanza en GitHub Actions.
+- Eliminadas las referencias corporativas y documentada la ubicación
+  conceptual de cada caso dentro de una cadena productiva Kraft genérica.
 
 ### Fixed
 - `compute_checksums.py` ahora verifica correctamente una ruta de caso
@@ -64,7 +66,8 @@ y este proyecto adhiere a [Semantic Versioning 2.0.0](https://semver.org/).
 
 ### Notes
 - Los datos y cromatogramas de los casos 001 y 002 son sintéticos y no
-  representan condiciones operacionales ni información interna de CMPC.
+  representan condiciones operacionales ni información de una instalación
+  industrial específica.
 
 ## [0.1.0] - 2026-05-15
 
