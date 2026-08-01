@@ -1,0 +1,221 @@
+schema_version: 1.0.0
+case_id: 003_recuperacion_calor_condensado_y_control_contaminacion_cruzada
+
+dwsim:
+  file: simulations/dwsim/003_recuperacion_calor_condensado_y_control_contaminacion_cruzada.dwxmz
+  required_version: 9.0.5
+  timeout_seconds: 120
+  object_map:
+    MSTR-301_CONDENSADO_CALIENTE: MSTR-301_CONDENSADO_CALIENTE
+    MSTR-302_AGUA_FRIA: MSTR-302_AGUA_FRIA
+    MSTR-303_CONDENSADO_ENFRIADO: MSTR-303_CONDENSADO_ENFRIADO
+    MSTR-304_AGUA_PRECALENTADA: MSTR-304_AGUA_PRECALENTADA
+    HX-301_INTERCAMBIADOR_CALOR: HX-301_INTERCAMBIADOR_CALOR
+
+datasets:
+  process:
+    path: data/process_results_v01.csv
+    id_column: object_id
+
+criteria:
+  - id: integridad_artefactos
+    title: Metadatos, tablas, unidades y checksums
+    type: existing_validators
+    scope: data_quality
+    blocking: true
+    required: true
+    validators:
+      - metadata
+      - tables
+      - units
+      - checksums
+    evidence_paths:
+      - metadata.yaml
+      - data/process_results_v01.meta.yaml
+      - provenance.json
+
+  - id: paridad_api_dataset_estado
+    title: Paridad DWSIM API-dataset del estado de las corrientes
+    type: api_dataset_consistency
+    scope: data_quality
+    blocking: true
+    required: false
+    dataset: process
+    ids:
+      - MSTR-301_CONDENSADO_CALIENTE
+      - MSTR-302_AGUA_FRIA
+      - MSTR-303_CONDENSADO_ENFRIADO
+      - MSTR-304_AGUA_PRECALENTADA
+    columns:
+      - dataset_column: temperature_K
+        api_column: temperature_K
+      - dataset_column: pressure_Pa
+        api_column: pressure_Pa
+      - dataset_column: mass_flow_kg_s
+        api_column: mass_flow_kg_s
+      - dataset_column: specific_enthalpy_kJ_kg
+        api_column: specific_enthalpy_kJ_kg
+    threshold:
+      operator: <=
+      value: 0.05
+      unit: "%"
+    unavailable_status: NOT_RUN
+    evidence_paths:
+      - data/process_results_v01.csv
+      - simulations/dwsim/003_recuperacion_calor_condensado_y_control_contaminacion_cruzada.dwxmz
+
+  - id: paridad_api_dataset_energia
+    title: Paridad DWSIM API-dataset del flujo energético
+    type: api_dataset_consistency
+    scope: data_quality
+    blocking: true
+    required: false
+    dataset: process
+    ids:
+      - MSTR-301_CONDENSADO_CALIENTE
+      - MSTR-302_AGUA_FRIA
+      - MSTR-303_CONDENSADO_ENFRIADO
+      - MSTR-304_AGUA_PRECALENTADA
+    columns:
+      - dataset_column: energy_flow_kW
+        api_column: energy_flow_kW
+    threshold:
+      operator: <=
+      value: 0.05
+      unit: "%"
+    unavailable_status: NOT_RUN
+    evidence_paths:
+      - data/process_results_v01.csv
+      - simulations/dwsim/003_recuperacion_calor_condensado_y_control_contaminacion_cruzada.dwxmz
+
+  - id: balance_masa_lado_caliente
+    title: Balance de masa del lado caliente
+    type: side_mass_balance
+    scope: numerical
+    blocking: true
+    required: true
+    dataset: process
+    id_column: object_id
+    value_column: mass_flow_kg_s
+    inlet_ids:
+      - MSTR-301_CONDENSADO_CALIENTE
+    outlet_ids:
+      - MSTR-303_CONDENSADO_ENFRIADO
+    threshold:
+      operator: <=
+      value: 0.01
+      unit: "%"
+    evidence_paths:
+      - data/process_results_v01.csv
+
+  - id: balance_masa_lado_frio
+    title: Balance de masa del lado frío
+    type: side_mass_balance
+    scope: numerical
+    blocking: true
+    required: true
+    dataset: process
+    id_column: object_id
+    value_column: mass_flow_kg_s
+    inlet_ids:
+      - MSTR-302_AGUA_FRIA
+    outlet_ids:
+      - MSTR-304_AGUA_PRECALENTADA
+    threshold:
+      operator: <=
+      value: 0.01
+      unit: "%"
+    evidence_paths:
+      - data/process_results_v01.csv
+
+  - id: balance_energia_transferida
+    title: Balance de energía normalizado por la carga transferida
+    type: stream_energy_balance
+    scope: numerical
+    blocking: true
+    required: true
+    terms:
+      - dataset: process
+        column: energy_flow_kW
+        ids:
+          - MSTR-301_CONDENSADO_CALIENTE
+        factor: 1.0
+      - dataset: process
+        column: energy_flow_kW
+        ids:
+          - MSTR-302_AGUA_FRIA
+        factor: 1.0
+      - dataset: process
+        column: energy_flow_kW
+        ids:
+          - MSTR-303_CONDENSADO_ENFRIADO
+        factor: -1.0
+      - dataset: process
+        column: energy_flow_kW
+        ids:
+          - MSTR-304_AGUA_PRECALENTADA
+        factor: -1.0
+    normalization: reference
+    normalization_reference:
+      metadata_output: carga_termica_exchanger
+      factor: 0.001
+      absolute: true
+    threshold:
+      operator: <=
+      value: 0.1
+      unit: "%"
+    evidence_paths:
+      - data/process_results_v01.csv
+      - metadata.yaml
+
+  - id: replica_lmtd
+    title: Desviación de la réplica analítica de LMTD
+    type: reported_metric
+    scope: phenomenon
+    blocking: true
+    required: true
+    value: 0.007
+    threshold:
+      operator: <=
+      value: 0.5
+      unit: "%"
+    evidence_paths:
+      - validation_report.md
+      - data/process_results_v01.csv
+    notes: Métrica reportada por la réplica analítica vigente; no se presenta como cálculo nuevo del motor.
+
+  - id: replica_carga_termica
+    title: Desviación de la réplica analítica de la carga térmica
+    type: reported_metric
+    scope: phenomenon
+    blocking: true
+    required: true
+    value: 0.00028
+    threshold:
+      operator: <=
+      value: 0.5
+      unit: "%"
+    evidence_paths:
+      - validation_report.md
+      - metadata.yaml
+    notes: Métrica reportada para Q=U*A*F*LMTD frente a la carga DWSIM.
+
+  - id: margen_presion_limpio_contaminado
+    title: Margen de presión limpio menos contaminado
+    type: pressure_margin
+    scope: safety
+    blocking: false
+    required: true
+    value:
+      metadata_output: diferencial_presion_limpio_menos_contaminado
+    threshold:
+      operator: ">"
+      value: 0.0
+      unit: Pa
+    failure_status: NOT_DEMONSTRATED
+    unavailable_status: NOT_DEMONSTRATED
+    evidence_paths:
+      - metadata.yaml
+      - data/process_results_v01.csv
+      - validation_report.md
+    notes: El escenario base tiene 0 Pa. No demuestra dirección hidráulica segura ni validación operacional; el margen mínimo debe definirse mediante análisis de riesgos.

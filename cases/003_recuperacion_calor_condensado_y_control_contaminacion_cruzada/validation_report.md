@@ -108,3 +108,34 @@ deposición con el tiempo pueden reducir el coeficiente $U$.
 El caso permanece en `review`. Es reproducible como estudio térmico
 estacionario y como tamiz conceptual de presión; no es una validación de diseño,
 seguridad o operación industrial.
+
+<!-- PTR-VALIDATION:AUTO:START -->
+## Resultado automático reproducible
+
+- **Fecha UTC:** 2026-07-26T02:40:27Z
+- **Validador:** Roberto Flores Núñez
+- **Versión del caso:** 0.1.2
+- **Fuente solicitada:** `dwsim`
+- **Fuente utilizada:** `dwsim_api`
+- **Resultado general:** **CONDITIONAL**
+- **Detalle de fuente:** simulación resuelta mediante DWSIM Automation API
+
+| Criterio | Alcance | Umbral | Resultado | Estado |
+|---|---|---:|---:|---|
+| Metadatos, tablas, unidades y checksums | data_quality | declarativo | 0 errores | ✅ PASS |
+| Paridad DWSIM API-dataset del estado de las corrientes | data_quality | <= 0.05 % | 0.000173345376563 % | ✅ PASS |
+| Paridad DWSIM API-dataset del flujo energético | data_quality | <= 0.05 % | 0.000173345376542 % | ✅ PASS |
+| Balance de masa del lado caliente | numerical | <= 0.01 % | 0 % | ✅ PASS |
+| Balance de masa del lado frío | numerical | <= 0.01 % | 0 % | ✅ PASS |
+| Balance de energía normalizado por la carga transferida | numerical | <= 0.1 % | 3.19190706802e-06 % | ✅ PASS |
+| Desviación de la réplica analítica de LMTD | phenomenon | <= 0.5 % | 0.007 % | ✅ PASS |
+| Desviación de la réplica analítica de la carga térmica | phenomenon | <= 0.5 % | 0.00028 % | ✅ PASS |
+| Margen de presión limpio menos contaminado | safety | > 0.0 Pa | 0 Pa | ⚠️ NOT_DEMONSTRATED |
+
+### Evidencia de ejecución
+
+- Comando base: `python scripts/validate_case.py cases/003_recuperacion_calor_condensado_y_control_contaminacion_cruzada --source dwsim`
+- Resultado estructurado: `validation_results.json`
+
+Esta sección es generada por `scripts/validate_case.py`; la narrativa técnica fuera de los delimitadores se conserva.
+<!-- PTR-VALIDATION:AUTO:END -->

@@ -1,0 +1,53 @@
+schema_version: 1.0.0
+case_id: 000_template
+
+dwsim:
+  file: simulations/dwsim/000_template.dwxmz
+  required_version: 9.0.5
+  timeout_seconds: 120
+  object_map:
+    MSTR-000_ENTRADA: MSTR-000_ENTRADA
+    MSTR-000_SALIDA: MSTR-000_SALIDA
+
+datasets:
+  process:
+    path: data/process_results_v01.csv
+    id_column: object_id
+
+criteria:
+  - id: integridad_artefactos
+    title: Metadatos, tablas, unidades y checksums
+    type: existing_validators
+    scope: data_quality
+    blocking: true
+    required: true
+    validators:
+      - metadata
+      - tables
+      - units
+      - checksums
+    evidence_paths:
+      - metadata.yaml
+      - data/process_results_v01.meta.yaml
+      - provenance.json
+
+  - id: balance_masa_global
+    title: Balance global de masa
+    type: global_mass_balance
+    scope: numerical
+    blocking: true
+    required: true
+    dataset: process
+    id_column: object_id
+    value_column: mass_flow_kg_s
+    inlet_ids:
+      - MSTR-000_ENTRADA
+    outlet_ids:
+      - MSTR-000_SALIDA
+    threshold:
+      operator: <=
+      value: 0.5
+      unit: "%"
+    evidence_paths:
+      - data/process_results_v01.csv
+    notes: Sustituir los IDs por la frontera física del caso y declarar por separado cada lado independiente.

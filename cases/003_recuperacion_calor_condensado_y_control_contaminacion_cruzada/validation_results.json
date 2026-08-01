@@ -1,0 +1,239 @@
+{
+  "actual_source": "dwsim_api",
+  "case_id": "003_recuperacion_calor_condensado_y_control_contaminacion_cruzada",
+  "case_version": "0.1.2",
+  "criteria": [
+    {
+      "blocking": true,
+      "evidence_paths": [
+        "metadata.yaml",
+        "data/process_results_v01.meta.yaml",
+        "provenance.json"
+      ],
+      "evidence_source": "existing_validator",
+      "id": "integridad_artefactos",
+      "message": "metadata: OK ([OK] 1 metadata file(s) valid.) | tables: OK ([OK] 1 tabla(s) válida(s).) | units: OK ([OK] unidades consistentes en 2 archivo(s).) | checksums: OK",
+      "required": true,
+      "result": {
+        "unit": "errores",
+        "value": 0.0
+      },
+      "scope": "data_quality",
+      "status": "PASS",
+      "threshold": null,
+      "title": "Metadatos, tablas, unidades y checksums",
+      "type": "existing_validators"
+    },
+    {
+      "blocking": true,
+      "evidence_paths": [
+        "data/process_results_v01.csv",
+        "simulations/dwsim/003_recuperacion_calor_condensado_y_control_contaminacion_cruzada.dwxmz"
+      ],
+      "evidence_source": "dwsim_api",
+      "id": "paridad_api_dataset_estado",
+      "message": "máxima discrepancia en MSTR-302_AGUA_FRIA specific_enthalpy_kJ_kg↔specific_enthalpy_kJ_kg: dataset=-2656.99; api=-2656.99460577",
+      "required": false,
+      "result": {
+        "unit": "%",
+        "value": 0.00017334537656269272
+      },
+      "scope": "data_quality",
+      "status": "PASS",
+      "threshold": {
+        "operator": "<=",
+        "unit": "%",
+        "value": 0.05
+      },
+      "title": "Paridad DWSIM API-dataset del estado de las corrientes",
+      "type": "api_dataset_consistency"
+    },
+    {
+      "blocking": true,
+      "evidence_paths": [
+        "data/process_results_v01.csv",
+        "simulations/dwsim/003_recuperacion_calor_condensado_y_control_contaminacion_cruzada.dwxmz"
+      ],
+      "evidence_source": "dwsim_api",
+      "id": "paridad_api_dataset_energia",
+      "message": "máxima discrepancia en MSTR-302_AGUA_FRIA energy_flow_kW↔energy_flow_kW: dataset=-13284.95; api=-13284.9730288",
+      "required": false,
+      "result": {
+        "unit": "%",
+        "value": 0.00017334537654215454
+      },
+      "scope": "data_quality",
+      "status": "PASS",
+      "threshold": {
+        "operator": "<=",
+        "unit": "%",
+        "value": 0.05
+      },
+      "title": "Paridad DWSIM API-dataset del flujo energético",
+      "type": "api_dataset_consistency"
+    },
+    {
+      "blocking": true,
+      "evidence_paths": [
+        "data/process_results_v01.csv"
+      ],
+      "evidence_source": "dwsim_api",
+      "id": "balance_masa_lado_caliente",
+      "message": "entrada=8.951122; salida=8.951122",
+      "required": true,
+      "result": {
+        "unit": "%",
+        "value": 0.0
+      },
+      "scope": "numerical",
+      "status": "PASS",
+      "threshold": {
+        "operator": "<=",
+        "unit": "%",
+        "value": 0.01
+      },
+      "title": "Balance de masa del lado caliente",
+      "type": "side_mass_balance"
+    },
+    {
+      "blocking": true,
+      "evidence_paths": [
+        "data/process_results_v01.csv"
+      ],
+      "evidence_source": "dwsim_api",
+      "id": "balance_masa_lado_frio",
+      "message": "entrada=5; salida=5",
+      "required": true,
+      "result": {
+        "unit": "%",
+        "value": 0.0
+      },
+      "scope": "numerical",
+      "status": "PASS",
+      "threshold": {
+        "operator": "<=",
+        "unit": "%",
+        "value": 0.01
+      },
+      "title": "Balance de masa del lado frío",
+      "type": "side_mass_balance"
+    },
+    {
+      "blocking": true,
+      "evidence_paths": [
+        "data/process_results_v01.csv",
+        "metadata.yaml"
+      ],
+      "evidence_source": "dwsim_api",
+      "id": "balance_energia_transferida",
+      "message": "residuo=3.3943058952e-05",
+      "required": true,
+      "result": {
+        "unit": "%",
+        "value": 3.1919070680161623e-06
+      },
+      "scope": "numerical",
+      "status": "PASS",
+      "threshold": {
+        "operator": "<=",
+        "unit": "%",
+        "value": 0.1
+      },
+      "title": "Balance de energía normalizado por la carga transferida",
+      "type": "stream_energy_balance"
+    },
+    {
+      "blocking": true,
+      "evidence_paths": [
+        "validation_report.md",
+        "data/process_results_v01.csv"
+      ],
+      "evidence_source": "reported_metric",
+      "id": "replica_lmtd",
+      "message": "criterio cumplido",
+      "required": true,
+      "result": {
+        "unit": "%",
+        "value": 0.007
+      },
+      "scope": "phenomenon",
+      "status": "PASS",
+      "threshold": {
+        "operator": "<=",
+        "unit": "%",
+        "value": 0.5
+      },
+      "title": "Desviación de la réplica analítica de LMTD",
+      "type": "reported_metric"
+    },
+    {
+      "blocking": true,
+      "evidence_paths": [
+        "validation_report.md",
+        "metadata.yaml"
+      ],
+      "evidence_source": "reported_metric",
+      "id": "replica_carga_termica",
+      "message": "criterio cumplido",
+      "required": true,
+      "result": {
+        "unit": "%",
+        "value": 0.00028
+      },
+      "scope": "phenomenon",
+      "status": "PASS",
+      "threshold": {
+        "operator": "<=",
+        "unit": "%",
+        "value": 0.5
+      },
+      "title": "Desviación de la réplica analítica de la carga térmica",
+      "type": "reported_metric"
+    },
+    {
+      "blocking": false,
+      "evidence_paths": [
+        "metadata.yaml",
+        "data/process_results_v01.csv",
+        "validation_report.md"
+      ],
+      "evidence_source": "dwsim_api",
+      "id": "margen_presion_limpio_contaminado",
+      "message": "criterio no cumplido",
+      "required": true,
+      "result": {
+        "unit": "Pa",
+        "value": 0.0
+      },
+      "scope": "safety",
+      "status": "NOT_DEMONSTRATED",
+      "threshold": {
+        "operator": ">",
+        "unit": "Pa",
+        "value": 0.0
+      },
+      "title": "Margen de presión limpio menos contaminado",
+      "type": "pressure_margin"
+    }
+  ],
+  "datasets": [
+    "cases/003_recuperacion_calor_condensado_y_control_contaminacion_cruzada/data/process_results_v01.csv"
+  ],
+  "dwsim_version": "DWSIM version 9.0.5.0 (28-10-2025 10:42:38)",
+  "figures": [
+    "cases/003_recuperacion_calor_condensado_y_control_contaminacion_cruzada/assets/figures/fig_003_01_flowsheet.png"
+  ],
+  "generated_at_utc": "2026-07-26T02:40:27Z",
+  "lifecycle_status": "review",
+  "overall_status": "CONDITIONAL",
+  "requested_source": "dwsim",
+  "schema_version": "1.0.0",
+  "scopes": {
+    "data_quality": "PASS",
+    "numerical": "PASS",
+    "phenomenon": "PASS",
+    "safety": "CONDITIONAL"
+  },
+  "source_message": "simulación resuelta mediante DWSIM Automation API",
+  "validator": "Roberto Flores Núñez"
+}

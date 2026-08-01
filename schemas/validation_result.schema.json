@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/robertoafn/PTR-Engineering-Cases/schemas/validation_result.schema.json",
+  "title": "Resultado de validación PTR",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "case_id",
+    "case_version",
+    "generated_at_utc",
+    "validator",
+    "requested_source",
+    "actual_source",
+    "overall_status",
+    "lifecycle_status",
+    "scopes",
+    "criteria",
+    "datasets",
+    "figures"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "case_id": {"type": "string"},
+    "case_version": {"type": "string"},
+    "generated_at_utc": {"type": "string", "format": "date-time"},
+    "validator": {"type": "string"},
+    "requested_source": {"enum": ["auto", "dataset", "dwsim"]},
+    "actual_source": {"enum": ["dwsim_api", "exported_dataset", "not_available"]},
+    "dwsim_version": {"type": ["string", "null"]},
+    "overall_status": {"enum": ["PASS", "CONDITIONAL", "FAIL"]},
+    "lifecycle_status": {"enum": ["draft", "review", "validated", "published"]},
+    "source_message": {"type": "string"},
+    "scopes": {
+      "type": "object",
+      "additionalProperties": {"enum": ["PASS", "CONDITIONAL", "FAIL", "NOT_RUN"]}
+    },
+    "criteria": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "title",
+          "type",
+          "scope",
+          "blocking",
+          "required",
+          "status",
+          "evidence_source",
+          "result",
+          "threshold",
+          "message",
+          "evidence_paths"
+        ],
+        "properties": {
+          "id": {"type": "string"},
+          "title": {"type": "string"},
+          "type": {"type": "string"},
+          "scope": {"type": "string"},
+          "blocking": {"type": "boolean"},
+          "required": {"type": "boolean"},
+          "status": {"enum": ["PASS", "FAIL", "N_A", "NOT_RUN", "NOT_DEMONSTRATED"]},
+          "evidence_source": {
+            "enum": ["dwsim_api", "exported_dataset", "reported_metric", "existing_validator", "not_available"]
+          },
+          "result": {
+            "oneOf": [
+              {"type": "null"},
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["value", "unit"],
+                "properties": {
+                  "value": {"type": ["number", "integer", "string", "boolean"]},
+                  "unit": {"type": "string"}
+                }
+              }
+            ]
+          },
+          "threshold": {
+            "oneOf": [
+              {"type": "null"},
+              {"$ref": "#/$defs/threshold"}
+            ]
+          },
+          "message": {"type": "string"},
+          "evidence_paths": {"type": "array", "items": {"type": "string"}}
+        }
+      }
+    },
+    "datasets": {"type": "array", "items": {"type": "string"}},
+    "figures": {"type": "array", "items": {"type": "string"}}
+  },
+  "$defs": {
+    "threshold": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["operator", "value", "unit"],
+      "properties": {
+        "operator": {"enum": ["<", "<=", ">", ">=", "==", "!="]},
+        "value": {"type": "number"},
+        "unit": {"type": "string"}
+      }
+    }
+  }
+}

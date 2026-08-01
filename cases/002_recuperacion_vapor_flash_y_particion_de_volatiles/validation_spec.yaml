@@ -1,0 +1,286 @@
+schema_version: 1.0.0
+case_id: 002_recuperacion_vapor_flash_y_particion_de_volatiles
+
+dwsim:
+  file: simulations/dwsim/002_recuperacion_vapor_flash_y_particion_de_volatiles.dwxmz
+  required_version: 9.0.5
+  timeout_seconds: 120
+  object_map:
+    MSTR-201_CONDENSADO_CALIENTE: MSTR-201_CONDENSADO_CALIENTE
+    MSTR-202_MEZCLA_FLASH: MSTR-202_MEZCLA_FLASH
+    MSTR-203_VAPOR_FLASH: MSTR-203_VAPOR_FLASH
+    MSTR-204_LIQUIDO_FLASH: MSTR-204_LIQUIDO_FLASH
+
+datasets:
+  process:
+    path: data/process_results_v01.csv
+    id_column: object_id
+  chromatography:
+    path: data/chromatography_results_v01.csv
+    id_column: sample_id
+
+criteria:
+  - id: integridad_artefactos
+    title: Metadatos, tablas, unidades y checksums
+    type: existing_validators
+    scope: data_quality
+    blocking: true
+    required: true
+    validators:
+      - metadata
+      - tables
+      - units
+      - checksums
+    evidence_paths:
+      - metadata.yaml
+      - data/process_results_v01.meta.yaml
+      - data/chromatography_results_v01.meta.yaml
+      - provenance.json
+
+  - id: paridad_api_dataset_estado
+    title: Paridad DWSIM API-dataset del estado de las corrientes
+    type: api_dataset_consistency
+    scope: data_quality
+    blocking: true
+    required: false
+    dataset: process
+    ids:
+      - MSTR-201_CONDENSADO_CALIENTE
+      - MSTR-202_MEZCLA_FLASH
+      - MSTR-203_VAPOR_FLASH
+      - MSTR-204_LIQUIDO_FLASH
+    columns:
+      - dataset_column: temperature_K
+        api_column: temperature_K
+      - dataset_column: pressure_Pa
+        api_column: pressure_Pa
+      - dataset_column: mass_flow_kg_s
+        api_column: mass_flow_kg_s
+      - dataset_column: specific_enthalpy_kJ_kg
+        api_column: specific_enthalpy_kJ_kg
+    threshold:
+      operator: <=
+      value: 0.05
+      unit: "%"
+    unavailable_status: NOT_RUN
+    evidence_paths:
+      - data/process_results_v01.csv
+      - simulations/dwsim/002_recuperacion_vapor_flash_y_particion_de_volatiles.dwxmz
+
+  - id: paridad_api_dataset_energia
+    title: Paridad DWSIM API-dataset del flujo energético
+    type: api_dataset_consistency
+    scope: data_quality
+    blocking: true
+    required: false
+    dataset: process
+    ids:
+      - MSTR-201_CONDENSADO_CALIENTE
+      - MSTR-202_MEZCLA_FLASH
+      - MSTR-203_VAPOR_FLASH
+      - MSTR-204_LIQUIDO_FLASH
+    columns:
+      - dataset_column: energy_flow_kW
+        api_column: energy_flow_kW
+    threshold:
+      operator: <=
+      value: 0.05
+      unit: "%"
+    unavailable_status: NOT_RUN
+    evidence_paths:
+      - data/process_results_v01.csv
+      - simulations/dwsim/002_recuperacion_vapor_flash_y_particion_de_volatiles.dwxmz
+    notes: Control de reproducibilidad sensible al estado de la simulación y a la exportación. Una falla no invalida por sí sola el fenómeno, pero bloquea la consistencia entre el modelo resuelto y el dataset publicado.
+
+  - id: balance_masa_global
+    title: Balance global de masa
+    type: global_mass_balance
+    scope: numerical
+    blocking: true
+    required: true
+    dataset: process
+    id_column: object_id
+    value_column: mass_flow_kg_s
+    inlet_ids:
+      - MSTR-201_CONDENSADO_CALIENTE
+    outlet_ids:
+      - MSTR-203_VAPOR_FLASH
+      - MSTR-204_LIQUIDO_FLASH
+    threshold:
+      operator: <=
+      value: 0.01
+      unit: "%"
+    evidence_paths:
+      - data/process_results_v01.csv
+    notes: MSTR-202_MEZCLA_FLASH es interna y se excluye de la frontera global.
+
+  - id: balance_metanol
+    title: Balance de masa de metanol
+    type: global_mass_balance
+    scope: numerical
+    blocking: true
+    required: true
+    dataset: process
+    id_column: object_id
+    value_column: methanol_mass_flow_kg_s
+    inlet_ids:
+      - MSTR-201_CONDENSADO_CALIENTE
+    outlet_ids:
+      - MSTR-203_VAPOR_FLASH
+      - MSTR-204_LIQUIDO_FLASH
+    threshold:
+      operator: <=
+      value: 0.05
+      unit: "%"
+    evidence_paths:
+      - data/process_results_v01.csv
+
+  - id: balance_energia_global
+    title: Balance global de energía del flash
+    type: stream_energy_balance
+    scope: numerical
+    blocking: true
+    required: true
+    terms:
+      - dataset: process
+        column: energy_flow_kW
+        ids:
+          - MSTR-201_CONDENSADO_CALIENTE
+        factor: 1.0
+      - dataset: process
+        column: energy_flow_kW
+        ids:
+          - MSTR-203_VAPOR_FLASH
+        factor: -1.0
+      - dataset: process
+        column: energy_flow_kW
+        ids:
+          - MSTR-204_LIQUIDO_FLASH
+        factor: -1.0
+    normalization: reference
+    normalization_reference:
+      dataset: process
+      column: energy_flow_kW
+      ids:
+        - MSTR-201_CONDENSADO_CALIENTE
+      absolute: true
+    threshold:
+      operator: <=
+      value: 1.0
+      unit: "%"
+    unavailable_status: N_A
+    evidence_paths:
+      - data/process_results_v01.csv
+      - simulations/dwsim/002_recuperacion_vapor_flash_y_particion_de_volatiles.dwxmz
+    notes: Compara la energía de la alimentación con las dos corrientes producto. El valor DeltaQ calculado internamente por el separador no se suma como una entrada independiente, porque el flowsheet no tiene una corriente de energía conectada.
+
+  - id: isoentalpia_valvula
+    title: Isoentalpía entre alimentación y mezcla flash
+    type: isenthalpic
+    scope: phenomenon
+    blocking: true
+    required: true
+    left:
+      dataset: process
+      column: specific_enthalpy_kJ_kg
+      ids:
+        - MSTR-201_CONDENSADO_CALIENTE
+    right:
+      dataset: process
+      column: specific_enthalpy_kJ_kg
+      ids:
+        - MSTR-202_MEZCLA_FLASH
+    calculation: relative_difference_percent
+    threshold:
+      operator: <=
+      value: 0.01
+      unit: "%"
+    evidence_paths:
+      - data/process_results_v01.csv
+
+  - id: rendimiento_vapor_flash
+    title: Rendimiento másico de vapor flash
+    type: range
+    scope: phenomenon
+    blocking: true
+    required: true
+    value:
+      metadata_output: rendimiento_masico_vapor_flash
+    minimum: 0.0
+    maximum: 1.0
+    threshold:
+      operator: <=
+      value: 1.0
+      unit: dimensionless
+    evidence_paths:
+      - metadata.yaml
+      - data/process_results_v01.csv
+
+  - id: recuperacion_metanol_vapor
+    title: Recuperación de metanol hacia el vapor
+    type: range
+    scope: phenomenon
+    blocking: true
+    required: true
+    value:
+      metadata_output: recuperacion_metanol_vapor
+    minimum: 0.0
+    maximum: 1.0
+    threshold:
+      operator: <=
+      value: 1.0
+      unit: dimensionless
+    evidence_paths:
+      - metadata.yaml
+      - data/process_results_v01.csv
+
+  - id: enriquecimiento_metanol
+    title: Enriquecimiento de metanol vapor/líquido
+    type: reported_metric
+    scope: phenomenon
+    blocking: true
+    required: true
+    value:
+      metadata_output: factor_enriquecimiento_metanol_vapor_liquido
+    threshold:
+      operator: ">"
+      value: 1.0
+      unit: dimensionless
+    evidence_paths:
+      - metadata.yaml
+      - data/process_results_v01.csv
+
+  - id: calibracion_gc_fid
+    title: Coeficiente de determinación de la calibración GC-FID
+    type: reported_metric
+    scope: data_quality
+    blocking: true
+    required: true
+    value:
+      metadata_output: coeficiente_determinacion_calibracion_gc_fid
+    threshold:
+      operator: ">="
+      value: 0.995
+      unit: dimensionless
+    evidence_paths:
+      - metadata.yaml
+      - data/chromatography_results_v01.csv
+
+  - id: duplicado_gc_fid
+    title: Diferencia relativa del duplicado GC-FID
+    type: reported_metric
+    scope: data_quality
+    blocking: true
+    required: true
+    value:
+      metadata_output: diferencia_duplicado_area
+      factor: 100.0
+      absolute: true
+    threshold:
+      operator: <=
+      value: 10.0
+      unit: "%"
+    evidence_paths:
+      - metadata.yaml
+      - data/chromatography_results_v01.csv
+    notes: La métrica almacenada en metadata.yaml es fracción y se convierte a porcentaje.

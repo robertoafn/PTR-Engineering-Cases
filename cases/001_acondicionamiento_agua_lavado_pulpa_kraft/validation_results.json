@@ -1,0 +1,214 @@
+{
+  "actual_source": "dwsim_api",
+  "case_id": "001_acondicionamiento_agua_lavado_pulpa_kraft",
+  "case_version": "0.1.3",
+  "criteria": [
+    {
+      "blocking": true,
+      "evidence_paths": [
+        "metadata.yaml",
+        "data/process_results_v01.meta.yaml",
+        "provenance.json"
+      ],
+      "evidence_source": "existing_validator",
+      "id": "integridad_artefactos",
+      "message": "metadata: OK ([OK] 1 metadata file(s) valid.) | tables: OK ([OK] 1 tabla(s) válida(s).) | units: OK ([OK] unidades consistentes en 2 archivo(s).) | checksums: OK",
+      "required": true,
+      "result": {
+        "unit": "errores",
+        "value": 0.0
+      },
+      "scope": "data_quality",
+      "status": "PASS",
+      "threshold": null,
+      "title": "Metadatos, tablas, unidades y checksums",
+      "type": "existing_validators"
+    },
+    {
+      "blocking": true,
+      "evidence_paths": [
+        "data/process_results_v01.csv",
+        "simulations/dwsim/001_acondicionamiento_agua_lavado_pulpa_kraft.dwxmz"
+      ],
+      "evidence_source": "dwsim_api",
+      "id": "paridad_api_dataset_corrientes",
+      "message": "máxima discrepancia en MSTR-002_AGUA_PRESURIZADA temperature_K↔temperature_K: dataset=303.180664541; api=303.180664541",
+      "required": false,
+      "result": {
+        "unit": "%",
+        "value": 1.499922007146156e-13
+      },
+      "scope": "data_quality",
+      "status": "PASS",
+      "threshold": {
+        "operator": "<=",
+        "unit": "%",
+        "value": 0.05
+      },
+      "title": "Paridad DWSIM API-dataset de las corrientes",
+      "type": "api_dataset_consistency"
+    },
+    {
+      "blocking": true,
+      "evidence_paths": [
+        "data/process_results_v01.csv",
+        "simulations/dwsim/001_acondicionamiento_agua_lavado_pulpa_kraft.dwxmz"
+      ],
+      "evidence_source": "dwsim_api",
+      "id": "paridad_api_dataset_equipos",
+      "message": "máxima discrepancia en H-001_CALENTADOR_AGUA energy_flow_W↔duty_kW: dataset=1670.5007177; api=1670.5007177",
+      "required": false,
+      "result": {
+        "unit": "%",
+        "value": 2.7222218228866422e-14
+      },
+      "scope": "data_quality",
+      "status": "PASS",
+      "threshold": {
+        "operator": "<=",
+        "unit": "%",
+        "value": 0.05
+      },
+      "title": "Paridad DWSIM API-dataset de bomba y calentador",
+      "type": "api_dataset_consistency"
+    },
+    {
+      "blocking": true,
+      "evidence_paths": [
+        "data/process_results_v01.csv"
+      ],
+      "evidence_source": "dwsim_api",
+      "id": "balance_masa_global",
+      "message": "entrada=10; salida=10",
+      "required": true,
+      "result": {
+        "unit": "%",
+        "value": 0.0
+      },
+      "scope": "numerical",
+      "status": "PASS",
+      "threshold": {
+        "operator": "<=",
+        "unit": "%",
+        "value": 0.01
+      },
+      "title": "Balance global de masa",
+      "type": "global_mass_balance"
+    },
+    {
+      "blocking": true,
+      "evidence_paths": [
+        "data/process_results_v01.csv",
+        "simulations/dwsim/001_acondicionamiento_agua_lavado_pulpa_kraft.dwxmz"
+      ],
+      "evidence_source": "dwsim_api",
+      "id": "balance_energia_recomputado",
+      "message": "residuo=7.88745001046e-06",
+      "required": true,
+      "result": {
+        "unit": "%",
+        "value": 4.7216082740316433e-07
+      },
+      "scope": "numerical",
+      "status": "PASS",
+      "threshold": {
+        "operator": "<=",
+        "unit": "%",
+        "value": 0.1
+      },
+      "title": "Balance global de energía recomputado",
+      "type": "stream_energy_balance"
+    },
+    {
+      "blocking": false,
+      "evidence_paths": [
+        "validation_report.md",
+        "metadata.yaml"
+      ],
+      "evidence_source": "reported_metric",
+      "id": "balance_energia_reportado",
+      "message": "criterio cumplido",
+      "required": true,
+      "result": {
+        "unit": "%",
+        "value": 2.69e-07
+      },
+      "scope": "numerical",
+      "status": "PASS",
+      "threshold": {
+        "operator": "<=",
+        "unit": "%",
+        "value": 0.1
+      },
+      "title": "Residuo energético documentado por el autor",
+      "type": "reported_metric"
+    },
+    {
+      "blocking": true,
+      "evidence_paths": [
+        "validation_report.md",
+        "data/process_results_v01.csv"
+      ],
+      "evidence_source": "reported_metric",
+      "id": "replica_hidraulica_bomba",
+      "message": "criterio cumplido",
+      "required": true,
+      "result": {
+        "unit": "%",
+        "value": 0.0
+      },
+      "scope": "phenomenon",
+      "status": "PASS",
+      "threshold": {
+        "operator": "<=",
+        "unit": "%",
+        "value": 1.0
+      },
+      "title": "Réplica hidráulica de la potencia de la bomba",
+      "type": "reported_metric"
+    },
+    {
+      "blocking": true,
+      "evidence_paths": [
+        "validation_report.md",
+        "data/process_results_v01.csv"
+      ],
+      "evidence_source": "reported_metric",
+      "id": "replica_calorimetrica_calentador",
+      "message": "criterio cumplido",
+      "required": true,
+      "result": {
+        "unit": "%",
+        "value": 0.013
+      },
+      "scope": "phenomenon",
+      "status": "PASS",
+      "threshold": {
+        "operator": "<=",
+        "unit": "%",
+        "value": 1.0
+      },
+      "title": "Réplica calorimétrica de la carga del calentador",
+      "type": "reported_metric"
+    }
+  ],
+  "datasets": [
+    "cases/001_acondicionamiento_agua_lavado_pulpa_kraft/data/process_results_v01.csv"
+  ],
+  "dwsim_version": "DWSIM version 9.0.5.0 (28-10-2025 10:42:38)",
+  "figures": [
+    "cases/001_acondicionamiento_agua_lavado_pulpa_kraft/assets/figures/fig_001_01_flowsheet.png"
+  ],
+  "generated_at_utc": "2026-07-26T02:39:04Z",
+  "lifecycle_status": "validated",
+  "overall_status": "PASS",
+  "requested_source": "dwsim",
+  "schema_version": "1.0.0",
+  "scopes": {
+    "data_quality": "PASS",
+    "numerical": "PASS",
+    "phenomenon": "PASS"
+  },
+  "source_message": "simulación resuelta mediante DWSIM Automation API",
+  "validator": "Roberto Flores Núñez"
+}

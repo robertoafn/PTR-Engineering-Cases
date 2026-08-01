@@ -7,6 +7,34 @@ y este proyecto adhiere a [Semantic Versioning 2.0.0](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-07-25
+
+### Added
+- Motor declarativo `scripts/validate_case.py`, esquemas JSON y pruebas para
+  validar balances, fenómenos, unidades, checksums y paridad API-dataset.
+- Especificaciones y resultados estructurados de validación para los casos
+  001, 002 y 003, preparados para el futuro dashboard.
+- Adaptador local de DWSIM Automation API para Windows y protocolo reproducible
+  en `docs/09_validation_protocol.md`.
+
+### Changed
+- El README distingue el estado del ciclo de vida del resultado automático.
+- El preflight y GitHub Actions ejecutan la matriz cuantitativa en modo
+  dataset; la plantilla de casos declara el nuevo contrato de validación.
+- Versiones de los casos 001, 002 y 003 sincronizadas como `0.1.3`, `0.1.2`
+  y `0.1.2`, respectivamente.
+
+### Validation
+- Caso 001: `PASS` con DWSIM Automation API.
+- Caso 002: `FAIL` de reproducibilidad por una desviación de
+  `0.115554596249 %` entre API y CSV para `MSTR-204_LIQUIDO_FLASH`; sus
+  balances y controles de fenómeno permanecen en `PASS`.
+- Caso 003: `CONDITIONAL`; la validación térmica pasa y el margen hidráulico
+  continúa `NOT_DEMONSTRATED`.
+- Suite completa: 44 pruebas y Ruff en `PASS`; naming, 3 metadatos, 4 tablas,
+  unidades en 7 archivos y checksums verificados.
+- No se modificaron simulaciones ni datasets para forzar estos resultados.
+
 ## [0.3.0] - 2026-07-25
 
 ### Added
@@ -107,7 +135,8 @@ y este proyecto adhiere a [Semantic Versioning 2.0.0](https://semver.org/).
 - Solo se incluía el placeholder `000_template`.
 - Esta versión constituye la arquitectura base para las iteraciones posteriores.
 
-[Unreleased]: https://github.com/robertoafn/PTR-Engineering-Cases/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/robertoafn/PTR-Engineering-Cases/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/robertoafn/PTR-Engineering-Cases/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/robertoafn/PTR-Engineering-Cases/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/robertoafn/PTR-Engineering-Cases/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/robertoafn/PTR-Engineering-Cases/releases/tag/v0.1.0

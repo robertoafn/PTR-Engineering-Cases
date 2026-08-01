@@ -2,6 +2,17 @@
 
 ## [Unreleased]
 
+## [0.1.2] - 2026-07-25
+
+### Added
+- Especificación declarativa `validation_spec.yaml`, resultado estructurado
+  `validation_results.json` y sección automática del informe.
+
+### Validation
+- Paridad API-dataset, balances térmicos y réplicas analíticas: `PASS`.
+- Resultado general: `CONDITIONAL`, porque el margen de presión
+  limpio-contaminado permanece `NOT_DEMONSTRATED`.
+
 ## [0.1.1] - 2026-07-25
 
 ### Changed

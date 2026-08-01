@@ -2,6 +2,18 @@
 
 ## [Unreleased]
 
+## [0.1.3] - 2026-07-25
+
+### Added
+- Especificación declarativa `validation_spec.yaml` y resultado estructurado
+  `validation_results.json`.
+- Sección automática reproducible en `validation_report.md`.
+
+### Validation
+- Resolución mediante DWSIM Automation API: `PASS`.
+- Balance global de masa, balance de energía, paridad API-dataset, unidades y
+  checksums: `PASS`.
+
 ## [0.1.2] - 2026-07-25
 
 ### Added

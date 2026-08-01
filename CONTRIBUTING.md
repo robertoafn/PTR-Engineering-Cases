@@ -24,6 +24,7 @@ en `docs/`.
 - [ ] `metadata.yaml` válido (si toca un caso).
 - [ ] Sidecars y datasets canónicos válidos.
 - [ ] Checksums actualizados en `provenance.json`.
+- [ ] `validation_spec.yaml` completo y resultado reproducible revisado.
 - [ ] QC checklist completado (`qc_checklist.md`).
 - [ ] Status declarado: `draft | review | validated | published`.
 - [ ] Naming conforme a `docs/03_naming_conventions.md`.

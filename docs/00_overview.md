@@ -25,9 +25,10 @@ ingeniería química industrial, donde cada caso documenta la cadena completa:
 - Comunidad académica y open-source.
 
 ## Estado actual
-v0.3.0 — Release publicado del portafolio con la arquitectura fundacional
-(v0.1.0) completa y tres casos integrados: 001 `validated`, 002 `review` y 003
-`review`.
+v0.4.0 — Release del portafolio con motor declarativo de validación,
+integración opcional con DWSIM Automation API y resultados estructurados para
+los tres casos: 001 `PASS`, 002 `FAIL` por paridad API-dataset y 003
+`CONDITIONAL` por seguridad no demostrada.
 
 El Caso 003 extiende la secuencia del Caso 002: reutiliza el condensado líquido
 caliente con trazas de metanol como fuente térmica para precalentar agua limpia
