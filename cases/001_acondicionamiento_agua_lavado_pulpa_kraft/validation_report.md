@@ -120,7 +120,37 @@ cumple los criterios definidos y cambia su estado de `review` a `validated`.
 
 ## 8. Acciones no bloqueantes
 
-1. Exportar una captura limpia del flowsheet desde DWSIM a PNG o JPG.
-2. Añadir la imagen a `assets/figures/` y enlazarla desde el README del caso.
-3. Actualizar la procedencia y los checksums si se incorpora un nuevo activo controlado.
-4. Considerar una réplica futura por un tercero como evidencia adicional, no obligatoria.
+1. Repetir la validación API y regenerar la evidencia tras cualquier cambio en
+   la simulación o el dataset.
+2. Considerar una réplica futura por un tercero como evidencia adicional, no
+   obligatoria.
+
+<!-- PTR-VALIDATION:AUTO:START -->
+## Resultado automático reproducible
+
+- **Fecha UTC:** 2026-07-26T02:39:04Z
+- **Validador:** Roberto Flores Núñez
+- **Versión del caso:** 0.1.3
+- **Fuente solicitada:** `dwsim`
+- **Fuente utilizada:** `dwsim_api`
+- **Resultado general:** **PASS**
+- **Detalle de fuente:** simulación resuelta mediante DWSIM Automation API
+
+| Criterio | Alcance | Umbral | Resultado | Estado |
+|---|---|---:|---:|---|
+| Metadatos, tablas, unidades y checksums | data_quality | declarativo | 0 errores | ✅ PASS |
+| Paridad DWSIM API-dataset de las corrientes | data_quality | <= 0.05 % | 1.49992200715e-13 % | ✅ PASS |
+| Paridad DWSIM API-dataset de bomba y calentador | data_quality | <= 0.05 % | 2.72222182289e-14 % | ✅ PASS |
+| Balance global de masa | numerical | <= 0.01 % | 0 % | ✅ PASS |
+| Balance global de energía recomputado | numerical | <= 0.1 % | 4.72160827403e-07 % | ✅ PASS |
+| Residuo energético documentado por el autor | numerical | <= 0.1 % | 2.69e-07 % | ✅ PASS |
+| Réplica hidráulica de la potencia de la bomba | phenomenon | <= 1.0 % | 0 % | ✅ PASS |
+| Réplica calorimétrica de la carga del calentador | phenomenon | <= 1.0 % | 0.013 % | ✅ PASS |
+
+### Evidencia de ejecución
+
+- Comando base: `python scripts/validate_case.py cases/001_acondicionamiento_agua_lavado_pulpa_kraft --source dwsim`
+- Resultado estructurado: `validation_results.json`
+
+Esta sección es generada por `scripts/validate_case.py`; la narrativa técnica fuera de los delimitadores se conserva.
+<!-- PTR-VALIDATION:AUTO:END -->

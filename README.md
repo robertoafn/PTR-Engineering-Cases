@@ -3,7 +3,7 @@
 > Portafolio técnico de casos reproducibles de ingeniería química industrial.
 > Stack open source · FAIR · SI · IUPAC · ISO 8000 · VIM · trazabilidad SHA-256.
 
-[![release](https://img.shields.io/badge/release-v0.3.0-blue)](./CHANGELOG.md)
+[![release](https://img.shields.io/badge/release-v0.4.0-blue)](./CHANGELOG.md)
 [![license-code](https://img.shields.io/badge/code-MIT-green)](./LICENSE)
 [![license-docs](https://img.shields.io/badge/docs-CC--BY--4.0-lightgrey)](./LICENSE-docs)
 
@@ -77,6 +77,7 @@ python scripts/validate_metadata.py cases/<NNN_slug>
 python scripts/validate_tables.py cases/<NNN_slug>
 python scripts/unit_consistency_check.py cases/<NNN_slug>
 python scripts/compute_checksums.py --verify cases/<NNN_slug>
+python scripts/validate_case.py cases/<NNN_slug> --source dataset
 pytest tests/ -q
 ```
 
@@ -86,11 +87,15 @@ de cada caso.
 
 ## Índice de casos
 
-| ID | Caso | Dominio | Equipos principales | Software | Estado |
-|---|---|---|---|---|---|
-| [001](./cases/001_acondicionamiento_agua_lavado_pulpa_kraft/) | Acondicionamiento de agua para lavado de pulpa Kraft | Bombeo y calentamiento de agua | Bomba centrífuga, calentador | DWSIM 9.0.5, Python 3.13.5 | `validated` |
-| [002](./cases/002_recuperacion_vapor_flash_y_particion_de_volatiles/) | Recuperación de vapor flash y partición de compuestos volátiles | Flash isoentálpico y equilibrio vapor-líquido | Válvula, separador gas-líquido | DWSIM 9.0.5, OpenChrom 1.6.14, Python 3.13.5 | `review` |
-| [003](./cases/003_recuperacion_calor_condensado_y_control_contaminacion_cruzada/) | Recuperación de calor de condensado y control de contaminación cruzada | Transferencia de calor y control hidráulico de contaminación | Intercambiador de carcasa y tubos (HX-301) | DWSIM 9.0.5, Python 3.13.5 | `review` |
+| ID | Caso | Dominio | Equipos principales | Software | Estado | Validación automática |
+|---|---|---|---|---|---|---|
+| [001](./cases/001_acondicionamiento_agua_lavado_pulpa_kraft/) | Acondicionamiento de agua para lavado de pulpa Kraft | Bombeo y calentamiento de agua | Bomba centrífuga, calentador | DWSIM 9.0.5, Python 3.13.5 | `validated` | [`PASS`](./cases/001_acondicionamiento_agua_lavado_pulpa_kraft/validation_report.md) |
+| [002](./cases/002_recuperacion_vapor_flash_y_particion_de_volatiles/) | Recuperación de vapor flash y partición de compuestos volátiles | Flash isoentálpico y equilibrio vapor-líquido | Válvula, separador gas-líquido | DWSIM 9.0.5, OpenChrom 1.6.14, Python 3.13.5 | `review` | [`FAIL` (paridad API↔dataset)](./cases/002_recuperacion_vapor_flash_y_particion_de_volatiles/validation_report.md) |
+| [003](./cases/003_recuperacion_calor_condensado_y_control_contaminacion_cruzada/) | Recuperación de calor de condensado y control de contaminación cruzada | Transferencia de calor y control hidráulico de contaminación | Intercambiador de carcasa y tubos (HX-301) | DWSIM 9.0.5, Python 3.13.5 | `review` | [`CONDITIONAL`](./cases/003_recuperacion_calor_condensado_y_control_contaminacion_cruzada/validation_report.md) |
+
+La validación automática y el estado del ciclo de vida son dimensiones
+independientes. El protocolo, los estados de criterio y el uso de DWSIM se
+describen en [`docs/09_validation_protocol.md`](./docs/09_validation_protocol.md).
 
 ### Ubicación conceptual en el proceso productivo Kraft
 
@@ -132,10 +137,13 @@ simulación DWSIM con cromatogramas GC-FID sintéticos procesados en OpenChrom,
 datos estructurados, controles de balance y trazabilidad por checksum.
 
 El escenario base obtuvo un rendimiento másico de vapor flash de `0.10488775`
-y una recuperación de metanol hacia el vapor de `0.42793470`. El caso se
-mantiene en estado `review`: sus activos técnicos y resultados están
-disponibles, pero aún no debe interpretarse como una validación experimental o
-industrial. Ver [Caso 002](./cases/002_recuperacion_vapor_flash_y_particion_de_volatiles/).
+y una recuperación de metanol hacia el vapor de `0.42793470`. La revalidación
+mediante DWSIM mantiene conformes los balances, pero detecta una desviación de
+`0.115554596249 %` entre la energía de `MSTR-204` recalculada por la API y la
+publicada en el CSV, sobre el umbral de paridad de `0.05 %`. El caso se mantiene
+en estado `review` y no debe promoverse hasta reconciliar esa evidencia; tampoco
+representa una validación experimental o industrial. Ver
+[Caso 002](./cases/002_recuperacion_vapor_flash_y_particion_de_volatiles/).
 
 ### Caso 003 — Recuperación de calor de condensado y control de contaminación cruzada
 
@@ -162,8 +170,9 @@ operacionales reales. Ver [Caso 003](./cases/003_recuperacion_calor_condensado_y
 |---|---|
 | **v0.1.0** | Arquitectura fundacional: plantillas, schemas, scripts, CI y gobernanza |
 | **v0.2.0** | Primer caso integrado, índice de casos y sincronización documental |
-| **v0.3.0 (actual)** | Incorporación del Caso 003, revisión de casos contextuales y endurecimiento de validadores de datasets, unidades y checksums |
-| **v0.4.0** | Visualizaciones técnicas, automatización del índice y cobertura de tests ≥ 80 % |
+| **v0.3.0** | Incorporación del Caso 003, revisión de casos contextuales y endurecimiento de validadores de datasets, unidades y checksums |
+| **v0.4.0 (actual)** | Motor declarativo de validación, integración opcional con DWSIM API y resultados estructurados por caso |
+| **v0.5.0** | Dashboard Streamlit por caso y fenómeno, visualizaciones técnicas y automatización del índice |
 | **v1.0.0** | Portafolio inicial validado y publicado con varios casos reproducibles |
 
 Próximas líneas de desarrollo previstas:

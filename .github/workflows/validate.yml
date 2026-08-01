@@ -47,5 +47,8 @@ jobs:
       - name: Verify case checksums
         run: python scripts/compute_checksums.py --verify cases/
 
+      - name: Validate quantitative case criteria
+        run: python scripts/validate_case.py cases/ --source dataset
+
       - name: Run regression tests
         run: pytest tests/ -q

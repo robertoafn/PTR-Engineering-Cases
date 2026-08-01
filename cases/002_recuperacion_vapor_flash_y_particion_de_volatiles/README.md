@@ -1,7 +1,7 @@
 # 002_recuperacion_vapor_flash_y_particion_de_volatiles — Recuperación de vapor flash y partición de compuestos volátiles
 
 > **Status:** review  
-> **Versión:** 0.1.1<br>
+> **Versión:** 0.1.2<br>
 > **Aviso de datos:** entradas, cromatogramas y resultados sintéticos.  
 > **No representa condiciones operacionales reales, datos propietarios ni procedimientos de una instalación específica.**
 

@@ -15,6 +15,7 @@
 - [ ] Unidades SI verificadas (`unit_consistency_check.py`)
 - [ ] QC checklist completado (`qc_checklist.md`)
 - [ ] Checksums regenerados (`compute_checksums.py`)
+- [ ] Especificación y resultado automático revisados (`validate_case.py`)
 - [ ] Provenance actualizado
 - [ ] Naming conforme convención (`enforce_naming.py`)
 - [ ] CHANGELOG actualizado (raíz y caso si aplica)

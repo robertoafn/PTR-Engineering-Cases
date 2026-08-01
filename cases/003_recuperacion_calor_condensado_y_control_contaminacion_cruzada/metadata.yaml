@@ -6,7 +6,7 @@ authors:
   - name: Roberto Flores
     email: roberto.flores.n1987@gmail.com
 created_at: '2026-07-21T01:29:14Z'
-version: 0.1.1
+version: 0.1.2
 license_code: MIT
 license_docs: CC-BY-4.0
 software_stack:
@@ -98,7 +98,7 @@ qc_rules:
   - checksum
 validation:
   strategy: Balances de materia y energía en el intercambiador; réplica analítica aproximada de la carga térmica mediante Q = U * A * F * LMTD; y tamiz conceptual del diferencial P_limpio - P_contaminado, sin modelar fuga, dinámica, integridad mecánica ni capas instrumentadas de protección.
-  acceptance_criteria: Error en balance de masa en cada lado de 0.0%; residuo en balance de energía <= 0.1% respecto a la carga térmica total; desviación en la réplica analítica de LMTD <= 1.0%. Para orientar una fuga hipotética se requiere P_limpio - P_contaminado > 0 Pa con un margen mínimo definido por análisis de riesgos y mantenido durante el dominio operativo; el escenario base de 0 Pa no demuestra ese control.
+  acceptance_criteria: Error en balance de masa en cada lado <= 0.01%; residuo en balance de energía <= 0.1% respecto a la carga térmica transferida; desviación en las réplicas analíticas de LMTD y carga térmica <= 0.5%. Para orientar una fuga hipotética se requiere P_limpio - P_contaminado > 0 Pa con un margen mínimo definido por análisis de riesgos y mantenido durante el dominio operativo; el escenario base de 0 Pa no demuestra ese control.
 traceability:
   provenance_ref: provenance.json
   derived_from:

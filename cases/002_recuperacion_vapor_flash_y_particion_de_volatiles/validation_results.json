@@ -1,0 +1,310 @@
+{
+  "actual_source": "dwsim_api",
+  "case_id": "002_recuperacion_vapor_flash_y_particion_de_volatiles",
+  "case_version": "0.1.2",
+  "criteria": [
+    {
+      "blocking": true,
+      "evidence_paths": [
+        "metadata.yaml",
+        "data/process_results_v01.meta.yaml",
+        "data/chromatography_results_v01.meta.yaml",
+        "provenance.json"
+      ],
+      "evidence_source": "existing_validator",
+      "id": "integridad_artefactos",
+      "message": "metadata: OK ([OK] 1 metadata file(s) valid.) | tables: OK ([OK] 2 tabla(s) válida(s).) | units: OK ([OK] unidades consistentes en 3 archivo(s).) | checksums: OK",
+      "required": true,
+      "result": {
+        "unit": "errores",
+        "value": 0.0
+      },
+      "scope": "data_quality",
+      "status": "PASS",
+      "threshold": null,
+      "title": "Metadatos, tablas, unidades y checksums",
+      "type": "existing_validators"
+    },
+    {
+      "blocking": true,
+      "evidence_paths": [
+        "data/process_results_v01.csv",
+        "simulations/dwsim/002_recuperacion_vapor_flash_y_particion_de_volatiles.dwxmz"
+      ],
+      "evidence_source": "dwsim_api",
+      "id": "paridad_api_dataset_estado",
+      "message": "máxima discrepancia en MSTR-203_VAPOR_FLASH mass_flow_kg_s↔mass_flow_kg_s: dataset=1.04887751939; api=1.04887751939",
+      "required": false,
+      "result": {
+        "unit": "%",
+        "value": 4.86903934813802e-13
+      },
+      "scope": "data_quality",
+      "status": "PASS",
+      "threshold": {
+        "operator": "<=",
+        "unit": "%",
+        "value": 0.05
+      },
+      "title": "Paridad DWSIM API-dataset del estado de las corrientes",
+      "type": "api_dataset_consistency"
+    },
+    {
+      "blocking": true,
+      "evidence_paths": [
+        "data/process_results_v01.csv",
+        "simulations/dwsim/002_recuperacion_vapor_flash_y_particion_de_volatiles.dwxmz"
+      ],
+      "evidence_source": "dwsim_api",
+      "id": "paridad_api_dataset_energia",
+      "message": "máxima discrepancia en MSTR-204_LIQUIDO_FLASH energy_flow_kW↔energy_flow_kW: dataset=-18349.4271015; api=-18370.6307079",
+      "required": false,
+      "result": {
+        "unit": "%",
+        "value": 0.11555459624896086
+      },
+      "scope": "data_quality",
+      "status": "FAIL",
+      "threshold": {
+        "operator": "<=",
+        "unit": "%",
+        "value": 0.05
+      },
+      "title": "Paridad DWSIM API-dataset del flujo energético",
+      "type": "api_dataset_consistency"
+    },
+    {
+      "blocking": true,
+      "evidence_paths": [
+        "data/process_results_v01.csv"
+      ],
+      "evidence_source": "dwsim_api",
+      "id": "balance_masa_global",
+      "message": "entrada=10; salida=9.99999995969",
+      "required": true,
+      "result": {
+        "unit": "%",
+        "value": 4.0311144644533675e-07
+      },
+      "scope": "numerical",
+      "status": "PASS",
+      "threshold": {
+        "operator": "<=",
+        "unit": "%",
+        "value": 0.01
+      },
+      "title": "Balance global de masa",
+      "type": "global_mass_balance"
+    },
+    {
+      "blocking": true,
+      "evidence_paths": [
+        "data/process_results_v01.csv"
+      ],
+      "evidence_source": "dwsim_api",
+      "id": "balance_metanol",
+      "message": "entrada=0.01; salida=0.00999990791454",
+      "required": true,
+      "result": {
+        "unit": "%",
+        "value": 0.0009208546439959386
+      },
+      "scope": "numerical",
+      "status": "PASS",
+      "threshold": {
+        "operator": "<=",
+        "unit": "%",
+        "value": 0.05
+      },
+      "title": "Balance de masa de metanol",
+      "type": "global_mass_balance"
+    },
+    {
+      "blocking": true,
+      "evidence_paths": [
+        "data/process_results_v01.csv",
+        "simulations/dwsim/002_recuperacion_vapor_flash_y_particion_de_volatiles.dwxmz"
+      ],
+      "evidence_source": "dwsim_api",
+      "id": "balance_energia_global",
+      "message": "residuo=97.2027654819",
+      "required": true,
+      "result": {
+        "unit": "%",
+        "value": 0.5377166568311298
+      },
+      "scope": "numerical",
+      "status": "PASS",
+      "threshold": {
+        "operator": "<=",
+        "unit": "%",
+        "value": 1.0
+      },
+      "title": "Balance global de energía del flash",
+      "type": "stream_energy_balance"
+    },
+    {
+      "blocking": true,
+      "evidence_paths": [
+        "data/process_results_v01.csv"
+      ],
+      "evidence_source": "dwsim_api",
+      "id": "isoentalpia_valvula",
+      "message": "izquierda=-1807.69489371; derecha=-1807.69489358",
+      "required": true,
+      "result": {
+        "unit": "%",
+        "value": 7.569966103435988e-09
+      },
+      "scope": "phenomenon",
+      "status": "PASS",
+      "threshold": {
+        "operator": "<=",
+        "unit": "%",
+        "value": 0.01
+      },
+      "title": "Isoentalpía entre alimentación y mezcla flash",
+      "type": "isenthalpic"
+    },
+    {
+      "blocking": true,
+      "evidence_paths": [
+        "metadata.yaml",
+        "data/process_results_v01.csv"
+      ],
+      "evidence_source": "dwsim_api",
+      "id": "rendimiento_vapor_flash",
+      "message": "rango=[0.0, 1.0]",
+      "required": true,
+      "result": {
+        "unit": "dimensionless",
+        "value": 0.104887751938762
+      },
+      "scope": "phenomenon",
+      "status": "PASS",
+      "threshold": {
+        "operator": "<=",
+        "unit": "dimensionless",
+        "value": 1.0
+      },
+      "title": "Rendimiento másico de vapor flash",
+      "type": "range"
+    },
+    {
+      "blocking": true,
+      "evidence_paths": [
+        "metadata.yaml",
+        "data/process_results_v01.csv"
+      ],
+      "evidence_source": "dwsim_api",
+      "id": "recuperacion_metanol_vapor",
+      "message": "rango=[0.0, 1.0]",
+      "required": true,
+      "result": {
+        "unit": "dimensionless",
+        "value": 0.427934702295189
+      },
+      "scope": "phenomenon",
+      "status": "PASS",
+      "threshold": {
+        "operator": "<=",
+        "unit": "dimensionless",
+        "value": 1.0
+      },
+      "title": "Recuperación de metanol hacia el vapor",
+      "type": "range"
+    },
+    {
+      "blocking": true,
+      "evidence_paths": [
+        "metadata.yaml",
+        "data/process_results_v01.csv"
+      ],
+      "evidence_source": "reported_metric",
+      "id": "enriquecimiento_metanol",
+      "message": "criterio cumplido",
+      "required": true,
+      "result": {
+        "unit": "dimensionless",
+        "value": 6.383981410295
+      },
+      "scope": "phenomenon",
+      "status": "PASS",
+      "threshold": {
+        "operator": ">",
+        "unit": "dimensionless",
+        "value": 1.0
+      },
+      "title": "Enriquecimiento de metanol vapor/líquido",
+      "type": "reported_metric"
+    },
+    {
+      "blocking": true,
+      "evidence_paths": [
+        "metadata.yaml",
+        "data/chromatography_results_v01.csv"
+      ],
+      "evidence_source": "reported_metric",
+      "id": "calibracion_gc_fid",
+      "message": "criterio cumplido",
+      "required": true,
+      "result": {
+        "unit": "dimensionless",
+        "value": 0.999971130804
+      },
+      "scope": "data_quality",
+      "status": "PASS",
+      "threshold": {
+        "operator": ">=",
+        "unit": "dimensionless",
+        "value": 0.995
+      },
+      "title": "Coeficiente de determinación de la calibración GC-FID",
+      "type": "reported_metric"
+    },
+    {
+      "blocking": true,
+      "evidence_paths": [
+        "metadata.yaml",
+        "data/chromatography_results_v01.csv"
+      ],
+      "evidence_source": "reported_metric",
+      "id": "duplicado_gc_fid",
+      "message": "criterio cumplido",
+      "required": true,
+      "result": {
+        "unit": "%",
+        "value": 2.4748225257280003
+      },
+      "scope": "data_quality",
+      "status": "PASS",
+      "threshold": {
+        "operator": "<=",
+        "unit": "%",
+        "value": 10.0
+      },
+      "title": "Diferencia relativa del duplicado GC-FID",
+      "type": "reported_metric"
+    }
+  ],
+  "datasets": [
+    "cases/002_recuperacion_vapor_flash_y_particion_de_volatiles/data/chromatography_results_v01.csv",
+    "cases/002_recuperacion_vapor_flash_y_particion_de_volatiles/data/process_results_v01.csv"
+  ],
+  "dwsim_version": "DWSIM version 9.0.5.0 (28-10-2025 10:42:38)",
+  "figures": [
+    "cases/002_recuperacion_vapor_flash_y_particion_de_volatiles/assets/figures/fig_002_01_flowsheet.png"
+  ],
+  "generated_at_utc": "2026-07-26T02:39:46Z",
+  "lifecycle_status": "review",
+  "overall_status": "FAIL",
+  "requested_source": "dwsim",
+  "schema_version": "1.0.0",
+  "scopes": {
+    "data_quality": "FAIL",
+    "numerical": "PASS",
+    "phenomenon": "PASS"
+  },
+  "source_message": "simulación resuelta mediante DWSIM Automation API",
+  "validator": "Roberto Flores Núñez"
+}

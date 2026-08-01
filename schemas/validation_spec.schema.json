@@ -1,0 +1,153 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/robertoafn/PTR-Engineering-Cases/schemas/validation_spec.schema.json",
+  "title": "Especificación de validación PTR",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "case_id", "datasets", "criteria"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "case_id": {"type": "string", "pattern": "^[0-9]{3}_[a-z0-9_]+$"},
+    "dwsim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["file", "required_version"],
+      "properties": {
+        "file": {"type": "string", "minLength": 1},
+        "required_version": {"type": "string", "minLength": 1},
+        "timeout_seconds": {"type": "integer", "minimum": 1, "default": 120},
+        "object_map": {"type": "object", "additionalProperties": {"type": "string"}}
+      }
+    },
+    "datasets": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path"],
+        "properties": {
+          "path": {"type": "string", "minLength": 1},
+          "id_column": {"type": "string", "default": "object_id"}
+        }
+      }
+    },
+    "criteria": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/criterion"}
+    }
+  },
+  "$defs": {
+    "threshold": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["operator", "value", "unit"],
+      "properties": {
+        "operator": {"enum": ["<", "<=", ">", ">=", "==", "!="]},
+        "value": {"type": "number"},
+        "unit": {"type": "string"}
+      }
+    },
+    "selector": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["dataset", "column"],
+      "properties": {
+        "dataset": {"type": "string"},
+        "column": {"type": "string"},
+        "ids": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "where": {
+          "type": "object",
+          "additionalProperties": {"type": ["string", "number", "boolean", "null"]}
+        },
+        "aggregate": {"enum": ["first", "sum", "mean", "min", "max", "count"], "default": "first"},
+        "factor": {"type": "number", "default": 1.0},
+        "absolute": {"type": "boolean", "default": false}
+      }
+    },
+    "operand": {
+      "oneOf": [
+        {"type": "number"},
+        {"$ref": "#/$defs/selector"},
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["metadata_output"],
+          "properties": {
+            "metadata_output": {"type": "string"},
+            "factor": {"type": "number", "default": 1.0},
+            "absolute": {"type": "boolean", "default": false}
+          }
+        }
+      ]
+    },
+    "criterion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "title", "type", "scope", "blocking", "required"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"},
+        "title": {"type": "string", "minLength": 1},
+        "type": {
+          "enum": [
+            "global_mass_balance",
+            "side_mass_balance",
+            "stream_energy_balance",
+            "isenthalpic",
+            "range",
+            "comparison",
+            "reported_metric",
+            "pressure_margin",
+            "api_dataset_consistency",
+            "existing_validators"
+          ]
+        },
+        "scope": {"enum": ["numerical", "phenomenon", "safety", "data_quality"]},
+        "blocking": {"type": "boolean"},
+        "required": {"type": "boolean"},
+        "description": {"type": "string"},
+        "threshold": {"$ref": "#/$defs/threshold"},
+        "failure_status": {"enum": ["FAIL", "NOT_DEMONSTRATED"], "default": "FAIL"},
+        "unavailable_status": {"enum": ["N_A", "NOT_RUN", "NOT_DEMONSTRATED"], "default": "N_A"},
+        "dataset": {"type": "string"},
+        "id_column": {"type": "string", "default": "object_id"},
+        "value_column": {"type": "string"},
+        "inlet_ids": {"type": "array", "items": {"type": "string"}},
+        "outlet_ids": {"type": "array", "items": {"type": "string"}},
+        "ids": {"type": "array", "items": {"type": "string"}},
+        "columns": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["dataset_column", "api_column"],
+            "properties": {
+              "dataset_column": {"type": "string"},
+              "api_column": {"type": "string"},
+              "dataset_factor": {"type": "number", "default": 1.0},
+              "api_factor": {"type": "number", "default": 1.0}
+            }
+          }
+        },
+        "terms": {"type": "array", "items": {"$ref": "#/$defs/selector"}},
+        "normalization": {"enum": ["inlet_sum", "outlet_sum", "max_side", "sum_absolute_terms", "reference"]},
+        "normalization_reference": {"$ref": "#/$defs/operand"},
+        "left": {"$ref": "#/$defs/operand"},
+        "right": {"$ref": "#/$defs/operand"},
+        "value": {"$ref": "#/$defs/operand"},
+        "calculation": {"enum": ["value", "absolute_difference", "relative_difference_percent", "ratio"]},
+        "minimum": {"type": "number"},
+        "maximum": {"type": "number"},
+        "validators": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"enum": ["metadata", "tables", "units", "checksums"]}
+        },
+        "evidence_paths": {"type": "array", "items": {"type": "string"}},
+        "notes": {"type": "string"}
+      }
+    }
+  }
+}

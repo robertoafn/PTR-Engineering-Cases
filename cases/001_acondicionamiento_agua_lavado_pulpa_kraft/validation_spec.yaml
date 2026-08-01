@@ -1,0 +1,196 @@
+schema_version: 1.0.0
+case_id: 001_acondicionamiento_agua_lavado_pulpa_kraft
+
+dwsim:
+  file: simulations/dwsim/001_acondicionamiento_agua_lavado_pulpa_kraft.dwxmz
+  required_version: 9.0.5
+  timeout_seconds: 120
+  object_map:
+    MSTR-001_AGUA_FRIA: MSTR-001_AGUA_FRIA
+    P-001_BOMBA_AGUA: P-001_BOMBA_AGUA
+    MSTR-002_AGUA_PRESURIZADA: MSTR-002_AGUA_PRESURIZADA
+    H-001_CALENTADOR_AGUA: H-001_CALENTADOR_AGUA
+    MSTR-003_AGUA_ACONDICIONADA: MSTR-003_AGUA_ACONDICIONADA
+
+datasets:
+  process:
+    path: data/process_results_v01.csv
+    id_column: object_id
+
+criteria:
+  - id: integridad_artefactos
+    title: Metadatos, tablas, unidades y checksums
+    type: existing_validators
+    scope: data_quality
+    blocking: true
+    required: true
+    validators:
+      - metadata
+      - tables
+      - units
+      - checksums
+    evidence_paths:
+      - metadata.yaml
+      - data/process_results_v01.meta.yaml
+      - provenance.json
+
+  - id: paridad_api_dataset_corrientes
+    title: Paridad DWSIM API-dataset de las corrientes
+    type: api_dataset_consistency
+    scope: data_quality
+    blocking: true
+    required: false
+    dataset: process
+    ids:
+      - MSTR-001_AGUA_FRIA
+      - MSTR-002_AGUA_PRESURIZADA
+      - MSTR-003_AGUA_ACONDICIONADA
+    columns:
+      - dataset_column: temperature_K
+        api_column: temperature_K
+      - dataset_column: pressure_Pa
+        api_column: pressure_Pa
+      - dataset_column: mass_flow_kg_s
+        api_column: mass_flow_kg_s
+    threshold:
+      operator: <=
+      value: 0.05
+      unit: "%"
+    unavailable_status: NOT_RUN
+    evidence_paths:
+      - data/process_results_v01.csv
+      - simulations/dwsim/001_acondicionamiento_agua_lavado_pulpa_kraft.dwxmz
+
+  - id: paridad_api_dataset_equipos
+    title: Paridad DWSIM API-dataset de bomba y calentador
+    type: api_dataset_consistency
+    scope: data_quality
+    blocking: true
+    required: false
+    dataset: process
+    ids:
+      - P-001_BOMBA_AGUA
+      - H-001_CALENTADOR_AGUA
+    columns:
+      - dataset_column: energy_flow_W
+        api_column: duty_kW
+        dataset_factor: 0.001
+    threshold:
+      operator: <=
+      value: 0.05
+      unit: "%"
+    unavailable_status: NOT_RUN
+    evidence_paths:
+      - data/process_results_v01.csv
+      - simulations/dwsim/001_acondicionamiento_agua_lavado_pulpa_kraft.dwxmz
+
+  - id: balance_masa_global
+    title: Balance global de masa
+    type: global_mass_balance
+    scope: numerical
+    blocking: true
+    required: true
+    dataset: process
+    id_column: object_id
+    value_column: mass_flow_kg_s
+    inlet_ids:
+      - MSTR-001_AGUA_FRIA
+    outlet_ids:
+      - MSTR-003_AGUA_ACONDICIONADA
+    threshold:
+      operator: <=
+      value: 0.01
+      unit: "%"
+    evidence_paths:
+      - data/process_results_v01.csv
+    notes: MSTR-002_AGUA_PRESURIZADA es una corriente interna y no forma parte de la frontera global.
+
+  - id: balance_energia_recomputado
+    title: Balance global de energía recomputado
+    type: stream_energy_balance
+    scope: numerical
+    blocking: true
+    required: true
+    terms:
+      - dataset: process
+        column: energy_flow_kW
+        ids:
+          - MSTR-001_AGUA_FRIA
+        factor: 1.0
+      - dataset: process
+        column: duty_kW
+        ids:
+          - P-001_BOMBA_AGUA
+        factor: 1.0
+      - dataset: process
+        column: duty_kW
+        ids:
+          - H-001_CALENTADOR_AGUA
+        factor: 1.0
+      - dataset: process
+        column: energy_flow_kW
+        ids:
+          - MSTR-003_AGUA_ACONDICIONADA
+        factor: -1.0
+    normalization: reference
+    normalization_reference:
+      metadata_output: carga_termica_calentador
+      factor: 0.001
+      absolute: true
+    threshold:
+      operator: <=
+      value: 0.1
+      unit: "%"
+    unavailable_status: N_A
+    evidence_paths:
+      - data/process_results_v01.csv
+      - simulations/dwsim/001_acondicionamiento_agua_lavado_pulpa_kraft.dwxmz
+    notes: El CSV no contiene energía de las corrientes materiales. En modo dataset el criterio es N_A; en modo DWSIM se completa energy_flow_kW mediante la API.
+
+  - id: balance_energia_reportado
+    title: Residuo energético documentado por el autor
+    type: reported_metric
+    scope: numerical
+    blocking: false
+    required: true
+    value: 0.000000269
+    threshold:
+      operator: <=
+      value: 0.1
+      unit: "%"
+    evidence_paths:
+      - validation_report.md
+      - metadata.yaml
+    notes: Evidencia histórica reportada; no sustituye la recomputación independiente del balance.
+
+  - id: replica_hidraulica_bomba
+    title: Réplica hidráulica de la potencia de la bomba
+    type: reported_metric
+    scope: phenomenon
+    blocking: true
+    required: true
+    value: 0.0
+    threshold:
+      operator: <=
+      value: 1.0
+      unit: "%"
+    evidence_paths:
+      - validation_report.md
+      - data/process_results_v01.csv
+    notes: Desviación reportada entre V_dot*DeltaP/eta y la potencia DWSIM.
+
+  - id: replica_calorimetrica_calentador
+    title: Réplica calorimétrica de la carga del calentador
+    type: reported_metric
+    scope: phenomenon
+    blocking: true
+    required: true
+    value: 0.013
+    threshold:
+      operator: <=
+      value: 1.0
+      unit: "%"
+    evidence_paths:
+      - validation_report.md
+      - data/process_results_v01.csv
+    notes: Desviación reportada entre m_dot*Cp*DeltaT y la carga térmica DWSIM.

@@ -38,18 +38,29 @@ Ver `assumptions.md`.
 Ver `metadata.yaml > inputs`.
 
 ## 8. Procedimiento reproducible
-1. `python scripts/validate_metadata.py cases/NNN_slug`
-2. `python scripts/validate_tables.py cases/NNN_slug`
-3. `python scripts/unit_consistency_check.py cases/NNN_slug`
-4. Abrir `simulations/dwsim/NNN_slug.dwxmz` y ejecutar.
+1. Completar `validation_spec.yaml` con fronteras, datasets y criterios.
+2. `python scripts/validate_case.py cases/NNN_slug --source dataset`
+3. `python scripts/validate_case.py cases/NNN_slug --source auto`
+4. Abrir `simulations/dwsim/NNN_slug.dwxmz` y ejecutar cuando corresponda.
 5. `jupyter nbconvert --execute notebooks/reporting/NN_<slug>.ipynb`
-6. `python scripts/compute_checksums.py --verify cases/NNN_slug`
+6. `python scripts/preflight.py cases/NNN_slug`
 
 ## 9. Resultados
 Tabla y figuras clave (SI). Las figuras viven en `assets/figures/`.
 
 ## 10. Validación y QC
-Ver `validation_report.md` y `qc_checklist.md`.
+Ver `validation_spec.yaml`, `validation_report.md` y `qc_checklist.md`.
+
+- `validation_spec.yaml` declara las fronteras, criterios, umbrales y evidencia.
+- `validation_results.json` se genera con `--write-artifacts`; no se edita
+  manualmente y será la fuente estructurada para visualizaciones.
+- `validation_report.md` es el informe técnico canónico. Conservar su narrativa
+  y las limitaciones fuera de la sección generada automáticamente.
+- Si una métrica no puede recomputarse, marcar `N_A`, `NOT_RUN` o
+  `NOT_DEMONSTRATED` con justificación; nunca fabricar un `PASS`.
+
+La validación automática no promueve por sí sola el estado del ciclo de vida.
+Consultar `docs/09_validation_protocol.md`.
 
 ## 11. Trazabilidad
 Ver `provenance.json`.

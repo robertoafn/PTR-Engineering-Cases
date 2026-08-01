@@ -4,6 +4,22 @@ All notable changes to this case will be documented in this file.
 
 ## [Unreleased]
 
+## [0.1.2] - 2026-07-25
+
+### Added
+
+- Especificación declarativa `validation_spec.yaml`, resultado estructurado
+  `validation_results.json` y sección automática del informe.
+
+### Validation
+
+- Balances globales de masa, metanol y energía, isoentalpía, partición,
+  controles GC-FID, unidades y checksums: `PASS`.
+- Paridad energética DWSIM API-dataset: `FAIL`; la desviación máxima es
+  `0.115554596249 %` en `MSTR-204_LIQUIDO_FLASH`, sobre el umbral de `0.05 %`.
+- El caso permanece en `review`; no se modificaron la simulación ni los datos
+  durante la validación.
+
 ## [0.1.1] - 2026-07-25
 
 ### Changed

@@ -30,6 +30,13 @@ def main(argv: list[str]) -> int:
         [python, "scripts/validate_tables.py", target],
         [python, "scripts/unit_consistency_check.py", target],
         [python, "scripts/compute_checksums.py", "--verify", target],
+        [
+            python,
+            "scripts/validate_case.py",
+            target,
+            "--source",
+            "dataset",
+        ],
         [python, "-m", "pytest", "tests/", "-q"],
         [python, "-m", "ruff", "check", "."],
     ]
