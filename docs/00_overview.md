@@ -25,10 +25,17 @@ ingeniería química industrial, donde cada caso documenta la cadena completa:
 - Comunidad académica y open-source.
 
 ## Estado actual
-v0.4.0 — Release del portafolio con motor declarativo de validación,
-integración opcional con DWSIM Automation API y resultados estructurados para
-los tres casos: 001 `PASS`, 002 `FAIL` por paridad API-dataset y 003
-`CONDITIONAL` por seguridad no demostrada.
+v0.5.0 — Release del portafolio con motor declarativo de validación, integración
+opcional con DWSIM Automation API y dashboard científico Streamlit para los
+tres casos implementados. La interfaz utiliza flowsheets, ecuaciones y gráficos
+específicos para explicar los fenómenos desde los datos versionados. La lectura
+sigue `pregunta → mecanismo → evidencia → interpretación → límites`; los
+veredictos, criterios y datasets quedan disponibles como respaldo de rigor y
+trazabilidad.
+
+La propuesta del Caso 004 extenderá HX-301 mediante propagación de
+incertidumbre GUM/Monte Carlo; permanece fuera de `cases/` hasta contar con un
+presupuesto trazable e implementación reproducible.
 
 El Caso 003 extiende la secuencia del Caso 002: reutiliza el condensado líquido
 caliente con trazas de metanol como fuente térmica para precalentar agua limpia
