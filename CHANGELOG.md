@@ -7,6 +7,39 @@ y este proyecto adhiere a [Semantic Versioning 2.0.0](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-08-01
+
+### Added
+- Dashboard Streamlit auto-descubrible con mapa científico, estudio por caso,
+  conexiones entre fenómenos y una vista separada de rigor y fuentes.
+- Transformaciones didácticas reproducibles para explicar potencia hidráulica,
+  calor sensible, flash isoentálpico, partición de metanol, cromatografía,
+  intercambio térmico, LMTD y margen hidráulico desde los datasets publicados.
+- Catálogo editorial estructurado que relaciona fenómenos y ecuaciones con los
+  IDs de criterios publicados sin duplicar la evidencia cuantitativa.
+- Protocolo de extensión y pruebas automatizadas de carga, cobertura del
+  catálogo, estados y separación entre calidad de datos y fenómeno físico.
+- Propuesta del Caso 004 para propagar incertidumbre GUM/Monte Carlo sobre
+  HX-301, con mensurandos, covarianzas, convergencia y criterios de promoción.
+
+### Changed
+- El roadmap v0.5.0 queda detallado con entregables, QA y definición de cierre.
+- La documentación principal incorpora la ejecución local del dashboard y la
+  continuidad conceptual `002 → 003 → 004`.
+- La jerarquía del dashboard cambia de validación primero a `pregunta → figura
+  → mecanismo → ecuación → datos → interpretación → límites`; los estados de
+  control quedan como respaldo auditable y no como conclusión científica.
+- Todas las vistas mantienen texto oscuro sobre fondos claros y las figuras
+  incorporan lectura guiada, unidades y límites de interpretación.
+
+### Validation
+- Pruebas específicas del dashboard: 11 `PASS`, incluidos cálculos científicos,
+  catálogo narrativo, recorrido de las cuatro vistas, advertencias de los casos
+  002 y 003 y el control que impide volver a declarar texto blanco.
+- Preflight integral: 55 pruebas, Ruff, naming, 3 metadatos, 4 tablas, unidades
+  en 7 archivos y checksums en `PASS`.
+- Arranque Streamlit y endpoint local de salud HTTP: `200 OK`.
+
 ## [0.4.0] - 2026-07-25
 
 ### Added
@@ -135,7 +168,8 @@ y este proyecto adhiere a [Semantic Versioning 2.0.0](https://semver.org/).
 - Solo se incluía el placeholder `000_template`.
 - Esta versión constituye la arquitectura base para las iteraciones posteriores.
 
-[Unreleased]: https://github.com/robertoafn/PTR-Engineering-Cases/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/robertoafn/PTR-Engineering-Cases/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/robertoafn/PTR-Engineering-Cases/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/robertoafn/PTR-Engineering-Cases/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/robertoafn/PTR-Engineering-Cases/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/robertoafn/PTR-Engineering-Cases/compare/v0.1.0...v0.2.0

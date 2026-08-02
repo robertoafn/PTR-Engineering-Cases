@@ -1,0 +1,371 @@
+schema_version: "2.0"
+updated_at: "2026-08-01"
+
+cases:
+  "001":
+    short_title: Acondicionamiento de agua
+    process_stage: Servicio auxiliar de agua
+    scientific_question: >-
+      ¿Cómo cambian la presión y la temperatura de una corriente de agua cuando
+      una bomba aporta trabajo mecánico y un calentador aporta energía térmica?
+    summary: >-
+      Este caso separa dos formas de transferir energía al mismo fluido. La bomba
+      modifica principalmente la presión; el calentador produce el cambio
+      térmico dominante, mientras el caudal másico permanece constante.
+    learning_outcomes:
+      - Distinguir potencia hidráulica, potencia de eje y carga térmica.
+      - Relacionar cada equipo con el cambio de estado observado entre corrientes.
+      - Comprobar la conservación de masa en una línea estacionaria sin reacción.
+    figure_caption: >-
+      Recorrido de MSTR-001 a MSTR-003: la bomba P-001 presuriza el agua y el
+      calentador H-001 eleva su temperatura antes de la descarga acondicionada.
+    figure_guide:
+      - label: "1 · MSTR-001 — estado inicial"
+        text: Agua a 303.15 K, 300 kPa y 10 kg/s entra a la línea auxiliar.
+      - label: "2 · P-001 — trabajo mecánico"
+        text: La presión sube hasta 600 kPa; el aumento de temperatura es mínimo.
+      - label: "3 · H-001 — transferencia térmica"
+        text: La corriente alcanza aproximadamente 343.15 K antes de salir.
+      - label: "4 · MSTR-003 — resultado"
+        text: El agua conserva 10 kg/s y queda disponible como corriente acondicionada.
+    methods:
+      - name: DWSIM
+        role: Resuelve los estados de corriente y los requerimientos energéticos.
+      - name: Python
+        role: Replica potencia hidráulica, calor sensible y balances desde el CSV.
+    conclusion: >-
+      La evidencia permite atribuir el salto de presión a la bomba y el aumento
+      térmico al calentador sin pérdida de masa en la línea modelada.
+    limitations: >-
+      Es un escenario estacionario y sintético. No incluye curva de bomba,
+      dinámica de control, pérdidas distribuidas ni validación experimental.
+    phenomena:
+      - id: elevacion_presion_bomba
+        name: Conversión de trabajo mecánico en presión
+        category: Mecánica de fluidos
+        question: ¿Cuánta potencia hidráulica requiere el salto de presión?
+        explanation: >-
+          La bomba transfiere trabajo al agua. Para un fluido casi incompresible,
+          el producto entre caudal volumétrico y diferencia de presión representa
+          la potencia hidráulica útil; la potencia de eje es mayor cuando la
+          eficiencia es menor que uno.
+        equation: "P_h = Q_v * Delta p; P_eje = P_h / eta"
+        equation_latex: 'P_h=\dot V\,\Delta p,\qquad P_{eje}=\frac{P_h}{\eta}'
+        variables:
+          - 'P_h: potencia hidráulica [W]'
+          - '\dot V: caudal volumétrico [m³/s]'
+          - '\Delta p: aumento de presión [Pa]'
+          - '\eta: eficiencia de la bomba [1]'
+        data_reading: >-
+          Compare MSTR-001 con MSTR-002: el caudal no cambia, la presión se duplica
+          y la temperatura apenas varía. Ese patrón distingue trabajo mecánico de
+          calentamiento intencional.
+        engineering_meaning: >-
+          La diferencia entre potencia hidráulica y potencia reportada por la
+          bomba representa pérdidas asociadas a una eficiencia menor que 100 %.
+        limitation: >-
+          El caso no reemplaza una selección de bomba ni verifica NPSH, cavitación
+          o comportamiento fuera del punto de diseño.
+        evidence_criteria:
+          - replica_hidraulica_bomba
+          - balance_energia_recomputado
+      - id: calentamiento_sensible
+        name: Calentamiento sensible de agua
+        category: Transferencia de calor
+        question: ¿Cómo se relacionan carga térmica, caudal y aumento de temperatura?
+        explanation: >-
+          El calentador aporta energía sin cambio de fase. En una aproximación de
+          capacidad calorífica media, la carga crece con el caudal y con la
+          diferencia entre temperaturas de salida y entrada.
+        equation: "Q_dot = m_dot * c_p * (T_out - T_in)"
+        equation_latex: '\dot Q=\dot m\,c_p\left(T_{out}-T_{in}\right)'
+        variables:
+          - '\dot Q: carga térmica [W]'
+          - '\dot m: caudal másico [kg/s]'
+          - 'c_p: capacidad calorífica media [J/(kg·K)]'
+          - 'T: temperatura [K]'
+        data_reading: >-
+          Compare MSTR-002 con MSTR-003: la presión cambia poco frente al aumento
+          de casi 40 K, señal de que H-001 domina la transformación térmica.
+        engineering_meaning: >-
+          El cálculo independiente de c_p aparente permite juzgar si la carga y
+          el aumento térmico tienen una escala físicamente coherente.
+        limitation: >-
+          La aproximación no representa variación detallada de propiedades ni
+          pérdidas de calor al ambiente.
+        evidence_criteria:
+          - replica_calorimetrica_calentador
+          - balance_energia_reportado
+      - id: balance_masa_estacionario
+        name: Conservación de masa en estado estacionario
+        category: Balances de proceso
+        question: ¿Se conserva el caudal a través de los dos equipos?
+        explanation: >-
+          Sin reacción, fuga ni acumulación, la masa que entra por unidad de
+          tiempo debe ser igual a la que sale, aunque cambien presión y temperatura.
+        equation: "sum(m_dot_in) - sum(m_dot_out) = 0"
+        equation_latex: '\sum \dot m_{in}-\sum \dot m_{out}=0'
+        variables:
+          - '\dot m: caudal másico [kg/s]'
+        data_reading: >-
+          Las tres corrientes materiales reportan 10 kg/s. La constancia visual
+          del caudal ayuda a separar conservación de masa de cambios de estado.
+        engineering_meaning: >-
+          Un balance cerrado es condición necesaria para interpretar correctamente
+          las transformaciones energética e hidráulica.
+        limitation: No se estudian transitorios ni acumulación dentro de los equipos.
+        evidence_criteria:
+          - balance_masa_global
+
+  "002":
+    short_title: Vapor flash y partición de volátiles
+    process_stage: Gestión de condensado caliente
+    scientific_question: >-
+      ¿Por qué una reducción de presión genera vapor flash y cómo se distribuye
+      el metanol entre la fase vapor y el líquido residual?
+    summary: >-
+      La válvula conserva aproximadamente la entalpía mientras reduce la presión.
+      El nuevo equilibrio produce dos fases y concentra preferentemente el
+      componente más volátil en el vapor.
+    learning_outcomes:
+      - Interpretar una expansión isoentálpica con vaporización parcial.
+      - Diferenciar fracción total de vapor y recuperación de un componente volátil.
+      - Conectar simulación de equilibrio con cuantificación GC-FID sintética.
+    figure_caption: >-
+      MSTR-201 atraviesa la válvula, forma MSTR-202 a menor presión y el separador
+      divide la mezcla en MSTR-203 vapor y MSTR-204 líquido.
+    figure_guide:
+      - label: "1 · MSTR-201 — condensado presurizado"
+        text: Alimentación agua–metanol a 453.15 K, 1.2 MPa y 10 kg/s.
+      - label: "2 · Válvula — expansión"
+        text: La presión cae a 0.3 MPa con entalpía específica prácticamente constante.
+      - label: "3 · MSTR-202 — mezcla bifásica"
+        text: La vaporización parcial enfría la mezcla hasta aproximadamente 406.65 K.
+      - label: "4 · Separador — reparto de fases"
+        text: Se obtienen 1.0489 kg/s de vapor y 8.9511 kg/s de líquido residual.
+    methods:
+      - name: DWSIM
+        role: Resuelve expansión, equilibrio vapor-líquido y separación de fases.
+      - name: OpenChrom / GC-FID
+        role: Representa un flujo analítico sintético de calibración y cuantificación.
+      - name: Python
+        role: Calcula repartos, recuperaciones, ajuste lineal y balances independientes.
+    conclusion: >-
+      Sólo cerca de una décima parte de la masa total pasa al vapor, pero esa fase
+      recupera una proporción mucho mayor del metanol y queda enriquecida respecto
+      de la alimentación, comportamiento consistente con volatilidad selectiva.
+    limitations: >-
+      Composición, cromatogramas y condiciones son sintéticos. La discrepancia
+      API–CSV de energía en MSTR-204 limita la reproducibilidad exacta del dataset,
+      aunque no invalida por sí sola la explicación del flash y la partición.
+    phenomena:
+      - id: expansion_isoentalpica
+        name: Expansión isoentálpica y generación de vapor flash
+        category: Termodinámica
+        question: ¿Cómo puede enfriarse y vaporizarse una corriente sin retirar calor?
+        explanation: >-
+          Una válvula reduce presión sin trabajo de eje útil y, idealmente, sin
+          intercambio de calor. La entalpía específica se conserva; parte de la
+          energía interna disponible se emplea en vaporizar líquido y la
+          temperatura disminuye hasta el equilibrio a la nueva presión.
+        equation: "h_in ~= h_out; Y_flash = m_dot_vapor / m_dot_feed"
+        equation_latex: 'h_{in}\approx h_{out},\qquad Y_{flash}=\frac{\dot m_v}{\dot m_F}'
+        variables:
+          - 'h: entalpía específica [kJ/kg]'
+          - 'Y_flash: rendimiento másico de vapor [1]'
+          - '\dot m_v, \dot m_F: caudales de vapor y alimentación [kg/s]'
+        data_reading: >-
+          Antes y después de la válvula, h permanece en torno a -1807.695 kJ/kg,
+          mientras la presión cae 900 kPa y aparece una fracción de vapor.
+        engineering_meaning: >-
+          La caída de temperatura no implica enfriamiento externo: emerge del
+          acoplamiento entre presión, equilibrio de fases y entalpía conservada.
+        limitation: >-
+          La predicción depende del modelo termodinámico y no se contrasta con una
+          medición de equilibrio real.
+        evidence_criteria:
+          - isoentalpia_valvula
+          - rendimiento_vapor_flash
+      - id: equilibrio_y_particion
+        name: Equilibrio de fases y partición de metanol
+        category: Equilibrio de fases
+        question: ¿La fase vapor arrastra metanol en la misma proporción que masa total?
+        explanation: >-
+          En equilibrio, el componente más volátil muestra mayor afinidad por la
+          fase vapor. Por eso la fracción de metanol recuperada en vapor puede ser
+          mucho mayor que la fracción de masa total vaporizada.
+        equation: "R_MeOH,v = m_dot_MeOH,v / m_dot_MeOH,in"
+        equation_latex: 'R_{MeOH,v}=\frac{\dot m_{MeOH,v}}{\dot m_{MeOH,F}}'
+        variables:
+          - 'R_MeOH,v: recuperación de metanol en vapor [1]'
+          - '\dot m_MeOH: caudal másico de metanol [kg/s]'
+        data_reading: >-
+          Compare en dos barras de base 100 % el reparto de masa total y el de
+          metanol: el vapor representa cerca de 10.49 % de la masa, pero recibe
+          aproximadamente 42.79 % del metanol.
+        engineering_meaning: >-
+          La diferencia entre ambos repartos muestra selectividad de fase y
+          explica el enriquecimiento de metanol en MSTR-203.
+        limitation: >-
+          El caso no evalúa otras especies volátiles, no idealidad experimental
+          ni eficiencia real del separador.
+        evidence_criteria:
+          - balance_metanol
+          - recuperacion_metanol_vapor
+          - enriquecimiento_metanol
+      - id: cuantificacion_gc_fid
+        name: Calibración y precisión GC-FID
+        category: Química analítica
+        question: ¿Cómo se transforma una señal cromatográfica en concentración?
+        explanation: >-
+          Una recta de calibración relaciona concentración conocida y área de
+          pico. Las muestras se interpolan en esa relación y un duplicado permite
+          vigilar la precisión del flujo de procesamiento.
+        equation: "A = a*C + b; RPD_A = |A1-A2| / mean(A1,A2) * 100"
+        equation_latex: 'A=aC+b,\qquad RPD_A=\frac{|A_1-A_2|}{\overline A}\,100\%'
+        variables:
+          - 'A: área integrada de pico [señal·s]'
+          - 'C: concentración [kg/m³]'
+          - 'RPD_A: diferencia porcentual relativa de áreas [%]'
+        data_reading: >-
+          Los cinco estándares definen la recta; MSTR-203 y su duplicado muestran
+          la dispersión de la cuantificación sintética.
+        engineering_meaning: >-
+          La evidencia analítica complementa la simulación: una metodología mide
+          composición y la otra predice el reparto termodinámico.
+        limitation: >-
+          No es una calibración instrumental real y no estima incertidumbre,
+          recuperación de método, límite de detección ni sesgo de muestreo.
+        evidence_criteria:
+          - calibracion_gc_fid
+          - duplicado_gc_fid
+
+  "003":
+    short_title: Recuperación de calor HX-301
+    process_stage: Integración térmica de condensado residual
+    scientific_question: >-
+      ¿Cuánto calor puede recuperarse del condensado y qué condición hidráulica
+      sería necesaria para orientar una fuga hipotética lejos del agua limpia?
+    summary: >-
+      HX-301 acopla dos corrientes sin mezclarlas: el condensado se enfría y el
+      agua limpia se calienta. La transferencia térmica queda demostrada, pero
+      las presiones iguales no crean una barrera hidráulica positiva.
+    learning_outcomes:
+      - Leer simultáneamente los perfiles térmicos de ambos lados de un intercambiador.
+      - Interpretar LMTD como fuerza impulsora térmica promedio.
+      - Separar desempeño térmico de integridad y dirección potencial de fuga.
+    figure_caption: >-
+      HX-301 recibe condensado caliente MSTR-301 y agua fría MSTR-302; entrega
+      condensado enfriado MSTR-303 y agua precalentada MSTR-304 sin mezcla directa.
+    figure_guide:
+      - label: "1 · Lado caliente / contaminado"
+        text: MSTR-301 entra a 406.649 K con trazas de metanol y sale como MSTR-303.
+      - label: "2 · Lado frío / limpio"
+        text: MSTR-302 entra a 293.15 K y se precalienta hasta 333.15 K.
+      - label: "3 · HX-301 — acoplamiento térmico"
+        text: Aproximadamente 1.063 MW pasa del condensado al agua a través de la pared.
+      - label: "4 · Presión — condición independiente"
+        text: Ambos lados están a 300 kPa; el flowsheet no demuestra dirección preferente de fuga.
+    methods:
+      - name: DWSIM
+        role: Resuelve estados, entalpías y carga del intercambiador.
+      - name: Python
+        role: Replica balances por lado, LMTD, carga térmica y margen de presión.
+    conclusion: >-
+      Los datos sostienen la recuperación térmica y el precalentamiento del agua.
+      No sostienen una conclusión de control de contaminación cruzada porque el
+      diferencial limpio menos contaminado es exactamente 0 Pa.
+    limitations: >-
+      El modelo es estacionario, sin ensuciamiento, dinámica, pérdida de integridad,
+      caída de presión detallada ni capas instrumentadas de protección.
+    phenomena:
+      - id: transferencia_calor_indirecta
+        name: Transferencia de calor indirecta
+        category: Transferencia de calor
+        question: ¿La energía cedida por el condensado coincide con la recibida por el agua?
+        explanation: >-
+          La pared del intercambiador permite transferir energía sin mezclar las
+          corrientes. En régimen estacionario y con pérdidas despreciables, las
+          cargas calculadas desde ambos lados deben ser compatibles.
+        equation: "Q_dot_hot ~= Q_dot_cold"
+        equation_latex: '\dot Q_h=\dot m_h(h_{h,in}-h_{h,out})\approx\dot m_c(h_{c,out}-h_{c,in})=\dot Q_c'
+        variables:
+          - '\dot Q_h, \dot Q_c: cargas calculadas por cada lado [kW]'
+          - 'h: entalpía específica [kJ/kg]'
+        data_reading: >-
+          El condensado baja 22.462 K y el agua sube 40 K; ambos balances entregan
+          aproximadamente 1063.4 kW, con un residuo de pocos watts.
+        engineering_meaning: >-
+          La concordancia de cargas respalda la interpretación de recuperación
+          térmica, no una validación mecánica del equipo.
+        limitation: >-
+          No se cuantifican pérdidas al ambiente, ensuciamiento ni incertidumbre
+          de propiedades o instrumentos.
+        evidence_criteria:
+          - balance_energia_transferida
+          - replica_carga_termica
+      - id: fuerza_impulsora_lmtd
+        name: Fuerza impulsora térmica y LMTD
+        category: Diseño térmico
+        question: ¿Cómo se resume la diferencia de temperatura disponible a lo largo de HX-301?
+        explanation: >-
+          Las diferencias terminales no son iguales. La diferencia media
+          logarítmica de temperatura (LMTD) las combina de forma consistente con
+          la ecuación de diseño para un intercambiador de configuración definida.
+        equation: "LMTD = (Delta T_1 - Delta T_2) / ln(Delta T_1 / Delta T_2)"
+        equation_latex: 'LMTD=\frac{\Delta T_2-\Delta T_1}{\ln(\Delta T_2/\Delta T_1)}'
+        variables:
+          - '\Delta T_1, \Delta T_2: diferencias terminales [K]'
+          - 'U: coeficiente global [W/(m²·K)]'
+          - 'A: área de intercambio [m²]'
+        data_reading: >-
+          Los extremos mantienen diferencias positivas de aproximadamente 73.499 K
+          y 91.037 K; su promedio logarítmico es cercano a 81.96 K.
+        engineering_meaning: >-
+          El LMTD conecta el perfil térmico visible con Q=U·A·F·LMTD y permite
+          revisar la escala del coeficiente U declarado.
+        limitation: >-
+          El área de 1 m² y el U elevado pertenecen al escenario sintético; no
+          equivalen al dimensionamiento de un equipo real.
+        evidence_criteria:
+          - replica_lmtd
+      - id: barrera_hidraulica
+        name: Dirección hidráulica ante una fuga hipotética
+        category: Integridad de proceso
+        question: ¿Existe mayor presión en el lado limpio para orientar una fuga?
+        explanation: >-
+          Si la pared pierde integridad, la dirección inicial del flujo depende de
+          la diferencia de presión local. Un margen positivo limpio–contaminado
+          favorecería flujo hacia el lado contaminado; igualdad de presiones no
+          establece esa dirección.
+        equation: "Delta p_barrera = p_limpio - p_contaminado > 0"
+        equation_latex: '\Delta p_b=p_{limpio}-p_{contaminado}>0'
+        variables:
+          - '\Delta p_b: margen hidráulico [Pa]'
+          - 'p_limpio, p_contaminado: presiones locales [Pa]'
+        data_reading: >-
+          Ambas salidas están a 300 kPa. La comparación entrega 0 Pa: coinciden,
+          pero no existe margen positivo.
+        engineering_meaning: >-
+          El desempeño térmico puede ser correcto mientras la condición hidráulica
+          necesaria para una estrategia de contención permanece no demostrada.
+        limitation: >-
+          La presión es sólo una capa. Se requieren análisis de riesgos, transitorios,
+          detección, aislamiento e integridad mecánica para una decisión real.
+        evidence_criteria:
+          - margen_presion_limpio_contaminado
+
+proposals:
+  "004":
+    short_title: Incertidumbre GUM/Monte Carlo en HX-301
+    process_stage: Metrología aplicada a integración térmica
+    status: proposed
+    depends_on: "003"
+    scientific_question: >-
+      ¿Qué tan robustas son las conclusiones térmicas e hidráulicas de HX-301
+      cuando se propagan incertidumbres y correlaciones de las entradas?
+    summary: >-
+      Comparará propagación GUM y Monte Carlo para carga térmica, LMTD, U y
+      margen de presión. No se muestran distribuciones hasta contar con un
+      presupuesto de incertidumbre trazable.
+    document: docs/proposals/004_incertidumbre_gum_monte_carlo_hx301.md

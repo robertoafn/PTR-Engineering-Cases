@@ -3,7 +3,7 @@
 > Portafolio técnico de casos reproducibles de ingeniería química industrial.
 > Stack open source · FAIR · SI · IUPAC · ISO 8000 · VIM · trazabilidad SHA-256.
 
-[![release](https://img.shields.io/badge/release-v0.4.0-blue)](./CHANGELOG.md)
+[![release](https://img.shields.io/badge/release-v0.5.0-blue)](./CHANGELOG.md)
 [![license-code](https://img.shields.io/badge/code-MIT-green)](./LICENSE)
 [![license-docs](https://img.shields.io/badge/docs-CC--BY--4.0-lightgrey)](./LICENSE-docs)
 
@@ -84,6 +84,24 @@ pytest tests/ -q
 La simulación debe abrirse desde la copia clonada y resolverse con la versión de
 software declarada por el caso. Los pasos adicionales se documentan en el README
 de cada caso.
+
+## Dashboard explicativo
+
+La línea v0.5.0 incorpora una aplicación Streamlit de sólo lectura que descubre
+los casos implementados y prioriza la comprensión de sus fenómenos. Cada caso
+se recorre como `pregunta → flowsheet → mecanismo → ecuación → datos →
+interpretación → límites`, con figuras específicas como apoyo a la explicación:
+
+```bash
+streamlit run dashboards/streamlit/app.py
+```
+
+La interfaz consume los CSV, metadatos, figuras y `validation_results.json`
+versionados; no modifica ni recalcula las simulaciones. Los criterios y estados
+se mantienen en la vista secundaria `Rigor y fuentes`: respaldan la
+trazabilidad, pero no sustituyen la interpretación científica. Ver
+[`dashboards/streamlit/README.md`](./dashboards/streamlit/README.md) y el
+[`protocolo del dashboard`](./docs/10_dashboard_streamlit.md).
 
 ## Índice de casos
 
@@ -171,13 +189,17 @@ operacionales reales. Ver [Caso 003](./cases/003_recuperacion_calor_condensado_y
 | **v0.1.0** | Arquitectura fundacional: plantillas, schemas, scripts, CI y gobernanza |
 | **v0.2.0** | Primer caso integrado, índice de casos y sincronización documental |
 | **v0.3.0** | Incorporación del Caso 003, revisión de casos contextuales y endurecimiento de validadores de datasets, unidades y checksums |
-| **v0.4.0 (actual)** | Motor declarativo de validación, integración opcional con DWSIM API y resultados estructurados por caso |
-| **v0.5.0** | Dashboard Streamlit por caso y fenómeno, visualizaciones técnicas y automatización del índice |
+| **v0.4.0** | Motor declarativo de validación, integración opcional con DWSIM API y resultados estructurados por caso |
+| **v0.5.0 (release actual)** | Dashboard científico Streamlit, visualizaciones explicativas, índice automático y propuesta metrológica del Caso 004 |
 | **v1.0.0** | Portafolio inicial validado y publicado con varios casos reproducibles |
+
+El plan verificable de la versión se mantiene en
+[`docs/ROADMAP_v0.5.0.md`](./docs/ROADMAP_v0.5.0.md).
 
 Próximas líneas de desarrollo previstas:
 
-1. análisis de sensibilidad termo-hidráulica y de integridad para el Caso 003;
+1. promover la [propuesta del Caso 004](./docs/proposals/004_incertidumbre_gum_monte_carlo_hx301.md)
+   cuando exista un presupuesto trazable de incertidumbre para HX-301;
 2. recirculación de agua con purga y make-up;
 3. operaciones unitarias Kraft de complejidad progresiva.
 
