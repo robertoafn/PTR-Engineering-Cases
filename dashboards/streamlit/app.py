@@ -34,6 +34,9 @@ from science_model import (  # noqa: E402
     case_002_split_frame,
     case_003_analysis,
     case_003_temperature_frame,
+    case_004_analysis,
+    case_004_sensitivity_frame,
+    case_004_temperature_frame,
 )
 
 BLUE = "#2563EB"
@@ -251,7 +254,7 @@ def render_scientific_map(cases: list[CaseBundle], catalog: dict[str, Any]) -> N
         if case.case_id == "001":
             st.info(
                 "El Caso 001 es un fundamento independiente de servicios auxiliares; "
-                "no alimenta materialmente a los casos 002 o 003."
+                "no alimenta materialmente a los casos 002, 003 o 004."
             )
         if case.case_id == "002":
             st.markdown("#### Puente material 002 → 003")
@@ -264,10 +267,17 @@ def render_scientific_map(cases: list[CaseBundle], catalog: dict[str, Any]) -> N
                 "El Caso 003 reutiliza este estado como base redondeada; las "
                 "propiedades restantes se resuelven nuevamente en DWSIM."
             )
+        if case.case_id == "003":
+            st.markdown("#### Puente de modelo 003 → 004")
+            st.write(
+                "El Caso 004 conserva el fenómeno de intercambio y corrige la "
+                "parametrización a U=1000 W/(m²·K), A=13 m² y un orden "
+                "nominal de presiones limpio−contaminado de +50 kPa."
+            )
         st.divider()
 
-    proposal = catalog.get("proposals", {}).get("004", {})
-    st.markdown("### Pregunta siguiente · Caso 004 propuesto")
+    proposal = catalog.get("proposals", {}).get("005", {})
+    st.markdown("### Pregunta siguiente · Caso 005 propuesto")
     render_question(proposal.get("scientific_question", "N/D"))
     st.write(proposal.get("summary", "Propuesta no disponible."))
 
@@ -325,6 +335,16 @@ def render_case_snapshot(case: CaseBundle) -> None:
         columns[1].metric("Agua limpia", f"+{values['cold_temperature_rise_k']:.3f} K")
         columns[2].metric("LMTD derivada", f"{values['lmtd_k']:.4f} K")
         columns[3].metric("Margen hidráulico", f"{values['pressure_margin_pa']:.0f} Pa")
+    elif case.case_id == "004":
+        values = case_004_analysis(case)
+        columns = st.columns(4)
+        columns[0].metric("Carga térmica", f"{values['q_mean_kw']/1000:.5f} MW")
+        columns[1].metric("UA especificado", f"{values['ua_w_k']/1000:.3f} kW/K")
+        columns[2].metric("LMTD derivada", f"{values['lmtd_k']:.4f} K")
+        columns[3].metric(
+            "Margen limpio−contaminado",
+            f"{values['pressure_margin_inlet_pa']/1000:.1f} kPa",
+        )
 
 
 def render_case_001_evidence(case: CaseBundle, phenomenon_id: str) -> None:
@@ -747,6 +767,303 @@ def render_case_003_evidence(case: CaseBundle, phenomenon_id: str) -> None:
         render_case_003_pressure(case)
 
 
+def _case_figure_matching(case: CaseBundle, *tokens: str) -> Path | None:
+    normalized = tuple(token.casefold() for token in tokens)
+    return next(
+        (
+            path
+            for path in case.figure_paths
+            if any(token in path.name.casefold() for token in normalized)
+        ),
+        None,
+    )
+
+
+def case_004_temperature_figure(case: CaseBundle) -> go.Figure:
+    values = case_004_analysis(case)
+    frame = case_004_temperature_frame(case)
+    temperatures = dict(zip(frame["Corriente"], frame["Temperatura (K)"], strict=True))
+    extremes = ["Extremo A", "Extremo B"]
+    fig = go.Figure()
+    fig.add_trace(
+        go.Scatter(
+            x=extremes,
+            y=[temperatures["MSTR-301"], temperatures["MSTR-303"]],
+            mode="lines+markers+text",
+            name="Condensado: MSTR-301 → MSTR-303",
+            line=dict(color=ORANGE, width=3),
+            marker=dict(size=11, color=ORANGE, line=dict(color=INK, width=1)),
+            text=[
+                f"{temperatures['MSTR-301']:.3f} K",
+                f"{temperatures['MSTR-303']:.3f} K",
+            ],
+            textposition="top center",
+        )
+    )
+    fig.add_trace(
+        go.Scatter(
+            x=extremes,
+            y=[temperatures["MSTR-304"], temperatures["MSTR-302"]],
+            mode="lines+markers+text",
+            name="Agua limpia: MSTR-302 ← MSTR-304",
+            line=dict(color=BLUE, width=3, dash="dash"),
+            marker=dict(size=11, color=BLUE_LIGHT, line=dict(color=BLUE, width=2)),
+            text=[
+                f"{temperatures['MSTR-304']:.3f} K",
+                f"{temperatures['MSTR-302']:.3f} K",
+            ],
+            textposition="bottom center",
+        )
+    )
+    fig.add_annotation(
+        x="Extremo A",
+        y=(temperatures["MSTR-301"] + temperatures["MSTR-304"]) / 2,
+        text=f"ΔT₁={values['delta_t_terminal_1_k']:.3f} K",
+        showarrow=False,
+        font=dict(color=INK),
+    )
+    fig.add_annotation(
+        x="Extremo B",
+        y=(temperatures["MSTR-303"] + temperatures["MSTR-302"]) / 2,
+        text=f"ΔT₂={values['delta_t_terminal_2_k']:.3f} K",
+        showarrow=False,
+        font=dict(color=INK),
+    )
+    fig.update_layout(
+        title="Caso 004: perfil nominal contracorriente con UA especificado",
+        legend=dict(orientation="h", y=1.18),
+    )
+    fig.update_xaxes(title="Extremos físicos de HX-301")
+    fig.update_yaxes(title="Temperatura [K]")
+    return plot_layout(fig, height=430)
+
+
+def render_case_004_ua(case: CaseBundle) -> None:
+    values = case_004_analysis(case)
+    st.plotly_chart(
+        case_004_temperature_figure(case),
+        width="stretch",
+        key="case004_temperature_ua",
+    )
+    columns = st.columns(4)
+    columns[0].metric("U especificado", f"{values['u_w_m2_k']:.0f} W/(m²·K)")
+    columns[1].metric("Área", f"{values['area_m2']:.2f} m²")
+    columns[2].metric("UA", f"{values['ua_w_k']/1000:.3f} kW/K")
+    columns[3].metric("Q̇ por UA", f"{values['q_ua_kw']:.3f} kW")
+    balance = pd.DataFrame(
+        {
+            "Ruta de cálculo": ["Lado caliente", "Lado frío", "U·A·F·LMTD"],
+            "Carga (kW)": [
+                values["q_hot_kw"],
+                values["q_cold_kw"],
+                values["q_ua_kw"],
+            ],
+        }
+    )
+    st.plotly_chart(
+        vertical_bar(
+            balance,
+            x="Ruta de cálculo",
+            y="Carga (kW)",
+            title="Tres reconstrucciones del mismo estado nominal",
+            unit="kW",
+            color=ORANGE,
+            texttemplate="%{y:.3f}",
+        ),
+        width="stretch",
+    )
+    st.info(
+        "El cierre demuestra coherencia interna. Como A se redimensionó junto con U "
+        "para conservar aproximadamente UA, no constituye una medición independiente "
+        "del coeficiente global ni del área."
+    )
+
+    case_001_cp_screen = 1670.5007177 / (
+        10.0 * (343.14999998 - 303.18066454)
+    )
+    cp_difference_percent = 100.0 * (
+        values["effective_cp_cold_kj_kg_k"] / case_001_cp_screen - 1.0
+    )
+    calorimetric_screen = pd.DataFrame(
+        {
+            "Referencia": [
+                "Caso 001 · Steam Tables/IAPWS",
+                "Caso 004 · lado frío NRTL",
+            ],
+            "cₚ efectivo (kJ/(kg·K))": [
+                case_001_cp_screen,
+                values["effective_cp_cold_kj_kg_k"],
+            ],
+        }
+    )
+    st.markdown("#### Tamiz calorimétrico entre casos")
+    st.plotly_chart(
+        vertical_bar(
+            calorimetric_screen,
+            x="Referencia",
+            y="cₚ efectivo (kJ/(kg·K))",
+            title="Comparación orientativa de la escala calorimétrica",
+            unit="kJ/(kg·K)",
+            color=BLUE,
+            texttemplate="%{y:.4f}",
+        ),
+        width="stretch",
+    )
+    st.warning(
+        "El lado frío del Caso 004 implica un cₚ efectivo de "
+        f"{values['effective_cp_cold_kj_kg_k']:.4f} kJ/(kg·K), frente a "
+        f"{case_001_cp_screen:.5f} kJ/(kg·K) en el tamiz del Caso 001 "
+        f"({cp_difference_percent:+.2f} %). Las condiciones y los paquetes de "
+        "propiedades no son idénticos: la diferencia es una señal para revisar "
+        "propiedades, no una validación independiente ni la demostración de un error."
+    )
+
+
+def render_case_004_sensitivity(case: CaseBundle) -> None:
+    frame = case_004_sensitivity_frame(case)
+    required = {"U (W/(m²·K))", "Carga térmica (kW)"}
+    if required.issubset(frame.columns):
+        chart = frame.copy()
+        for column in required | {"Caudal frío (kg/s)"}:
+            if column in chart.columns:
+                chart[column] = pd.to_numeric(chart[column], errors="coerce")
+        chart = chart.dropna(subset=list(required)).sort_values("U (W/(m²·K))")
+        fig = go.Figure()
+        if "Caudal frío (kg/s)" in chart.columns:
+            for flow, group in chart.groupby("Caudal frío (kg/s)", dropna=False):
+                fig.add_trace(
+                    go.Scatter(
+                        x=group["U (W/(m²·K))"],
+                        y=group["Carga térmica (kW)"],
+                        mode="lines+markers",
+                        name=f"ṁ frío={flow:.3g} kg/s",
+                    )
+                )
+        else:
+            fig.add_trace(
+                go.Scatter(
+                    x=chart["U (W/(m²·K))"],
+                    y=chart["Carga térmica (kW)"],
+                    mode="lines+markers",
+                    name="Barrido nominal",
+                )
+            )
+        fig.update_layout(title="Respuesta térmica al variar U y el caudal frío")
+        fig.update_xaxes(title="U [W/(m²·K)]")
+        fig.update_yaxes(title="Carga térmica [kW]", rangemode="tozero")
+        st.plotly_chart(plot_layout(fig, height=430), width="stretch")
+        st.dataframe(chart, hide_index=True, width="stretch")
+    else:
+        st.info(
+            "El barrido reproducible aún no expone las columnas U y Q en la "
+            "evidencia cargada por el dashboard."
+        )
+
+    figure = _case_figure_matching(case, "sensibilidad", "sensitivity")
+    if figure is not None:
+        st.image(
+            str(figure),
+            caption="Sensibilidad de HX-301 generada desde los escenarios versionados.",
+            width="stretch",
+        )
+    st.warning(
+        "Una sensibilidad muestra cómo responde el modelo a sus entradas; no convierte "
+        "el U supuesto en un dato experimental ni valida por sí sola las propiedades."
+    )
+
+
+def render_case_004_pressure(case: CaseBundle) -> None:
+    values = case_004_analysis(case)
+    fig = go.Figure()
+    positions = ["Entrada", "Salida"]
+    fig.add_trace(
+        go.Bar(
+            x=positions,
+            y=[
+                values["pressure_clean_inlet_pa"] / 1000.0,
+                values["pressure_clean_outlet_pa"] / 1000.0,
+            ],
+            name="Agua limpia",
+            marker_color=BLUE,
+            texttemplate="%{y:.1f} kPa",
+            textposition="outside",
+        )
+    )
+    fig.add_trace(
+        go.Bar(
+            x=positions,
+            y=[
+                values["pressure_contaminated_inlet_pa"] / 1000.0,
+                values["pressure_contaminated_outlet_pa"] / 1000.0,
+            ],
+            name="Condensado con trazas",
+            marker_color=ORANGE,
+            texttemplate="%{y:.1f} kPa",
+            textposition="outside",
+        )
+    )
+    fig.update_layout(
+        title="Orden nominal de presiones a ambos extremos de HX-301",
+        barmode="group",
+    )
+    fig.update_xaxes(title="Posición")
+    fig.update_yaxes(title="Presión [kPa]", rangemode="tozero")
+    st.plotly_chart(plot_layout(fig), width="stretch")
+    columns = st.columns(3)
+    columns[0].metric(
+        "Margen en entrada", f"{values['pressure_margin_inlet_pa']/1000:.1f} kPa"
+    )
+    columns[1].metric(
+        "Margen en salida", f"{values['pressure_margin_outlet_pa']/1000:.1f} kPa"
+    )
+    columns[2].metric(
+        "Caídas internas modeladas",
+        f"{values['hot_pressure_drop_pa']:.0f} / {values['cold_pressure_drop_pa']:.0f} Pa",
+    )
+    st.warning(
+        "+50 kPa es una condición de frontera estacionaria impuesta. Favorece una "
+        "dirección inicial de fuga hipotética, pero no demuestra integridad, suficiencia "
+        "del margen, respuesta transitoria ni seguridad operacional."
+    )
+
+
+def render_case_004_crosscheck(case: CaseBundle) -> None:
+    figure = _case_figure_matching(case, "vle", "dechema", "literatura")
+    if figure is not None:
+        st.image(
+            str(figure),
+            caption="Comparación termodinámica declarada por el Caso 004.",
+            width="stretch",
+        )
+    frames = [
+        (key, frame)
+        for key, frame in case.datasets.items()
+        if "crosscheck" in key.casefold() or "vle" in key.casefold()
+    ]
+    if frames:
+        for key, frame in frames:
+            st.markdown(f"**Dataset: {key}**")
+            st.dataframe(frame.head(30), hide_index=True, width="stretch")
+    else:
+        st.info("No hay un dataset de validación externa disponible en esta carga.")
+    st.warning(
+        "Paridad numérica, comparación entre parametrizaciones y validación contra "
+        "datos experimentales son preguntas distintas. Cada una requiere fuente, "
+        "convención de parámetros, condiciones y tolerancia propias."
+    )
+
+
+def render_case_004_evidence(case: CaseBundle, phenomenon_id: str) -> None:
+    if phenomenon_id == "reparametrizacion_ua":
+        render_case_004_ua(case)
+    elif phenomenon_id == "sensibilidad_ua_caudal":
+        render_case_004_sensitivity(case)
+    elif phenomenon_id == "margen_presion_positivo":
+        render_case_004_pressure(case)
+    else:
+        render_case_004_crosscheck(case)
+
+
 def render_criterion_evidence(case: CaseBundle, criterion_ids: list[str]) -> None:
     rows = []
     for criterion in case.validation.get("criteria", []):
@@ -793,6 +1110,7 @@ def render_phenomenon(case: CaseBundle, phenomenon: dict[str, Any]) -> None:
         "001": render_case_001_evidence,
         "002": render_case_002_evidence,
         "003": render_case_003_evidence,
+        "004": render_case_004_evidence,
     }
     renderer = renderers.get(case.case_id)
     if renderer is None:
@@ -900,7 +1218,11 @@ def render_connections(cases: list[CaseBundle]) -> None:
         - **Medición:** GC-FID y su calibración muestran cómo una señal se convierte
           en evidencia composicional, aunque en este repositorio los datos sean sintéticos.
         - **Integridad:** que un balance térmico cierre no demuestra una barrera
-          hidráulica ni la ausencia de fuga.
+          hidráulica ni la ausencia de fuga; el Caso 004 separa el orden nominal
+          de presiones de una demostración de seguridad.
+        - **Validación cruzada:** sensibilidad, paridad numérica y comparación
+          contra literatura responden preguntas distintas y conservan fuentes y
+          tolerancias separadas.
         """
     )
 
@@ -933,6 +1255,13 @@ def render_rigor(cases: list[CaseBundle], catalog: dict[str, Any]) -> None:
         st.warning(
             "El estado CONDITIONAL conserva el límite científico principal: "
             "la transferencia térmica pasa, pero Δp limpio–contaminado = 0 Pa."
+        )
+    if case.case_id == "004":
+        st.warning(
+            "El margen nominal de +50 kPa es una condición estática impuesta. "
+            "La advertencia de cambio de fase, las propiedades calorimétricas y "
+            "los crosschecks externos permanecen visibles en sus criterios; no "
+            "se interpreta como validación de seguridad."
         )
 
     render_methods(case)
@@ -968,8 +1297,8 @@ def render_rigor(cases: list[CaseBundle], catalog: dict[str, Any]) -> None:
         """
     )
 
-    proposal = catalog.get("proposals", {}).get("004", {})
-    st.markdown("### Caso 004 propuesto")
+    proposal = catalog.get("proposals", {}).get("005", {})
+    st.markdown("### Caso 005 propuesto")
     st.write(proposal.get("summary", "Propuesta no disponible."))
     st.code(proposal.get("document", "N/D"), language=None)
 

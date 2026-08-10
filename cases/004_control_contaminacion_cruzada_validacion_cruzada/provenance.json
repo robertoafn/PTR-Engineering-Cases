@@ -1,0 +1,441 @@
+{
+  "case_id": "004_control_contaminacion_cruzada_validacion_cruzada",
+  "generated_at": "2026-08-02T05:15:00Z",
+  "agents": [
+    {
+      "id": "agent:author",
+      "type": "person",
+      "name": "Roberto Flores"
+    },
+    {
+      "id": "agent:dwsim",
+      "type": "software",
+      "name": "DWSIM 9.0.5"
+    },
+    {
+      "id": "agent:python",
+      "type": "software",
+      "name": "Python 3.12.13"
+    },
+    {
+      "id": "agent:codex",
+      "type": "software",
+      "name": "OpenAI Codex"
+    }
+  ],
+  "activities": [
+    {
+      "id": "act:manual_dwsim_model",
+      "started_at": "2026-08-02T01:41:33Z",
+      "ended_at": "2026-08-02T02:14:21Z",
+      "software": "DWSIM 9.0.5 GUI",
+      "parameters": {
+        "property_package": "NRTL",
+        "calculation_mode": "CalcBothTemp_UA",
+        "flow_direction": "CounterCurrent",
+        "overall_coefficient_W_m2_K": 1000.0,
+        "area_m2": 13.0,
+        "lmtd_correction_factor": 1.0,
+        "hot_side_pressure_drop_Pa": 0.0,
+        "cold_side_pressure_drop_Pa": 0.0,
+        "original_filename": "004_hx301_deltaP_positive.dwxmz"
+      },
+      "used": [],
+      "generated": [
+        "entity:dwsim_simulation"
+      ]
+    },
+    {
+      "id": "act:saved_state_extraction",
+      "started_at": "2026-08-02T02:20:00Z",
+      "ended_at": "2026-08-02T02:30:00Z",
+      "software": "Python 3.12.13; extract_saved_results.py",
+      "parameters": {
+        "method": "dwxmz_saved_state_xml",
+        "solver_executed": false,
+        "source_unchanged": true,
+        "vapor_fraction_bases": [
+          "molar",
+          "mass"
+        ]
+      },
+      "used": [
+        "entity:dwsim_simulation",
+        "entity:script_extract"
+      ],
+      "generated": [
+        "entity:process_csv",
+        "entity:process_meta",
+        "entity:equipment_csv",
+        "entity:equipment_meta"
+      ]
+    },
+    {
+      "id": "act:dwsim_api_verification",
+      "started_at": "2026-08-02T02:47:18Z",
+      "ended_at": "2026-08-02T03:05:00Z",
+      "software": "DWSIM 9.0.5 Automation API; PTR DwsimValidationRunner",
+      "parameters": {
+        "operations": [
+          "load_temporary_copy",
+          "solve_flowsheet",
+          "extract_five_objects",
+          "verify_source_checksum_unchanged"
+        ],
+        "solved": true,
+        "source_unchanged": true,
+        "dependency_resolution_final": "complete",
+        "preliminary_thermocs_resolution_issue": "resolved",
+        "runner_stderr_final": "",
+        "warning_hot_side_phase_change_persisted": true
+      },
+      "used": [
+        "entity:dwsim_simulation",
+        "entity:process_csv"
+      ],
+      "generated": []
+    },
+    {
+      "id": "act:sensitivity_u_cold_flow",
+      "started_at": "2026-08-02T03:05:00Z",
+      "ended_at": "2026-08-02T03:30:00Z",
+      "software": "DWSIM 9.0.5 Automation API; sensitivity_hx301.py",
+      "parameters": {
+        "overall_coefficient_W_m2_K": [
+          800.0,
+          1000.0,
+          1200.0,
+          1500.0
+        ],
+        "cold_flow_factor": [
+          0.8,
+          1.0,
+          1.2
+        ],
+        "scenario_count": 12,
+        "converged_count": 12,
+        "source_unchanged": true
+      },
+      "used": [
+        "entity:dwsim_simulation",
+        "entity:script_sensitivity"
+      ],
+      "generated": [
+        "entity:sensitivity_csv",
+        "entity:sensitivity_meta"
+      ]
+    },
+    {
+      "id": "act:case002_api_parity",
+      "started_at": "2026-08-02T04:30:00Z",
+      "ended_at": "2026-08-02T04:49:00Z",
+      "software": "DWSIM 9.0.5 Automation API; parity_check_002.py",
+      "parameters": {
+        "state_tolerance_percent": 0.05,
+        "energy_tolerance_percent": 0.05,
+        "max_state_difference_percent": 4.86903934813802e-13,
+        "max_energy_difference_percent": 0.11555459624896086,
+        "failed_object": "MSTR-204_LIQUIDO_FLASH",
+        "failed_metric": "energy_flow_kW",
+        "status": "FAIL",
+        "source_unchanged": true
+      },
+      "used": [
+        "entity:script_parity"
+      ],
+      "generated": [
+        "entity:case002_parity_csv",
+        "entity:case002_parity_meta"
+      ]
+    },
+    {
+      "id": "act:external_crosschecks_prepared",
+      "started_at": "2026-08-02T03:30:00Z",
+      "ended_at": "2026-08-02T04:20:00Z",
+      "software": "Python 3.12.13",
+      "parameters": {
+        "nrtl_dechema_status": "NOT_RUN",
+        "vle_literature_status": "NOT_RUN",
+        "reason": "Faltan fuentes exactas, condiciones comparables y licencia resuelta; no se generaron resultados sintéticos."
+      },
+      "used": [
+        "entity:script_nrtl",
+        "entity:script_vle",
+        "entity:literature_readme"
+      ],
+      "generated": []
+    },
+    {
+      "id": "act:figure_generation",
+      "started_at": "2026-08-02T04:00:00Z",
+      "ended_at": "2026-08-02T05:05:00Z",
+      "software": "Python 3.12.13; Pillow; generate_figures.py",
+      "parameters": {
+        "source_backed": true,
+        "text_palette": "dark_on_light",
+        "vle_figure_status": "NOT_RUN"
+      },
+      "used": [
+        "entity:process_csv",
+        "entity:equipment_csv",
+        "entity:sensitivity_csv",
+        "entity:script_figures"
+      ],
+      "generated": [
+        "entity:figure_pfd",
+        "entity:figure_sensitivity"
+      ]
+    },
+    {
+      "id": "act:declarative_validation",
+      "started_at": "2026-08-02T04:20:00Z",
+      "ended_at": "2026-08-02T05:15:00Z",
+      "software": "Python 3.12.13; DWSIM 9.0.5 Automation API; validate_case.py",
+      "parameters": {
+        "requested_source": "dwsim",
+        "actual_source": "dwsim_api",
+        "overall_status": "CONDITIONAL",
+        "lifecycle_status": "review",
+        "case002_parity_status": "FAIL",
+        "nrtl_dechema_status": "NOT_RUN",
+        "vle_literature_status": "NOT_RUN",
+        "independent_calorimetry_status": "NOT_RUN",
+        "monophase_status": "NOT_DEMONSTRATED"
+      },
+      "used": [
+        "entity:dwsim_simulation",
+        "entity:process_csv",
+        "entity:equipment_csv",
+        "entity:sensitivity_csv",
+        "entity:case002_parity_csv",
+        "entity:metadata",
+        "entity:validation_spec"
+      ],
+      "generated": [
+        "entity:validation_results",
+        "entity:validation_report"
+      ]
+    }
+  ],
+  "entities": [
+    {
+      "id": "entity:dwsim_simulation",
+      "path": "simulations/dwsim/004_control_contaminacion_cruzada_validacion_cruzada.dwxmz",
+      "checksum_sha256": "e62493025e33114466e1af735c5916eb73eaa92d36ea6d2419e456875d0a181e",
+      "derived_from": []
+    },
+    {
+      "id": "entity:process_csv",
+      "path": "data/process_results_v01.csv",
+      "checksum_sha256": "48d07a59ba1353eb7b962be58134498a05b55932f084e0ad1e14f539bdbb4dc6",
+      "derived_from": [
+        "entity:dwsim_simulation",
+        "entity:script_extract"
+      ]
+    },
+    {
+      "id": "entity:process_meta",
+      "path": "data/process_results_v01.meta.yaml",
+      "checksum_sha256": "b6fc28ecc8cac1b971ef5e9b3c27f3cbecc5005d8df903e93bdddde90e5056b5",
+      "derived_from": [
+        "entity:process_csv"
+      ]
+    },
+    {
+      "id": "entity:equipment_csv",
+      "path": "data/processed/hx301_equipment_results_v01.csv",
+      "checksum_sha256": "b599a866daa8193f54bde5245eb9cbacb746081e5e66e6d70dd1b3de1db4f0a7",
+      "derived_from": [
+        "entity:dwsim_simulation",
+        "entity:script_extract"
+      ]
+    },
+    {
+      "id": "entity:equipment_meta",
+      "path": "data/processed/hx301_equipment_results_v01.meta.yaml",
+      "checksum_sha256": "27800aa97460c0a1bda76eb3f5a138c011099114c02c9d118a933a18837b8536",
+      "derived_from": [
+        "entity:equipment_csv"
+      ]
+    },
+    {
+      "id": "entity:sensitivity_csv",
+      "path": "data/processed/hx301_sensitivity_v01.csv",
+      "checksum_sha256": "6f531859cba66a290689ad821a779eec6502ff76a1751371dec5221001dd75ca",
+      "derived_from": [
+        "entity:dwsim_simulation",
+        "entity:script_sensitivity"
+      ]
+    },
+    {
+      "id": "entity:sensitivity_meta",
+      "path": "data/processed/hx301_sensitivity_v01.meta.yaml",
+      "checksum_sha256": "d7c8b759b24701214c3c340b3fbe07df9d8835a178b36c04244f2ff493d13e88",
+      "derived_from": [
+        "entity:sensitivity_csv"
+      ]
+    },
+    {
+      "id": "entity:case002_parity_csv",
+      "path": "data/processed/case002_api_parity_v01.csv",
+      "checksum_sha256": "e8dea1de56f7f0a59273d3dd13d1a6f906afc67556e76efc68c45108dee8bf16",
+      "derived_from": [
+        "entity:script_parity"
+      ]
+    },
+    {
+      "id": "entity:case002_parity_meta",
+      "path": "data/processed/case002_api_parity_v01.meta.yaml",
+      "checksum_sha256": "a33eab7a152326ec7049ad1846d53bedf047a29632237db2bfccf6e234d7d152",
+      "derived_from": [
+        "entity:case002_parity_csv"
+      ]
+    },
+    {
+      "id": "entity:script_extract",
+      "path": "scripts/extract_saved_results.py",
+      "checksum_sha256": "1cb813798d7f4fa66e9dbfb98d8a9e5082733e07b8778a1b6778e0b47be7e09c",
+      "derived_from": []
+    },
+    {
+      "id": "entity:script_sensitivity",
+      "path": "scripts/sensitivity_hx301.py",
+      "checksum_sha256": "9c32f244798bc768f5a95813dda333e735de61fa9c1dd4bb6cd6b63ecab4bb94",
+      "derived_from": []
+    },
+    {
+      "id": "entity:script_figures",
+      "path": "scripts/generate_figures.py",
+      "checksum_sha256": "a0e8db5803d88eaddc8e4f8157447ef684d0a4c8e1f51fd302bd03cd221a35b3",
+      "derived_from": []
+    },
+    {
+      "id": "entity:script_nrtl",
+      "path": "scripts/crosscheck_nrtl_dechema.py",
+      "checksum_sha256": "95f885776ca660e6978b8412a7d9b781d719b416873d358c00a15fce55e8201d",
+      "derived_from": []
+    },
+    {
+      "id": "entity:script_vle",
+      "path": "scripts/vle_comparison_dwsim_literature.py",
+      "checksum_sha256": "7f371e56cd00903cec41cae4362e1f2aaeaaf525075c31e9052d891ff61180d9",
+      "derived_from": []
+    },
+    {
+      "id": "entity:script_parity",
+      "path": "scripts/parity_check_002.py",
+      "checksum_sha256": "29b2c995ffbce8900e2a2d3475a79e17a1a4b36e3295d2b15c15395c1d5ca95b",
+      "derived_from": []
+    },
+    {
+      "id": "entity:figure_pfd",
+      "path": "assets/figures/fig_004_01_pfd_hx301_instrumentado.png",
+      "checksum_sha256": "df77c369be627fb8ea6f4a024fac0f763b060235d717f151ad84b53a9a9dbaf0",
+      "derived_from": [
+        "entity:process_csv",
+        "entity:equipment_csv",
+        "entity:script_figures"
+      ]
+    },
+    {
+      "id": "entity:figure_sensitivity",
+      "path": "assets/figures/fig_004_02_sensibilidad_u_q.png",
+      "checksum_sha256": "811006cd8557f91763cd9f7c13dc371d9c233010b9f0ada4f88d4bd0740cf1c5",
+      "derived_from": [
+        "entity:sensitivity_csv",
+        "entity:script_figures"
+      ]
+    },
+    {
+      "id": "entity:figures_readme",
+      "path": "assets/figures/README.md",
+      "checksum_sha256": "d4f716a38ff8a61daac95190238371e00a749479ae4b79dbdd464988d6fa8c21",
+      "derived_from": [
+        "entity:figure_pfd",
+        "entity:figure_sensitivity"
+      ]
+    },
+    {
+      "id": "entity:literature_readme",
+      "path": "data/raw/literature/README.md",
+      "checksum_sha256": "b9183edc3960a400baee791a39ec6f4e4402f4e902b9fcc7823f1b7f701ad8fa",
+      "derived_from": []
+    },
+    {
+      "id": "entity:readme",
+      "path": "README.md",
+      "checksum_sha256": "9a95622d61192c4e6d10e6bc7ac1063fda3c6da70bcb395e449f94c12257a325",
+      "derived_from": [
+        "entity:process_csv",
+        "entity:equipment_csv",
+        "entity:sensitivity_csv",
+        "entity:case002_parity_csv"
+      ]
+    },
+    {
+      "id": "entity:assumptions",
+      "path": "assumptions.md",
+      "checksum_sha256": "7448c2bfe1a51f059e3c5133252d3a92f5ae9e04b7f8b559382aaf84c4c0036d",
+      "derived_from": [
+        "entity:dwsim_simulation"
+      ]
+    },
+    {
+      "id": "entity:metadata",
+      "path": "metadata.yaml",
+      "checksum_sha256": "eb12ee4e4044bbcf8c8f61e3f117a465f3c3bacb5a66ff755c1afaf795e9de00",
+      "derived_from": [
+        "entity:process_csv",
+        "entity:equipment_csv",
+        "entity:sensitivity_csv",
+        "entity:case002_parity_csv"
+      ]
+    },
+    {
+      "id": "entity:validation_spec",
+      "path": "validation_spec.yaml",
+      "checksum_sha256": "55a66d8e1a5b28b4087eb9181366a99fb2ecefe4b62d5b6b124e156d11fe5db2",
+      "derived_from": []
+    },
+    {
+      "id": "entity:validation_results",
+      "path": "validation_results.json",
+      "checksum_sha256": "e403679c6ca1fe3093c1d2b05d7a802906895c3b432891722c42be5fb3fed857",
+      "derived_from": [
+        "entity:validation_spec",
+        "entity:dwsim_simulation",
+        "entity:process_csv",
+        "entity:sensitivity_csv",
+        "entity:case002_parity_csv"
+      ]
+    },
+    {
+      "id": "entity:validation_report",
+      "path": "validation_report.md",
+      "checksum_sha256": "8a295ff6e6a82f8b4335be05307011a1745076f7c541fe77f0eb9e70645618cf",
+      "derived_from": [
+        "entity:validation_results"
+      ]
+    },
+    {
+      "id": "entity:qc_checklist",
+      "path": "qc_checklist.md",
+      "checksum_sha256": "da5cf4c500088e959616c8f70efe42ffc78e928c5bd69796ca9a1ce61c86c762",
+      "derived_from": [
+        "entity:validation_results"
+      ]
+    },
+    {
+      "id": "entity:references",
+      "path": "references.bib",
+      "checksum_sha256": "994666d04b127324dc262a995e4e1d1998f323786901b8a848b9e766842ad23a",
+      "derived_from": []
+    },
+    {
+      "id": "entity:changelog",
+      "path": "CHANGELOG.md",
+      "checksum_sha256": "14f735b355daf756b4c60176ca92f3f2c87657001a87f46a2979325aa05e390f",
+      "derived_from": []
+    }
+  ]
+}

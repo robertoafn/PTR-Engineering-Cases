@@ -1,0 +1,40 @@
+dataset_id: hx301_sensitivity_v01
+case_id: 004_control_contaminacion_cruzada_validacion_cruzada
+title: Sensibilidad del HX-301 a U y caudal de agua fría
+description: >-
+  Malla de 12 escenarios resuelta mediante DWSIM 9.0.5 Automation3 sobre
+  copias temporales del flowsheet. Cada escenario cambia U y el factor de
+  caudal frío únicamente en memoria; el checksum del archivo fuente se
+  verifica antes y después de cada ejecución.
+source_type: simulated
+license: CC0-1.0
+author: Roberto Flores Núñez
+variables:
+  - {symbol: scenario, column: scenario_id, name: Identificador del escenario, unit: dimensionless, type: string}
+  - {symbol: U, column: overall_coefficient_W_m2_K, name: Coeficiente global, unit: W/(m^2·K), type: float}
+  - {symbol: f_m_c, column: cold_flow_factor, name: Factor aplicado al caudal frío nominal, unit: dimensionless, type: float}
+  - {symbol: A, column: area_m2, name: Área de intercambio, unit: m^2, type: float}
+  - {symbol: UA, column: ua_W_K, name: Conductancia térmica global, unit: W/K, type: float}
+  - {symbol: T_hi, column: hot_inlet_temperature_K, name: Temperatura caliente de entrada, unit: K, type: float}
+  - {symbol: T_ci, column: cold_inlet_temperature_K, name: Temperatura fría de entrada, unit: K, type: float}
+  - {symbol: T_ho, column: hot_outlet_temperature_K, name: Temperatura caliente de salida, unit: K, type: float}
+  - {symbol: T_co, column: cold_outlet_temperature_K, name: Temperatura fría de salida, unit: K, type: float}
+  - {symbol: P_hi, column: hot_inlet_pressure_Pa, name: Presión caliente de entrada, unit: Pa, type: float}
+  - {symbol: P_ci, column: cold_inlet_pressure_Pa, name: Presión fría de entrada, unit: Pa, type: float}
+  - {symbol: dP_margin, column: clean_to_contaminated_deltaP_Pa, name: Margen limpio menos contaminado, unit: Pa, type: float}
+  - {symbol: m_h, column: hot_mass_flow_kg_s, name: Caudal másico caliente, unit: kg/s, type: float}
+  - {symbol: m_c, column: cold_mass_flow_kg_s, name: Caudal másico frío, unit: kg/s, type: float}
+  - {symbol: Q, column: heat_duty_kW, name: Deber térmico DWSIM, unit: kW, type: float}
+  - {symbol: LMTD, column: lmtd_K, name: Diferencia media logarítmica, unit: K, type: float}
+  - {symbol: Q_h, column: q_hot_kW, name: Calor cedido por el lado caliente, unit: kW, type: float}
+  - {symbol: Q_c, column: q_cold_kW, name: Calor absorbido por el lado frío, unit: kW, type: float}
+  - {symbol: r_E, column: energy_balance_residual_kW, name: Residuo absoluto de balance energético, unit: kW, type: float}
+  - {symbol: r_E_pct, column: energy_balance_relative_percent, name: Residuo energético relativo a la carga media, unit: "%", type: float}
+  - {symbol: sha256, column: source_sha256, name: SHA-256 del flowsheet fuente, unit: dimensionless, type: string}
+  - {symbol: dwsim, column: dwsim_version, name: Versión informada por DWSIM, unit: dimensionless, type: string}
+primary_key:
+  - scenario_id
+created_at: "2026-08-02T03:30:00Z"
+version: 0.1.0
+checksum_sha256: 6f531859cba66a290689ad821a779eec6502ff76a1751371dec5221001dd75ca
+provenance_ref: ../../provenance.json

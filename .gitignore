@@ -36,6 +36,10 @@ data/raw/**/*.mzML
 data/raw/**/*.cdf
 data/interim/**
 
+# Corpus documental FOSSEE local. Los casos promovidos se publican únicamente
+# bajo /Literature_cases/ después de comprobar procedencia e integridad.
+/references/Literature_cases_references/
+
 # Reportes generados
 tests/reports/
 **/validation_report_*.html

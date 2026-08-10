@@ -25,6 +25,8 @@ from science_model import (  # noqa: E402
     case_002_chromatogram_frame,
     case_002_gc_analysis,
     case_003_analysis,
+    case_004_analysis,
+    case_004_sensitivity_frame,
 )
 
 
@@ -32,17 +34,18 @@ def _case(case_id: str):
     return next(item for item in load_all_cases(ROOT) if item.case_id == case_id)
 
 
-def test_dashboard_discovers_only_the_three_implemented_cases() -> None:
+def test_dashboard_discovers_the_four_implemented_cases() -> None:
     discovered = discover_case_dirs(ROOT)
-    assert [path.name[:3] for path in discovered] == ["001", "002", "003"]
+    assert [path.name[:3] for path in discovered] == ["001", "002", "003", "004"]
 
 
 def test_catalog_covers_the_scientific_narrative_and_evidence_links() -> None:
     cases = load_all_cases(ROOT)
     catalog = load_catalog(ROOT)
     assert catalog["schema_version"] == "2.0"
-    assert set(catalog["cases"]) == {"001", "002", "003"}
-    assert catalog["proposals"]["004"]["status"] == "proposed"
+    assert set(catalog["cases"]) == {"001", "002", "003", "004"}
+    assert catalog["proposals"]["005"]["status"] == "proposed"
+    assert catalog["proposals"]["005"]["depends_on"] == "004"
 
     required_case_fields = {
         "scientific_question",
@@ -125,6 +128,28 @@ def test_case_003_explains_heat_exchange_and_hydraulic_limit() -> None:
     assert values["pressure_margin_pa"] == pytest.approx(0.0)
 
 
+def test_case_004_explains_ua_sensitivity_and_nominal_pressure_order() -> None:
+    case = _case("004")
+    values = case_004_analysis(case)
+    sensitivity = case_004_sensitivity_frame(case)
+
+    assert values["q_hot_kw"] == pytest.approx(1064.856763, rel=1e-8)
+    assert values["q_cold_kw"] == pytest.approx(1064.856752, rel=1e-8)
+    assert values["energy_residual_kw"] == pytest.approx(1.12136e-5, rel=5e-4)
+    assert values["lmtd_k"] == pytest.approx(81.91194, rel=1e-7)
+    assert values["u_w_m2_k"] == pytest.approx(1000.0)
+    assert values["area_m2"] == pytest.approx(13.0)
+    assert values["ua_w_k"] == pytest.approx(13000.0)
+    assert values["pressure_margin_inlet_pa"] == pytest.approx(50000.0)
+    assert values["pressure_margin_outlet_pa"] == pytest.approx(50000.0)
+    assert len(sensitivity) >= 12
+    assert {
+        "U (W/(m²·K))",
+        "Caudal frío (kg/s)",
+        "Carga térmica (kW)",
+    }.issubset(sensitivity.columns)
+
+
 def test_portfolio_preserves_validation_and_lifecycle_dimensions() -> None:
     portfolio = portfolio_frame(load_all_cases(ROOT)).set_index("ID")
     assert portfolio.loc["001", "Validación"] == "PASS"
@@ -132,6 +157,8 @@ def test_portfolio_preserves_validation_and_lifecycle_dimensions() -> None:
     assert portfolio.loc["002", "Validación"] == "FAIL"
     assert portfolio.loc["002", "Ciclo de vida"] == "review"
     assert portfolio.loc["003", "Validación"] == "CONDITIONAL"
+    assert portfolio.loc["004", "Validación"] == "CONDITIONAL"
+    assert portfolio.loc["004", "Ciclo de vida"] == "review"
 
 
 def test_case_002_failure_is_data_quality_not_physical_balance() -> None:
@@ -171,7 +198,7 @@ def test_streamlit_scientific_views_and_limits_render() -> None:
 
     app.sidebar.radio[0].set_value("Estudiar un caso").run(timeout=75)
     assert not app.exception
-    assert len(app.selectbox[0].options) == 3
+    assert len(app.selectbox[0].options) == 4
 
     case_002 = next(option for option in app.selectbox[0].options if option.startswith("002"))
     app.selectbox[0].set_value(case_002).run(timeout=75)
@@ -182,6 +209,12 @@ def test_streamlit_scientific_views_and_limits_render() -> None:
     app.selectbox[0].set_value(case_003).run(timeout=75)
     assert not app.exception
     assert any("0 Pa" in item.value for item in app.warning)
+
+    case_004 = next(option for option in app.selectbox[0].options if option.startswith("004"))
+    app.selectbox[0].set_value(case_004).run(timeout=75)
+    assert not app.exception
+    assert any("+50 kPa" in item.value for item in app.warning)
+    assert any("+27.22 %" in item.value for item in app.warning)
 
     app.sidebar.radio[0].set_value("Conectar fenómenos").run(timeout=75)
     assert not app.exception

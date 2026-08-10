@@ -11,7 +11,8 @@ La secuencia de lectura es:
 `pregunta → flowsheet → mecanismo → ecuación → datos → interpretación → límites`
 
 Los resultados de validación permanecen disponibles como respaldo auditable,
-pero no gobiernan la portada ni sustituyen la explicación física.
+pero no gobiernan la portada ni sustituyen la explicación física. En v0.6.0 el
+dashboard cubre exclusivamente los casos PTR 001–004.
 
 ## Ejecutar
 
@@ -31,8 +32,9 @@ Abra `http://localhost:8501` si el navegador no se inicia automáticamente.
 
 ## Recorrido de la interfaz
 
-- **Mapa científico:** presenta la pregunta y los fenómenos de cada caso; sólo
-  declara continuidad material entre los casos 002 y 003.
+- **Mapa científico:** presenta la pregunta y los fenómenos de cada caso;
+  distingue la continuidad material 002→003 de la continuidad de modelo
+  003→004.
 - **Estudiar un caso:** sitúa primero el flowsheet y su guía de lectura; después
   desarrolla cada fenómeno con ecuación, datos, interpretación y limitaciones.
 - **Conectar fenómenos:** compara preguntas y mecanismos por dominio científico.
@@ -45,8 +47,15 @@ Cada caso utiliza figuras específicas para su pregunta:
 - Caso 002: expansión isoentálpica, reparto de masa y metanol, cromatogramas y
   calibración sintética;
 - Caso 003: perfiles térmicos, balance de calor, LMTD y margen hidráulico;
-- Caso 004: sólo plantea la pregunta metrológica futura; no muestra resultados
-  Monte Carlo mientras no existan datos reproducibles.
+- Caso 004: reparametrización UA, sensibilidad U–caudal, perfiles térmicos,
+  orden nominal de presiones y jerarquía de validación cruzada.
+
+El Caso 102 de `Literature_cases/` aún no aparece en la interfaz. Su estado
+actual acredita la identidad e integridad del original FOSSEE, no una
+reconvergencia ni una validación científica. Se incorporará cuando el usuario
+aporte la reproducción DWSIM 9.0.5 y el caso disponga de resultados, figuras y
+conclusiones reproducibles. Las variantes con otros paquetes termodinámicos se
+compararán por separado y no sustituirán el archivo fuente.
 
 ## Fuentes y transformaciones
 
@@ -70,6 +79,8 @@ las simulaciones.
 - `CONDITIONAL` identifica una conclusión relevante que la evidencia aún no
   demuestra;
 - un margen de presión de `0 Pa` no prueba una barrera hidráulica;
+- un margen nominal de `+50 kPa` no demuestra suficiencia, integridad ni
+  seguridad durante transitorios o fallas;
 - las señales cromatográficas del Caso 002 son sintéticas y sus áreas canónicas
   fueron integradas externamente;
 - todas las conclusiones visibles incluyen su dominio de validez.
@@ -85,6 +96,12 @@ las simulaciones.
    genéricos que oculten el significado físico;
 5. asociar cada fenómeno con sus criterios mediante `evidence_criteria`;
 6. ampliar las pruebas científicas y revisar visualmente la aplicación.
+
+Para `Literature_cases/`, primero se conserva el original inmutable con su
+manifiesto, SHA-256, licencia y procedencia, y se ejecuta
+`scripts/validate_literature_case.py`. La mera promoción de la fuente no cumple
+los requisitos del paso 1: hacen falta resultados propios antes de extender el
+catálogo del dashboard.
 
 ## Verificar
 

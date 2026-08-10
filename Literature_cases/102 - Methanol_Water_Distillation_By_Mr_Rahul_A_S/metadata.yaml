@@ -1,0 +1,36 @@
+schema_version: 1.0.0
+case_id: "102"
+track: literature_case
+title: Methanol Water Distillation
+slug: methanol_water_distillation
+lifecycle_status: source_ingested
+validation_status: SOURCE_BASELINE_VERIFIED
+language: en
+maintainer: Roberto Flores Nunez
+source:
+  publisher: FOSSEE, IIT Bombay
+  program: DWSIM Flowsheeting Project
+  project_record_id: 256
+  catalog_case_id: 102
+  contributor: Rahul A S
+  institution: SASTRA Deemed University, Thanjavur
+  year: 2018
+  record_url: https://dwsim.fossee.in/flowsheeting-project/dwsim-flowsheet-run/256
+  license: CC-BY-SA-4.0
+baseline:
+  files_are_unmodified: true
+  property_package: Raoult's Law
+  compounds:
+    - Methanol
+    - Water
+  official_dwsim_version: DWSIM v6.5 (Classic UI)
+  embedded_build_version: 5.5.6886.34470
+  version_consistency: DISCREPANCY_RECORDED
+  execution_status: NOT_RUN
+  scientific_validation: NOT_RUN
+workflow:
+  next_required_variant: dwsim_9_0_5/parity_raoult
+  later_candidate_models:
+    - NRTL
+    - UNIQUAC
+  rule: La variante DWSIM 9.0.5 se crea como archivo nuevo; nunca se abre y guarda sobre el baseline FOSSEE.

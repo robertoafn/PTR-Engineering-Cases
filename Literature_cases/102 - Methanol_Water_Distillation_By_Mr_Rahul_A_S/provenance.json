@@ -1,0 +1,55 @@
+{
+  "schema_version": "1.0.0",
+  "case_id": "102",
+  "generated_at": "2026-08-09",
+  "agents": [
+    {
+      "id": "fossee_iitb",
+      "role": "source_publisher"
+    },
+    {
+      "id": "rahul_a_s",
+      "role": "source_contributor"
+    },
+    {
+      "id": "roberto_flores_nunez",
+      "role": "repository_maintainer"
+    }
+  ],
+  "activities": [
+    {
+      "id": "source_ingestion_20260809",
+      "type": "copy_without_modification",
+      "description": "Promoción selectiva del Caso 102 desde el corpus FOSSEE local ignorado."
+    },
+    {
+      "id": "integrity_verification_20260809",
+      "type": "sha256_and_byte_parity",
+      "description": "Verificación de tamaño, SHA-256 y equivalencia byte a byte."
+    },
+    {
+      "id": "saved_state_inspection_20260809",
+      "type": "read_only_xml_inspection",
+      "description": "Inspección del XML embebido sin abrir ni guardar el archivo en DWSIM."
+    }
+  ],
+  "entities": [
+    {
+      "path": "Abstracts.pdf",
+      "role": "fossee_source_abstract",
+      "sha256": "d04f3faeec4c23f33d99e2ff036a397f18d1ebca70a911432b093f0a92852c53",
+      "license": "CC-BY-SA-4.0"
+    },
+    {
+      "path": "MethanolDistillation.dwxmz",
+      "role": "fossee_source_simulation",
+      "sha256": "b262eb9b3d00d641189e913620cf4ef27b6651188be9a006293f5e947eee5498",
+      "license": "CC-BY-SA-4.0"
+    },
+    {
+      "path": "assets/figures/MethanolDistillation.png",
+      "role": "derived_saved_state_visualization",
+      "sha256": "82b518540b8d861245a2e70c2a95daf82cf96c91c148d1e984b5df1fd6a3be57"
+    }
+  ]
+}

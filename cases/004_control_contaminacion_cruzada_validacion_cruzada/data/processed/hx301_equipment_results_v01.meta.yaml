@@ -1,0 +1,40 @@
+dataset_id: hx301_equipment_results_v01
+case_id: 004_control_contaminacion_cruzada_validacion_cruzada
+title: Parámetros y resultado térmico serializados del HX-301
+description: >-
+  Configuración UA y resultado térmico almacenados en el archivo DWSIM del Caso
+  004. El indicador use_shell_and_tube_geometry=false confirma que se trata del
+  modo UA concentrado y no de un rating mecánico detallado de carcasa y tubos.
+source_type: simulated
+license: CC0-1.0
+author: Roberto Flores Núñez
+variables:
+  - {symbol: object_id, column: object_id, name: Identificador del objeto, unit: dimensionless, type: string}
+  - {symbol: object_type, column: object_type, name: Tipo de objeto, unit: dimensionless, type: string}
+  - {symbol: mode, column: calculation_mode, name: Modo de cálculo DWSIM, unit: dimensionless, type: string}
+  - {symbol: flow, column: flow_arrangement, name: Arreglo de flujo, unit: dimensionless, type: string}
+  - {symbol: U, column: overall_coefficient_W_m2_K, name: Coeficiente global, unit: W/(m^2·K), type: float}
+  - {symbol: A, column: area_m2, name: Área de transferencia, unit: m^2, type: float}
+  - {symbol: UA, column: ua_W_K, name: Conductancia térmica global, unit: W/K, type: float}
+  - {symbol: F, column: correction_factor, name: Factor de corrección LMTD, unit: dimensionless, type: float}
+  - {symbol: Q, column: heat_duty_kW, name: Deber térmico, unit: kW, type: float}
+  - {symbol: LMTD, column: lmtd_K, name: Diferencia media logarítmica, unit: K, type: float}
+  - {symbol: T_hi, column: hot_inlet_temperature_K, name: Temperatura caliente de entrada, unit: K, type: float}
+  - {symbol: T_ho, column: hot_outlet_temperature_K, name: Temperatura caliente de salida, unit: K, type: float}
+  - {symbol: T_ci, column: cold_inlet_temperature_K, name: Temperatura fría de entrada, unit: K, type: float}
+  - {symbol: T_co, column: cold_outlet_temperature_K, name: Temperatura fría de salida, unit: K, type: float}
+  - {symbol: P_hi, column: hot_inlet_pressure_Pa, name: Presión caliente de entrada, unit: Pa, type: float}
+  - {symbol: P_ho, column: hot_outlet_pressure_Pa, name: Presión caliente de salida, unit: Pa, type: float}
+  - {symbol: P_ci, column: cold_inlet_pressure_Pa, name: Presión fría de entrada, unit: Pa, type: float}
+  - {symbol: P_co, column: cold_outlet_pressure_Pa, name: Presión fría de salida, unit: Pa, type: float}
+  - {symbol: dP_h, column: hot_side_pressure_drop_Pa, name: Caída de presión interna lado caliente, unit: Pa, type: float}
+  - {symbol: dP_c, column: cold_side_pressure_drop_Pa, name: Caída de presión interna lado frío, unit: Pa, type: float}
+  - {symbol: dP_margin_in, column: clean_contaminated_pressure_margin_inlet_Pa, name: Margen limpio menos contaminado a la entrada, unit: Pa, type: float}
+  - {symbol: dP_margin_out, column: clean_contaminated_pressure_margin_outlet_Pa, name: Margen limpio menos contaminado a la salida, unit: Pa, type: float}
+  - {symbol: geometry, column: use_shell_and_tube_geometry, name: Uso de geometría rigurosa de carcasa y tubos, unit: dimensionless, type: bool}
+primary_key:
+  - object_id
+created_at: "2026-08-02T03:10:02Z"
+version: 0.1.0
+checksum_sha256: b599a866daa8193f54bde5245eb9cbacb746081e5e66e6d70dd1b3de1db4f0a7
+provenance_ref: ../../provenance.json

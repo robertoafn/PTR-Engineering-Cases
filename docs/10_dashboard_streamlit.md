@@ -2,8 +2,9 @@
 
 ## Objetivo
 
-La interfaz v0.5.0 convierte artefactos reproducibles del repositorio en una
-explicación científica progresiva:
+La interfaz, incorporada en v0.5.0 y consolidada en v0.6.0, convierte
+artefactos reproducibles del repositorio en una explicación científica
+progresiva:
 
 `pregunta → figura → mecanismo → ecuación → dato → interpretación → límite`
 
@@ -26,8 +27,16 @@ La aplicación mantiene cuatro capas explícitas:
    y deja los controles de validación en `Rigor y fuentes`.
 
 La app descubre únicamente directorios `cases/[0-9][0-9][0-9]_*` con
-`metadata.yaml` y `validation_results.json`. `cases/000_template` y las
-propuestas documentales no forman parte del portafolio implementado.
+`metadata.yaml` y `validation_results.json`. En v0.6.0 su alcance efectivo son
+los casos PTR 001–004; `cases/000_template`, propuestas documentales y
+`Literature_cases/` no forman parte del catálogo mostrado.
+
+El Caso de literatura 102 ya está indexado y auditado en el repositorio como
+fuente FOSSEE, pero todavía no tiene resultados propios de una reproducción
+actual. Por ello no se presenta en el dashboard. Se integrará sólo después de
+que el usuario aporte la variante DWSIM 9.0.5 y existan datasets, figuras,
+metadatos y conclusiones reproducibles. Las variantes termodinámicas posteriores
+se mostrarán como comparaciones separadas, nunca como reemplazo del original.
 
 ## Contrato de explicación por fenómeno
 
@@ -68,12 +77,18 @@ recuperación de calor. La presión se trata como una pregunta distinta: presion
 iguales producen un margen de `0 Pa`, por lo que el caso no demuestra dirección
 hidráulica protectora ni integridad del equipo.
 
-### Caso 004 — pregunta metrológica
+### Caso 004 — par U–A reparametrizado, sensibilidad y orden de presiones
 
-Mientras sea una propuesta, sólo se presenta la pregunta sobre incertidumbre
-GUM/Monte Carlo en HX-301. No se generan distribuciones, intervalos ni
-probabilidades sin presupuesto de incertidumbre, correlaciones, código y datos
-reproducibles.
+El perfil contracorriente y las cargas calculadas desde cada lado explican el
+cierre del modelo UA. U y A se muestran por separado para evitar presentar su
+producto como validación independiente. La sensibilidad U–caudal frío se
+visualiza sólo cuando existe su CSV reproducible. Las presiones de ambos lados
+se comparan en entrada y salida: `+50 kPa` es un orden nominal impuesto, no una
+demostración de integridad o seguridad.
+
+La advertencia de cambio de fase, el carácter concentrado del modelo, los
+crosschecks externos `NOT_RUN` y el `FAIL` energético reproducido del Caso 002
+deben permanecer visibles cerca de las afirmaciones afectadas.
 
 ## Reglas visuales y de accesibilidad
 
@@ -91,9 +106,16 @@ reproducibles.
 2. publicar evidencia estructurada y rutas relativas;
 3. definir la pregunta y los objetivos de aprendizaje;
 4. documentar mecanismos, ecuaciones, variables e interpretación;
-5. agregar transformaciones científicas puras y figuras específicas;
+5. agregar transformaciones científicas puras y figuras específicas, con un
+   estado vacío comprensible cuando una fuente externa esté `NOT_RUN`;
 6. vincular cada fenómeno con criterios existentes;
 7. probar cálculos, navegación, advertencias y legibilidad visual.
+
+Para un caso de `Literature_cases/`, antes del paso 1 se verifica la integridad
+del original con `scripts/validate_literature_case.py`. Esa verificación no
+basta para incorporarlo: el dashboard requiere resultados derivados propios y
+debe distinguir explícitamente fuente, reproducción DWSIM y alternativas de
+modelado.
 
 ## Ejecución y QA
 

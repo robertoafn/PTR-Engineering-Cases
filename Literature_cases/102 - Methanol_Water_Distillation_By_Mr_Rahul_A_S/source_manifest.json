@@ -1,0 +1,41 @@
+{
+  "schema_version": "1.0.0",
+  "case_id": "102",
+  "title": "Methanol Water Distillation",
+  "baseline_status": "IMPORTED_UNMODIFIED",
+  "source": {
+    "publisher": "FOSSEE, IIT Bombay",
+    "program": "DWSIM Flowsheeting Project",
+    "project_record_id": 256,
+    "catalog_case_id": 102,
+    "contributor": "Rahul A S",
+    "institution": "SASTRA Deemed University, Thanjavur",
+    "year": 2018,
+    "record_url": "https://dwsim.fossee.in/flowsheeting-project/dwsim-flowsheet-run/256",
+    "license": "CC-BY-SA-4.0"
+  },
+  "software_version_evidence": {
+    "official_record": "DWSIM v6.5 (Classic UI)",
+    "embedded_build_version": "5.5.6886.34470",
+    "embedded_build_date": "2018-11-08",
+    "embedded_saved_at": "2018-12-11T14:43:40+05:30",
+    "consistency": "DISCREPANCY_RECORDED",
+    "note": "La ficha FOSSEE y el XML embebido no informan la misma version. Ninguna se sustituye ni se presenta como reconciliada."
+  },
+  "files": [
+    {
+      "path": "Abstracts.pdf",
+      "role": "fossee_source_abstract",
+      "size_bytes": 8491,
+      "sha256": "d04f3faeec4c23f33d99e2ff036a397f18d1ebca70a911432b093f0a92852c53",
+      "immutable": true
+    },
+    {
+      "path": "MethanolDistillation.dwxmz",
+      "role": "fossee_source_simulation",
+      "size_bytes": 26455,
+      "sha256": "b262eb9b3d00d641189e913620cf4ef27b6651188be9a006293f5e947eee5498",
+      "immutable": true
+    }
+  ]
+}

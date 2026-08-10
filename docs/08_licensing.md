@@ -7,6 +7,7 @@
 | Datos sintéticos generados | **CC0 1.0** | declarado por dataset |
 | Datos derivados de literatura | Hereda licencia de fuente | declarado por dataset |
 | Software de terceros | Conserva su licencia | declarado en `metadata.yaml` |
+| Artefactos FOSSEE promovidos | Conserva la licencia indicada por la fuente | `source_manifest.json`, `metadata.yaml` y `provenance.json` |
 
 ## Política de terceros
 - No incluir binarios propietarios.
@@ -15,6 +16,24 @@
   `references/bibliography.bib`.
 - Ejercicios inspirados en libros: reformular fenómeno, declarar fuente,
   no copiar literalmente el enunciado.
+
+## Casos FOSSEE
+
+- `references/Literature_cases_references/` es un corpus local de trabajo:
+  permanece en `.gitignore` y no se distribuye en bloque desde este
+  repositorio.
+- Sólo se publica en `Literature_cases/` un caso seleccionado después de
+  verificar su ficha oficial, autoría, licencia y procedencia.
+- Cada original conserva su licencia de origen. La licencia general del código
+  o de la documentación PTR no reemplaza ni amplía esa licencia.
+- Los originales se mantienen inmutables y con SHA-256. Adaptaciones, figuras,
+  metadatos y variantes deben distinguir su autoría y licencia de la fuente.
+- El Caso 102 registra la licencia indicada por su ficha FOSSEE en sus propios
+  metadatos; futuros casos se revisan individualmente y no heredan esa
+  conclusión de forma automática.
+- Si la licencia o atribución de un artefacto no puede verificarse, el archivo
+  no se promueve: se conserva únicamente como referencia local o se enlaza a
+  la fuente.
 
 ## Exclusiones de copyright
 - Logos y marcas de terceros: no incluir salvo permiso explícito.

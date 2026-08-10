@@ -18,12 +18,13 @@ namespace PtrEngineeringCases.DwsimAutomation
     {
         public RunnerResult()
         {
-            SchemaVersion = "1.0.0";
+            SchemaVersion = "1.1.0";
             ExpectedDwsimVersion = "9.0.5";
             Errors = new List<ErrorResult>();
             Objects = new List<ObjectResult>();
             RequestedObjects = new List<string>();
             MissingObjects = new List<string>();
+            AppliedChanges = new List<AppliedChangeResult>();
         }
 
         [DataMember(Name = "schema_version", Order = 1)]
@@ -67,6 +68,9 @@ namespace PtrEngineeringCases.DwsimAutomation
 
         [DataMember(Name = "missing_objects", Order = 14)]
         public List<string> MissingObjects { get; set; }
+
+        [DataMember(Name = "applied_changes", Order = 15)]
+        public List<AppliedChangeResult> AppliedChanges { get; set; }
     }
 
     [DataContract]
@@ -80,6 +84,37 @@ namespace PtrEngineeringCases.DwsimAutomation
 
         [DataMember(Name = "stack_trace", Order = 3)]
         public string StackTrace { get; set; }
+    }
+
+    [DataContract]
+    internal sealed class AppliedChangeResult
+    {
+        [DataMember(Name = "kind", Order = 1)]
+        public string Kind { get; set; }
+
+        [DataMember(Name = "object_identifier", Order = 2)]
+        public string ObjectIdentifier { get; set; }
+
+        [DataMember(Name = "object_id", Order = 3)]
+        public string ObjectId { get; set; }
+
+        [DataMember(Name = "object_tag", Order = 4)]
+        public string ObjectTag { get; set; }
+
+        [DataMember(Name = "member", Order = 5)]
+        public string Member { get; set; }
+
+        [DataMember(Name = "previous_value", Order = 6)]
+        public double PreviousValue { get; set; }
+
+        [DataMember(Name = "input_value", Order = 7)]
+        public double InputValue { get; set; }
+
+        [DataMember(Name = "target_value", Order = 8)]
+        public double TargetValue { get; set; }
+
+        [DataMember(Name = "applied_value", Order = 9)]
+        public double AppliedValue { get; set; }
     }
 
     [DataContract]
@@ -122,6 +157,21 @@ namespace PtrEngineeringCases.DwsimAutomation
 
         [DataMember(Name = "warnings", Order = 11)]
         public List<string> Warnings { get; set; }
+
+        [DataMember(Name = "overall_coefficient_W_m2_K", Order = 12)]
+        public double? OverallCoefficientWM2K { get; set; }
+
+        [DataMember(Name = "area_m2", Order = 13)]
+        public double? AreaM2 { get; set; }
+
+        [DataMember(Name = "lmtd_K", Order = 14)]
+        public double? LmtdK { get; set; }
+    }
+
+    internal sealed class NumericChange
+    {
+        public string ObjectIdentifier { get; set; }
+        public double Value { get; set; }
     }
 
     internal sealed class CommandLineOptions
@@ -136,6 +186,8 @@ namespace PtrEngineeringCases.DwsimAutomation
         public string DwsimHome { get; set; }
         public string ExpectedVersion { get; set; }
         public List<string> ObjectIds { get; private set; }
+        public NumericChange OverallCoefficientChange { get; set; }
+        public NumericChange MassFlowFactorChange { get; set; }
         public bool ShowHelp { get; set; }
     }
 
@@ -175,6 +227,31 @@ namespace PtrEngineeringCases.DwsimAutomation
             "DeltaQ", "Q", "Power", "EnergyFlow"
         };
 
+        private static readonly string[] OverallCoefficientMembers =
+        {
+            "GetOverallCoefficient", "OverallCoefficient"
+        };
+
+        private static readonly string[] AreaMembers =
+        {
+            "GetArea", "Area"
+        };
+
+        private static readonly string[] LmtdMembers =
+        {
+            "GetLMTD", "LMTD", "Lmtd"
+        };
+
+        private static readonly string[] OverallCoefficientSetters =
+        {
+            "SetOverallCoefficient", "OverallCoefficient"
+        };
+
+        private static readonly string[] MassFlowSetters =
+        {
+            "SetMassFlow", "MassFlow", "massflow", "MassFlowRate"
+        };
+
         [STAThread]
         private static int Main(string[] args)
         {
@@ -208,6 +285,7 @@ namespace PtrEngineeringCases.DwsimAutomation
             string initialDirectory = Directory.GetCurrentDirectory();
             string simulationPath = null;
             string temporaryDirectory = null;
+            string previousDwsimHomeEnvironment = null;
             object automation = null;
             object flowsheet = null;
             TextWriter originalStandardOutput = Console.Out;
@@ -277,6 +355,13 @@ namespace PtrEngineeringCases.DwsimAutomation
                 // mantener stdout como un único documento JSON estable.
                 Console.SetOut(capturedDwsimOutput);
                 standardOutputCaptured = true;
+                previousDwsimHomeEnvironment = Environment.GetEnvironmentVariable(
+                    "DWSIM_HOME",
+                    EnvironmentVariableTarget.Process);
+                Environment.SetEnvironmentVariable(
+                    "DWSIM_HOME",
+                    _dwsimHome,
+                    EnvironmentVariableTarget.Process);
                 Directory.SetCurrentDirectory(_dwsimHome);
 
                 Assembly automationAssembly = Assembly.LoadFrom(automationAssemblyPath);
@@ -305,16 +390,23 @@ namespace PtrEngineeringCases.DwsimAutomation
                         "LoadFlowsheet",
                         new object[] { temporarySimulation });
 
-                    object solverResult = InvokeMethod(
-                        automation,
-                        "CalculateFlowsheet4",
-                        new object[] { flowsheet });
+                    if (ApplyScenarioChanges(flowsheet, options, result))
+                    {
+                        object solverResult = InvokeMethod(
+                            automation,
+                            "CalculateFlowsheet4",
+                            new object[] { flowsheet });
 
-                    int solverErrorCount = AppendSolverErrors(result, solverResult);
-                    solverCompleted = solverErrorCount == 0;
-                    result.Solved = solverCompleted;
+                        int solverErrorCount = AppendSolverErrors(result, solverResult);
+                        solverCompleted = solverErrorCount == 0;
+                        result.Solved = solverCompleted;
 
-                    ExtractObjects(flowsheet, options.ObjectIds, result);
+                        ExtractObjects(flowsheet, options.ObjectIds, result);
+                    }
+                    else
+                    {
+                        result.Solved = false;
+                    }
                 }
             }
             catch (TargetInvocationException exception)
@@ -356,6 +448,18 @@ namespace PtrEngineeringCases.DwsimAutomation
                 }
 
                 AppDomain.CurrentDomain.AssemblyResolve -= ResolveDwsimAssembly;
+
+                try
+                {
+                    Environment.SetEnvironmentVariable(
+                        "DWSIM_HOME",
+                        previousDwsimHomeEnvironment,
+                        EnvironmentVariableTarget.Process);
+                }
+                catch (Exception exception)
+                {
+                    AddException(result, "EnvironmentRestoreWarning", exception);
+                }
 
                 try
                 {
@@ -443,6 +547,264 @@ namespace PtrEngineeringCases.DwsimAutomation
             Console.Out.WriteLine(SerializeJson(result));
             Console.Out.Flush();
             return exitCode;
+        }
+
+        private static bool ApplyScenarioChanges(
+            object flowsheet,
+            CommandLineOptions options,
+            RunnerResult result)
+        {
+            bool successful = true;
+
+            if (options.OverallCoefficientChange != null
+                && !ApplyOverallCoefficientChange(
+                    flowsheet,
+                    options.OverallCoefficientChange,
+                    result))
+            {
+                successful = false;
+            }
+
+            if (options.MassFlowFactorChange != null
+                && !ApplyMassFlowFactorChange(
+                    flowsheet,
+                    options.MassFlowFactorChange,
+                    result))
+            {
+                successful = false;
+            }
+
+            return successful;
+        }
+
+        private static bool ApplyOverallCoefficientChange(
+            object flowsheet,
+            NumericChange change,
+            RunnerResult result)
+        {
+            object simulationObject;
+            string objectId;
+            string objectTag;
+            if (!TryFindSimulationObject(
+                flowsheet,
+                change.ObjectIdentifier,
+                out simulationObject,
+                out objectId,
+                out objectTag))
+            {
+                AddError(
+                    result,
+                    "ScenarioObjectNotFound",
+                    "No se encontró el intercambiador indicado para cambiar U: "
+                    + change.ObjectIdentifier,
+                    null);
+                return false;
+            }
+
+            double? previous = ReadNumericValue(
+                simulationObject,
+                OverallCoefficientMembers,
+                false);
+            if (!previous.HasValue)
+            {
+                AddError(
+                    result,
+                    "ScenarioPropertyUnavailable",
+                    "El objeto " + change.ObjectIdentifier
+                    + " no expone OverallCoefficient mediante la API.",
+                    null);
+                return false;
+            }
+
+            string writtenMember;
+            if (!TryWriteNumericMemberOrMethod(
+                simulationObject,
+                OverallCoefficientSetters,
+                change.Value,
+                out writtenMember))
+            {
+                AddError(
+                    result,
+                    "ScenarioPropertyNotWritable",
+                    "No fue posible asignar OverallCoefficient al objeto "
+                    + change.ObjectIdentifier + ".",
+                    null);
+                return false;
+            }
+
+            double? applied = ReadNumericValue(
+                simulationObject,
+                OverallCoefficientMembers,
+                false);
+            if (!applied.HasValue || !ValuesEquivalent(applied.Value, change.Value))
+            {
+                AddError(
+                    result,
+                    "ScenarioPropertyVerificationFailed",
+                    "DWSIM no confirmó el valor solicitado de U para "
+                    + change.ObjectIdentifier + ".",
+                    null);
+                return false;
+            }
+
+            result.AppliedChanges.Add(new AppliedChangeResult
+            {
+                Kind = "overall_coefficient_W_m2_K",
+                ObjectIdentifier = change.ObjectIdentifier,
+                ObjectId = objectId,
+                ObjectTag = objectTag,
+                Member = writtenMember,
+                PreviousValue = previous.Value,
+                InputValue = change.Value,
+                TargetValue = change.Value,
+                AppliedValue = applied.Value
+            });
+            return true;
+        }
+
+        private static bool ApplyMassFlowFactorChange(
+            object flowsheet,
+            NumericChange change,
+            RunnerResult result)
+        {
+            object simulationObject;
+            string objectId;
+            string objectTag;
+            if (!TryFindSimulationObject(
+                flowsheet,
+                change.ObjectIdentifier,
+                out simulationObject,
+                out objectId,
+                out objectTag))
+            {
+                AddError(
+                    result,
+                    "ScenarioObjectNotFound",
+                    "No se encontró la corriente indicada para escalar el caudal: "
+                    + change.ObjectIdentifier,
+                    null);
+                return false;
+            }
+
+            double? previous = ReadNumericValue(
+                simulationObject,
+                MassFlowMembers,
+                true);
+            if (!previous.HasValue)
+            {
+                AddError(
+                    result,
+                    "ScenarioPropertyUnavailable",
+                    "El objeto " + change.ObjectIdentifier
+                    + " no expone el caudal másico mediante la API.",
+                    null);
+                return false;
+            }
+
+            double target = previous.Value * change.Value;
+            if (Double.IsNaN(target) || Double.IsInfinity(target) || target < 0.0)
+            {
+                AddError(
+                    result,
+                    "ScenarioValueOutOfRange",
+                    "El factor solicitado produce un caudal másico no válido.",
+                    null);
+                return false;
+            }
+
+            string writtenMember;
+            bool written = TryWriteNumericMemberOrMethod(
+                simulationObject,
+                MassFlowSetters,
+                target,
+                out writtenMember);
+            if (!written)
+            {
+                object phases = GetMemberValue(simulationObject, "Phases");
+                object overallPhase = GetDictionaryValue(phases, "0")
+                    ?? GetFirstDictionaryValue(phases);
+                object phaseProperties = GetMemberValue(overallPhase, "Properties");
+                written = TryWriteNumericMemberOrMethod(
+                    phaseProperties,
+                    MassFlowSetters,
+                    target,
+                    out writtenMember);
+            }
+
+            if (!written)
+            {
+                AddError(
+                    result,
+                    "ScenarioPropertyNotWritable",
+                    "No fue posible asignar el caudal másico a "
+                    + change.ObjectIdentifier + ".",
+                    null);
+                return false;
+            }
+
+            double? applied = ReadNumericValue(
+                simulationObject,
+                MassFlowMembers,
+                true);
+            if (!applied.HasValue || !ValuesEquivalent(applied.Value, target))
+            {
+                AddError(
+                    result,
+                    "ScenarioPropertyVerificationFailed",
+                    "DWSIM no confirmó el caudal solicitado para "
+                    + change.ObjectIdentifier + ".",
+                    null);
+                return false;
+            }
+
+            result.AppliedChanges.Add(new AppliedChangeResult
+            {
+                Kind = "mass_flow_factor",
+                ObjectIdentifier = change.ObjectIdentifier,
+                ObjectId = objectId,
+                ObjectTag = objectTag,
+                Member = writtenMember,
+                PreviousValue = previous.Value,
+                InputValue = change.Value,
+                TargetValue = target,
+                AppliedValue = applied.Value
+            });
+            return true;
+        }
+
+        private static bool TryFindSimulationObject(
+            object flowsheet,
+            string identifier,
+            out object simulationObject,
+            out string objectId,
+            out string objectTag)
+        {
+            foreach (KeyValuePair<string, object> entry in EnumerateSimulationObjects(flowsheet))
+            {
+                object candidate = entry.Value;
+                string name = ConvertToString(GetMemberValue(candidate, "Name"));
+                object graphicObject = GetMemberValue(candidate, "GraphicObject");
+                string tag = ConvertToString(GetMemberValue(graphicObject, "Tag"));
+                string id = FirstNonEmpty(entry.Key, name, tag);
+                if (MatchesIdentifier(identifier, id, name, tag))
+                {
+                    simulationObject = candidate;
+                    objectId = id;
+                    objectTag = tag;
+                    return true;
+                }
+            }
+
+            simulationObject = null;
+            objectId = null;
+            objectTag = null;
+            return false;
+        }
+
+        private static bool ValuesEquivalent(double actual, double expected)
+        {
+            double tolerance = Math.Max(1.0e-9, Math.Abs(expected) * 1.0e-9);
+            return Math.Abs(actual - expected) <= tolerance;
         }
 
         private static void ExtractObjects(
@@ -548,6 +910,12 @@ namespace PtrEngineeringCases.DwsimAutomation
                 simulationObject, EnergyFlowMembers, false);
             result.DutyKW = ReadNumericValue(
                 simulationObject, DutyMembers, false);
+            result.OverallCoefficientWM2K = ReadNumericValue(
+                simulationObject, OverallCoefficientMembers, false);
+            result.AreaM2 = ReadNumericValue(
+                simulationObject, AreaMembers, false);
+            result.LmtdK = ReadNumericValue(
+                simulationObject, LmtdMembers, false);
 
             if (result.IsMaterialStream)
             {
@@ -667,6 +1035,107 @@ namespace PtrEngineeringCases.DwsimAutomation
             }
 
             return null;
+        }
+
+        private static bool TryWriteNumericMemberOrMethod(
+            object target,
+            string[] candidates,
+            double value,
+            out string writtenMember)
+        {
+            writtenMember = null;
+            if (target == null)
+            {
+                return false;
+            }
+
+            Type targetType = target.GetType();
+            foreach (string candidate in candidates)
+            {
+                MethodInfo[] methods = targetType.GetMethods(
+                    BindingFlags.Public | BindingFlags.Instance);
+                foreach (MethodInfo method in methods)
+                {
+                    if (!String.Equals(
+                        method.Name,
+                        candidate,
+                        StringComparison.OrdinalIgnoreCase))
+                    {
+                        continue;
+                    }
+
+                    ParameterInfo[] parameters = method.GetParameters();
+                    if (parameters.Length != 1 || parameters[0].ParameterType.IsByRef)
+                    {
+                        continue;
+                    }
+
+                    try
+                    {
+                        object converted = ConvertNumericForTarget(
+                            value,
+                            parameters[0].ParameterType);
+                        method.Invoke(target, new[] { converted });
+                        writtenMember = method.Name + "()";
+                        return true;
+                    }
+                    catch
+                    {
+                        // Se prueba el siguiente setter compatible.
+                    }
+                }
+
+                try
+                {
+                    PropertyInfo property = FindProperty(targetType, candidate);
+                    if (property != null
+                        && property.CanWrite
+                        && property.GetIndexParameters().Length == 0)
+                    {
+                        object converted = ConvertNumericForTarget(value, property.PropertyType);
+                        property.SetValue(target, converted, null);
+                        writtenMember = property.Name;
+                        return true;
+                    }
+                }
+                catch
+                {
+                    // Se prueba el siguiente miembro compatible.
+                }
+
+                try
+                {
+                    FieldInfo field = targetType.GetField(
+                        candidate,
+                        BindingFlags.Public
+                        | BindingFlags.Instance
+                        | BindingFlags.IgnoreCase);
+                    if (field != null && !field.IsInitOnly)
+                    {
+                        object converted = ConvertNumericForTarget(value, field.FieldType);
+                        field.SetValue(target, converted);
+                        writtenMember = field.Name;
+                        return true;
+                    }
+                }
+                catch
+                {
+                    // Se prueba el siguiente miembro compatible.
+                }
+            }
+
+            return false;
+        }
+
+        private static object ConvertNumericForTarget(double value, Type targetType)
+        {
+            Type effectiveType = Nullable.GetUnderlyingType(targetType) ?? targetType;
+            if (effectiveType.IsEnum)
+            {
+                throw new InvalidCastException(
+                    "No se puede asignar un valor continuo a una enumeración.");
+            }
+            return Convert.ChangeType(value, effectiveType, CultureInfo.InvariantCulture);
         }
 
         private static IList<KeyValuePair<string, object>> EnumerateSimulationObjects(
@@ -963,12 +1432,7 @@ namespace PtrEngineeringCases.DwsimAutomation
             try
             {
                 string simpleName = new AssemblyName(args.Name).Name;
-                string[] directories =
-                {
-                    _dwsimHome,
-                    Path.Combine(_dwsimHome, "extenders"),
-                    Path.Combine(_dwsimHome, "ppacks")
-                };
+                List<string> directories = GetDwsimAssemblyDirectories();
                 string[] extensions = { ".dll", ".exe" };
 
                 foreach (string directory in directories)
@@ -990,6 +1454,48 @@ namespace PtrEngineeringCases.DwsimAutomation
                     + exception.Message);
             }
             return null;
+        }
+
+        private static List<string> GetDwsimAssemblyDirectories()
+        {
+            List<string> directories = new List<string>();
+            AddAssemblyDirectory(directories, _dwsimHome);
+            AddAssemblyDirectory(directories, Path.Combine(_dwsimHome, "ThermoCS"));
+            AddAssemblyDirectory(directories, Path.Combine(_dwsimHome, "extenders"));
+            AddAssemblyDirectory(directories, Path.Combine(_dwsimHome, "ppacks"));
+
+            try
+            {
+                foreach (string directory in Directory.GetDirectories(_dwsimHome))
+                {
+                    AddAssemblyDirectory(directories, directory);
+                }
+            }
+            catch
+            {
+                // Las rutas conocidas anteriores siguen disponibles.
+            }
+            return directories;
+        }
+
+        private static void AddAssemblyDirectory(
+            ICollection<string> directories,
+            string candidate)
+        {
+            if (String.IsNullOrWhiteSpace(candidate) || !Directory.Exists(candidate))
+            {
+                return;
+            }
+
+            string fullPath = Path.GetFullPath(candidate);
+            foreach (string existing in directories)
+            {
+                if (String.Equals(existing, fullPath, StringComparison.OrdinalIgnoreCase))
+                {
+                    return;
+                }
+            }
+            directories.Add(fullPath);
         }
 
         private static string ResolveDwsimHome(string commandLineValue)
@@ -1282,6 +1788,54 @@ namespace PtrEngineeringCases.DwsimAutomation
                     }
                     options.ExpectedVersion = args[index];
                 }
+                else if (argument == "--set-overall-coefficient")
+                {
+                    if (options.OverallCoefficientChange != null)
+                    {
+                        error = "--set-overall-coefficient solo puede indicarse una vez.";
+                        return false;
+                    }
+                    if (!TryReadValue(args, ref index, out error))
+                    {
+                        return false;
+                    }
+                    NumericChange overallCoefficientChange;
+                    if (!TryParseNumericChange(
+                        args[index],
+                        0.0,
+                        1000000.0,
+                        "--set-overall-coefficient",
+                        out overallCoefficientChange,
+                        out error))
+                    {
+                        return false;
+                    }
+                    options.OverallCoefficientChange = overallCoefficientChange;
+                }
+                else if (argument == "--set-mass-flow-factor")
+                {
+                    if (options.MassFlowFactorChange != null)
+                    {
+                        error = "--set-mass-flow-factor solo puede indicarse una vez.";
+                        return false;
+                    }
+                    if (!TryReadValue(args, ref index, out error))
+                    {
+                        return false;
+                    }
+                    NumericChange massFlowFactorChange;
+                    if (!TryParseNumericChange(
+                        args[index],
+                        0.0,
+                        100.0,
+                        "--set-mass-flow-factor",
+                        out massFlowFactorChange,
+                        out error))
+                    {
+                        return false;
+                    }
+                    options.MassFlowFactorChange = massFlowFactorChange;
+                }
                 else
                 {
                     error = "Argumento no reconocido: " + argument;
@@ -1295,6 +1849,67 @@ namespace PtrEngineeringCases.DwsimAutomation
                 return false;
             }
 
+            return true;
+        }
+
+        private static bool TryParseNumericChange(
+            string value,
+            double exclusiveMinimum,
+            double inclusiveMaximum,
+            string optionName,
+            out NumericChange change,
+            out string error)
+        {
+            change = null;
+            error = null;
+            int separator = value == null ? -1 : value.IndexOf('=');
+            if (separator <= 0
+                || separator != value.LastIndexOf('=')
+                || separator == value.Length - 1)
+            {
+                error = optionName + " requiere el formato OBJETO=VALOR.";
+                return false;
+            }
+
+            string identifier = value.Substring(0, separator).Trim();
+            string rawNumber = value.Substring(separator + 1).Trim();
+            if (identifier.Length == 0 || identifier.Length > 256)
+            {
+                error = optionName + " contiene un identificador de objeto no válido.";
+                return false;
+            }
+            foreach (char character in identifier)
+            {
+                if (Char.IsControl(character))
+                {
+                    error = optionName + " contiene caracteres de control no permitidos.";
+                    return false;
+                }
+            }
+
+            double parsed;
+            if (!Double.TryParse(
+                rawNumber,
+                NumberStyles.Float,
+                CultureInfo.InvariantCulture,
+                out parsed)
+                || Double.IsNaN(parsed)
+                || Double.IsInfinity(parsed)
+                || parsed <= exclusiveMinimum
+                || parsed > inclusiveMaximum)
+            {
+                error = optionName + " requiere un valor finito mayor que "
+                    + exclusiveMinimum.ToString(CultureInfo.InvariantCulture)
+                    + " y menor o igual que "
+                    + inclusiveMaximum.ToString(CultureInfo.InvariantCulture) + ".";
+                return false;
+            }
+
+            change = new NumericChange
+            {
+                ObjectIdentifier = identifier,
+                Value = parsed
+            };
             return true;
         }
 
@@ -1348,8 +1963,12 @@ namespace PtrEngineeringCases.DwsimAutomation
             writer.WriteLine(
                 "  DwsimValidationRunner.exe --simulation <caso.dwxmz> "
                 + "[--dwsim-home <ruta>] [--objects ID1,ID2] "
-                + "[--required-version 9.0.5]");
+                + "[--required-version 9.0.5] "
+                + "[--set-overall-coefficient OBJETO=VALOR] "
+                + "[--set-mass-flow-factor OBJETO=FACTOR]");
             writer.WriteLine();
+            writer.WriteLine(
+                "Los cambios de escenario se aplican solamente en memoria sobre la copia temporal.");
             writer.WriteLine("La salida normal en stdout es un único documento JSON.");
             writer.WriteLine("Los mensajes de DWSIM y del runner se escriben únicamente en stderr.");
         }

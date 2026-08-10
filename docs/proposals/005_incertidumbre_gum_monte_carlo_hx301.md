@@ -1,8 +1,8 @@
-# Propuesta — Caso 004: incertidumbre GUM/Monte Carlo sobre HX-301
+# Propuesta — Caso 005: incertidumbre GUM/Monte Carlo sobre HX-301
 
 - **Estado:** `proposed`
-- **Dependencia:** Caso 003, HX-301
-- **Objetivo de versión:** posterior a v0.5.0
+- **Dependencia:** Caso 004, HX-301
+- **Objetivo de versión:** posterior a v0.6.0
 - **Naturaleza:** diseño reproducible de un caso; no contiene resultados de
   incertidumbre ni una validación de seguridad.
 
@@ -15,11 +15,12 @@ correlaciones de sus magnitudes de entrada?
 
 El caso cerrará la secuencia conceptual:
 
-`002 flash de condensado → 003 recuperación térmica determinista → 004 solidez metrológica de las conclusiones`
+`002 flash → 003 recuperación térmica → 004 escenario corregido y validación cruzada → 005 solidez metrológica`
 
-No se modificará el escenario del Caso 003. Sus valores versionados constituirán
-el punto nominal y se preservará el vínculo conceptual con
-`MSTR-204_LIQUIDO_FLASH` del Caso 002.
+No se modificará el escenario versionado del Caso 004 durante la propagación.
+Sus valores constituirán el punto nominal y se preservará el vínculo
+conceptual con `MSTR-204_LIQUIDO_FLASH` del Caso 002 y con el escenario térmico
+base del Caso 003.
 
 ## Fundamento metrológico
 
@@ -39,21 +40,22 @@ este caso no fijará por sí solo un límite de seguridad.
 
 ## Punto nominal heredado
 
-Los siguientes valores proceden del dataset versionado del Caso 003 y no son
-mediciones de planta:
+Los siguientes valores corresponden al punto nominal previsto por el Caso 004.
+Deberán reconciliarse con su dataset versionado antes de implementar esta
+propuesta; no son mediciones de planta:
 
 | Magnitud | Valor nominal | Unidad |
 |---|---:|---|
 | Caudal másico, lado caliente | 8.95112 | kg/s |
 | Caudal másico, lado frío | 5.00000 | kg/s |
-| Temperatura caliente entrada/salida | 406.649 / 384.187 | K |
-| Temperatura fría entrada/salida | 293.150 / 333.150 | K |
-| Presión de ambos lados | 300000 | Pa |
-| Carga térmica DWSIM | 1063.410 | kW |
-| LMTD DWSIM | 81.9556 | K |
-| Área declarada | 1.0 | m² |
+| Temperatura caliente entrada/salida | 406.649 / 384.156 | K |
+| Temperatura fría entrada/salida | 293.150 / 333.205 | K |
+| Presión lado contaminado / limpio | 300000 / 350000 | Pa |
+| Carga térmica DWSIM | 1064.857 | kW |
+| LMTD DWSIM | 81.9121 | K |
+| Área declarada | 13.0 | m² |
 | Factor de corrección declarado | 1.0 | 1 |
-| Coeficiente global declarado | 12975.4 | W/(m²·K) |
+| Coeficiente global declarado | 1000.0 | W/(m²·K) |
 
 ## Mensurandos y modelos
 
@@ -103,10 +105,11 @@ evitar circularidad y doble conteo.
 
 Además del valor esperado y su intervalo de cobertura se estimarán
 `P(Delta p_b > 0)` y, únicamente cuando un análisis de riesgos externo defina
-un margen mínimo `p_min`, `P(Delta p_b > p_min)`. Con el nominal actual de
-`0 Pa`, una distribución aproximadamente simétrica no puede demostrar alta
-probabilidad de margen positivo; esa inferencia deberá comprobarse con el
-modelo y no se presentará como validación de seguridad.
+un margen mínimo `p_min`, `P(Delta p_b > p_min)`. El nominal de `+50000 Pa`
+demuestra sólo el orden estático impuesto entre presiones. Su intervalo y la
+probabilidad de mantener un margen todavía deberán calcularse; ninguna de esas
+magnitudes se presentará como validación de seguridad sin una regla de decisión
+externa.
 
 ## Presupuesto de incertidumbre propuesto
 
@@ -179,7 +182,7 @@ que `0.05*u_c` entre lotes finales.
 ## Artefactos previstos
 
 ```text
-cases/004_incertidumbre_gum_monte_carlo_hx301/
+cases/005_incertidumbre_gum_monte_carlo_hx301/
 ├── README.md
 ├── metadata.yaml
 ├── assumptions.md
@@ -192,12 +195,12 @@ cases/004_incertidumbre_gum_monte_carlo_hx301/
 │   ├── sensitivity_ranking_v01.csv
 │   └── *.meta.yaml
 ├── assets/figures/
-│   ├── fig_004_01_distribuciones_salida.png
-│   └── fig_004_02_contribuciones_incertidumbre.png
+│   ├── fig_005_01_distribuciones_salida.png
+│   └── fig_005_02_contribuciones_incertidumbre.png
 └── provenance.json
 
 scripts/run_uncertainty_hx301.py
-tests/test_case_004_uncertainty.py
+tests/test_case_005_uncertainty.py
 ```
 
 Las muestras completas de Monte Carlo no se versionarán si su tamaño es
@@ -215,7 +218,7 @@ DWSIM. Toda aproximación deberá declarar su dominio y error de sustitución.
 
 1. entradas, unidades, distribuciones, fuentes y correlaciones declaradas;
 2. checksums y esquemas sin errores;
-3. reproducción exacta del nominal del Caso 003 dentro del umbral fijado;
+3. reproducción exacta del nominal del Caso 004 dentro del umbral fijado;
 4. resultados invariantes ante repetición con la misma semilla;
 5. convergencia Monte Carlo documentada por lotes;
 6. comparación GUM–Monte Carlo y explicación de discrepancias;
@@ -233,7 +236,7 @@ DWSIM. Toda aproximación deberá declarar su dominio y error de sustitución.
 - fijar correlaciones y reglas de truncamiento antes de observar resultados;
 - acordar el margen `p_min` mediante un análisis de riesgos independiente si se
   pretende evaluar conformidad hidráulica;
-- implementar y probar la comparación nominal contra el Caso 003.
+- implementar y probar la comparación nominal contra el Caso 004.
 
-Hasta cumplir estas condiciones, el Caso 004 debe permanecer como propuesta y
+Hasta cumplir estas condiciones, el Caso 005 debe permanecer como propuesta y
 no aparecer como caso validado en el índice automático.

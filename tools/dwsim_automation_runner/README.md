@@ -58,18 +58,27 @@ Opciones:
 --dwsim-home <ruta>          Instalación DWSIM que se utilizará.
 --objects <ID1,ID2>          Limita la extracción a IDs, nombres o tags.
 --required-version <X.Y.Z>   Versión exacta esperada; por defecto 9.0.5.
+--set-overall-coefficient <ID=U>
+                             Asigna U en W/(m²·K) al objeto indicado.
+--set-mass-flow-factor <ID=factor>
+                             Escala el caudal másico de la corriente indicada.
 --help                       Muestra la ayuda.
 ```
+
+Los dos cambios de escenario son opcionales, aceptan exclusivamente valores
+finitos positivos y solo pueden indicarse una vez. Se aplican al flowsheet en
+memoria después de cargar la copia temporal. El archivo fuente nunca se guarda.
 
 La simulación original se lee para calcular SHA-256, se copia a un directorio
 temporal y solo la copia se carga y resuelve. El runner:
 
 1. compara `GetVersion()` con la versión requerida;
 2. ejecuta `LoadFlowsheet()` sobre la copia;
-3. llama a `CalculateFlowsheet4()`;
-4. extrae los objetos;
-5. llama a `ReleaseResources()` y elimina el temporal;
-6. vuelve a calcular SHA-256 sobre el archivo original.
+3. aplica los cambios de escenario solicitados y verifica su lectura posterior;
+4. llama a `CalculateFlowsheet4()`;
+5. extrae los objetos;
+6. llama a `ReleaseResources()` y elimina el temporal;
+7. vuelve a calcular SHA-256 sobre el archivo original.
 
 No se llama a `SaveFlowsheet`.
 
@@ -80,7 +89,7 @@ JSON. Los mensajes producidos por DWSIM se capturan y reenvían a `stderr`.
 
 ```json
 {
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "timestamp_utc": "2026-07-25T12:00:00.0000000Z",
   "dwsim_version": "DWSIM version 9.0.5.0 (...)",
   "expected_dwsim_version": "9.0.5",
@@ -103,11 +112,15 @@ JSON. Los mensajes producidos por DWSIM se capturan y reenvían a `stderr`.
       "specific_enthalpy_kJ_kg": 104.8,
       "energy_flow_kW": 104.8,
       "duty_kW": null,
-      "warnings": []
+      "warnings": [],
+      "overall_coefficient_W_m2_K": null,
+      "area_m2": null,
+      "lmtd_K": null
     }
   ],
   "requested_objects": [],
-  "missing_objects": []
+  "missing_objects": [],
+  "applied_changes": []
 }
 ```
 
@@ -118,6 +131,9 @@ Las unidades son las unidades SI internas usadas por la API DWSIM:
 - flujo másico: kg/s;
 - entalpía específica: kJ/kg;
 - energía, potencia o deber térmico: kW.
+- coeficiente global: W/(m²·K);
+- área: m²;
+- LMTD: K.
 
 Cuando una corriente material no expone `energy_flow_kW`, el runner lo calcula
 como `mass_flow_kg_s * specific_enthalpy_kJ_kg`. Para equipos, `energy_flow_kW`
@@ -126,6 +142,17 @@ declararse en `validation_spec.yaml`.
 
 Una propiedad que no pueda extraerse se representa como `null` y, para
 corrientes materiales, se añade una advertencia. Nunca se sustituye por cero.
+
+`applied_changes` registra objeto, miembro API, valor previo, entrada CLI,
+objetivo y valor leído después de la asignación. La resolución se interrumpe si
+un objeto no existe, un miembro no es escribible o la lectura posterior no
+confirma el cambio.
+
+El resolvedor de ensamblados busca dependencias en `DWSIM_HOME`, `ThermoCS`,
+`extenders`, `ppacks` y los demás subdirectorios inmediatos de la instalación.
+El runner fija además `DWSIM_HOME` y el directorio de trabajo dentro de su propio
+proceso antes de crear `Automation3`, por lo que no depende del directorio desde
+el que se invoque.
 
 ## Timeout del proceso llamador
 

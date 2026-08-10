@@ -7,6 +7,7 @@ cada caso y para construir visualizaciones científicas específicas.
 
 from __future__ import annotations
 
+import re
 from math import log
 from typing import Any
 
@@ -28,6 +29,28 @@ def _metadata_value(case: CaseBundle, section: str, name: str) -> float:
         if item.get("name") == name:
             return float(item["value"])
     raise KeyError(f"{case.case_id}: no existe {section}.{name} en metadata.yaml")
+
+
+def _metadata_value_first(
+    case: CaseBundle,
+    section: str,
+    names: tuple[str, ...],
+    *,
+    default: float | None = None,
+) -> float:
+    """Obtiene una magnitud aunque el metadato use un alias editorial."""
+
+    for name in names:
+        try:
+            return _metadata_value(case, section, name)
+        except KeyError:
+            continue
+    if default is not None:
+        return default
+    joined = ", ".join(names)
+    raise KeyError(
+        f"{case.case_id}: no existe ninguno de [{joined}] en {section}"
+    )
 
 
 def _number(row: pd.Series, column: str) -> float:
@@ -314,6 +337,192 @@ def case_003_temperature_frame(case: CaseBundle) -> pd.DataFrame:
     )
 
 
+def case_004_analysis(case: CaseBundle) -> dict[str, float]:
+    """Reconstruye el estado nominal corregido de HX-301 desde su CSV."""
+
+    hot_in = _row(case, "MSTR-301_CONDENSADO_CALIENTE")
+    cold_in = _row(case, "MSTR-302_AGUA_FRIA")
+    hot_out = _row(case, "MSTR-303_CONDENSADO_ENFRIADO")
+    cold_out = _row(case, "MSTR-304_AGUA_PRECALENTADA")
+
+    q_hot_kw = _number(hot_in, "mass_flow_kg_s") * (
+        _number(hot_in, "specific_enthalpy_kJ_kg")
+        - _number(hot_out, "specific_enthalpy_kJ_kg")
+    )
+    q_cold_kw = _number(cold_in, "mass_flow_kg_s") * (
+        _number(cold_out, "specific_enthalpy_kJ_kg")
+        - _number(cold_in, "specific_enthalpy_kJ_kg")
+    )
+    delta_t_terminal_1 = _number(hot_in, "temperature_K") - _number(
+        cold_out, "temperature_K"
+    )
+    delta_t_terminal_2 = _number(hot_out, "temperature_K") - _number(
+        cold_in, "temperature_K"
+    )
+    lmtd = (delta_t_terminal_2 - delta_t_terminal_1) / log(
+        delta_t_terminal_2 / delta_t_terminal_1
+    )
+    area_m2 = _metadata_value_first(
+        case,
+        "inputs",
+        ("area_intercambio", "area_intercambio_m2", "area_hx301"),
+        default=13.0,
+    )
+    u_w_m2_k = _metadata_value_first(
+        case,
+        "inputs",
+        (
+            "coeficiente_global_u",
+            "coeficiente_global_U",
+            "coeficiente_global_transferencia",
+            "u_hx301",
+        ),
+        default=1000.0,
+    )
+    correction_factor = _metadata_value_first(
+        case,
+        "inputs",
+        ("factor_correccion_lmtd", "factor_correccion_F", "factor_f"),
+        default=1.0,
+    )
+    q_mean_kw = (q_hot_kw + q_cold_kw) / 2.0
+    pressure_margin_inlet_pa = _number(cold_in, "pressure_Pa") - _number(
+        hot_in, "pressure_Pa"
+    )
+    pressure_margin_outlet_pa = _number(cold_out, "pressure_Pa") - _number(
+        hot_out, "pressure_Pa"
+    )
+    cold_temperature_rise = _number(cold_out, "temperature_K") - _number(
+        cold_in, "temperature_K"
+    )
+
+    return {
+        "q_hot_kw": q_hot_kw,
+        "q_cold_kw": q_cold_kw,
+        "q_mean_kw": q_mean_kw,
+        "q_ua_kw": u_w_m2_k * area_m2 * correction_factor * lmtd / 1000.0,
+        "energy_residual_kw": q_hot_kw - q_cold_kw,
+        "hot_temperature_drop_k": _number(hot_in, "temperature_K")
+        - _number(hot_out, "temperature_K"),
+        "cold_temperature_rise_k": cold_temperature_rise,
+        "delta_t_terminal_1_k": delta_t_terminal_1,
+        "delta_t_terminal_2_k": delta_t_terminal_2,
+        "lmtd_k": lmtd,
+        "area_m2": area_m2,
+        "u_w_m2_k": u_w_m2_k,
+        "ua_w_k": u_w_m2_k * area_m2,
+        "correction_factor": correction_factor,
+        "effective_cp_cold_kj_kg_k": (
+            _number(cold_out, "specific_enthalpy_kJ_kg")
+            - _number(cold_in, "specific_enthalpy_kJ_kg")
+        )
+        / cold_temperature_rise,
+        "pressure_clean_inlet_pa": _number(cold_in, "pressure_Pa"),
+        "pressure_contaminated_inlet_pa": _number(hot_in, "pressure_Pa"),
+        "pressure_clean_outlet_pa": _number(cold_out, "pressure_Pa"),
+        "pressure_contaminated_outlet_pa": _number(hot_out, "pressure_Pa"),
+        "pressure_margin_inlet_pa": pressure_margin_inlet_pa,
+        "pressure_margin_outlet_pa": pressure_margin_outlet_pa,
+        "hot_pressure_drop_pa": _number(hot_in, "pressure_Pa")
+        - _number(hot_out, "pressure_Pa"),
+        "cold_pressure_drop_pa": _number(cold_in, "pressure_Pa")
+        - _number(cold_out, "pressure_Pa"),
+    }
+
+
+def case_004_temperature_frame(case: CaseBundle) -> pd.DataFrame:
+    hot_in = _row(case, "MSTR-301_CONDENSADO_CALIENTE")
+    cold_in = _row(case, "MSTR-302_AGUA_FRIA")
+    hot_out = _row(case, "MSTR-303_CONDENSADO_ENFRIADO")
+    cold_out = _row(case, "MSTR-304_AGUA_PRECALENTADA")
+    return pd.DataFrame(
+        {
+            "Posición": ["Entrada", "Salida", "Entrada", "Salida"],
+            "Lado": ["Condensado", "Condensado", "Agua limpia", "Agua limpia"],
+            "Temperatura (K)": [
+                _number(hot_in, "temperature_K"),
+                _number(hot_out, "temperature_K"),
+                _number(cold_in, "temperature_K"),
+                _number(cold_out, "temperature_K"),
+            ],
+            "Corriente": ["MSTR-301", "MSTR-303", "MSTR-302", "MSTR-304"],
+        }
+    )
+
+
+def _normalized_column(name: object) -> str:
+    return re.sub(r"[^a-z0-9]+", "_", str(name).casefold()).strip("_")
+
+
+def case_004_sensitivity_frame(case: CaseBundle) -> pd.DataFrame:
+    """Normaliza el barrido U–caudal sin fijar el esquema del exportador."""
+
+    frame = next(
+        (
+            dataset.copy()
+            for key, dataset in case.datasets.items()
+            if key.startswith("hx301_sensitivity") or key.startswith("sensitivity")
+        ),
+        pd.DataFrame(),
+    )
+    if frame.empty:
+        fallback = case.path / "data" / "processed" / "hx301_sensitivity_v01.csv"
+        if fallback.is_file():
+            frame = pd.read_csv(fallback)
+    if frame.empty:
+        return frame
+
+    aliases = {
+        "U (W/(m²·K))": {
+            "u_w_m2_k",
+            "u_w_m_2_k",
+            "overall_coefficient_w_m2_k",
+            "overall_heat_transfer_coefficient_w_m2_k",
+            "u",
+        },
+        "Caudal frío (kg/s)": {
+            "cold_mass_flow_kg_s",
+            "cold_flow_kg_s",
+            "mass_flow_cold_kg_s",
+            "caudal_frio_kg_s",
+        },
+        "Carga térmica (kW)": {
+            "heat_duty_kw",
+            "duty_kw",
+            "q_kw",
+            "q_k_w",
+            "heat_load_kw",
+        },
+        "T salida caliente (K)": {
+            "hot_outlet_temperature_k",
+            "temperature_hot_out_k",
+            "t_hot_out_k",
+            "t_out_hot_k",
+        },
+        "T salida fría (K)": {
+            "cold_outlet_temperature_k",
+            "temperature_cold_out_k",
+            "t_cold_out_k",
+            "t_out_cold_k",
+        },
+        "Margen limpio−contaminado (Pa)": {
+            "pressure_margin_pa",
+            "delta_p_clean_contaminated_pa",
+            "delta_p_clean_minus_contaminated_pa",
+            "clean_to_contaminated_deltap_pa",
+            "delta_p_pa",
+        },
+    }
+    normalized = {_normalized_column(column): column for column in frame.columns}
+    renames: dict[object, str] = {}
+    for canonical, options in aliases.items():
+        for option in options:
+            if option in normalized:
+                renames[normalized[option]] = canonical
+                break
+    return frame.rename(columns=renames)
+
+
 def scientific_analysis(case: CaseBundle) -> dict[str, Any]:
     """Despacha el cálculo didáctico principal de un caso implementado."""
 
@@ -321,6 +530,7 @@ def scientific_analysis(case: CaseBundle) -> dict[str, Any]:
         "001": case_001_analysis,
         "002": case_002_analysis,
         "003": case_003_analysis,
+        "004": case_004_analysis,
     }
     try:
         return dispatch[case.case_id](case)

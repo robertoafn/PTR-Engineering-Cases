@@ -1,6 +1,8 @@
 """Ejecuta el mismo control local requerido antes de integrar un cambio.
 
-El objetivo puede ser ``cases/`` o un directorio de caso individual.
+El objetivo puede ser ``cases/`` o un directorio de caso individual. La
+integridad de los casos publicados en ``Literature_cases/`` se comprueba
+siempre mediante sus manifiestos; el corpus local ignorado no es necesario.
 
 Uso:
     python scripts/preflight.py cases/
@@ -30,6 +32,11 @@ def main(argv: list[str]) -> int:
         [python, "scripts/validate_tables.py", target],
         [python, "scripts/unit_consistency_check.py", target],
         [python, "scripts/compute_checksums.py", "--verify", target],
+        [
+            python,
+            "scripts/validate_literature_case.py",
+            "Literature_cases/",
+        ],
         [
             python,
             "scripts/validate_case.py",

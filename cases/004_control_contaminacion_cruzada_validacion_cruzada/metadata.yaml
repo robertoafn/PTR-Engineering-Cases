@@ -1,0 +1,160 @@
+case_id: 004_control_contaminacion_cruzada_validacion_cruzada
+title: Control de contaminacion cruzada y validacion cruzada de HX-301
+phenomenon: Transferencia de calor sensible en un intercambiador contracorriente representado mediante un modelo global UA, junto con la evaluacion del margen de presion limpio menos contaminado como tamiz de direccion hidraulica ante una fuga hipotetica.
+objective: Verificar de forma reproducible el punto nominal de HX-301 con U igual a 1000 W/(m^2*K), area igual a 13 m^2 y margen de presion limpio-contaminado de 50000 Pa, diferenciando la coherencia del modelo DWSIM de una validacion calorimetrica, geometrica, termodinamica o de seguridad independiente.
+authors:
+  - name: Roberto Flores
+    email: roberto.flores.n1987@gmail.com
+created_at: '2026-08-02T02:14:21Z'
+version: 0.1.0
+license_code: MIT
+license_docs: CC-BY-4.0
+software_stack:
+  - name: DWSIM
+    version: 9.0.5
+    license: GPL-3.0
+    purpose: Simulacion estacionaria del intercambiador HX-301 con NRTL y especificacion UA.
+  - name: Python
+    version: 3.12.13
+    license: PSF
+    purpose: Extraccion, validacion declarativa, replicas numericas y controles de calidad.
+inputs:
+  - name: caudal_masico_caliente
+    value: 8.951122
+    unit: kg/s
+    source_type: simulated
+  - name: temperatura_entrada_caliente
+    value: 406.649349770717
+    unit: K
+    source_type: simulated
+  - name: presion_entrada_caliente
+    value: 300000.0
+    unit: Pa
+    source_type: simulated
+  - name: fraccion_masica_metanol_caliente
+    value: 0.000639088654938267
+    unit: dimensionless
+    source_type: simulated
+  - name: caudal_masico_frio
+    value: 5.0
+    unit: kg/s
+    source_type: synthetic
+  - name: temperatura_entrada_frio
+    value: 293.15
+    unit: K
+    source_type: synthetic
+  - name: presion_entrada_frio
+    value: 350000.0
+    unit: Pa
+    source_type: synthetic
+  - name: coeficiente_global_u
+    value: 1000.0
+    unit: W/(m^2·K)
+    source_type: hypothetical
+  - name: area_intercambio
+    value: 13.0
+    unit: m^2
+    source_type: hypothetical
+  - name: factor_correccion_lmtd
+    value: 1.0
+    unit: dimensionless
+    source_type: hypothetical
+  - name: caida_presion_interna_lado_caliente
+    value: 0.0
+    unit: Pa
+    source_type: hypothetical
+  - name: caida_presion_interna_lado_frio
+    value: 0.0
+    unit: Pa
+    source_type: hypothetical
+outputs:
+  - name: carga_termica_exchanger
+    value: 1064856.76304171
+    unit: W
+    source_type: simulated
+  - name: lmtd_intercambiador
+    value: 81.9120586955162
+    unit: K
+    source_type: simulated
+  - name: lmtd_reconstruida
+    value: 81.9119401738472
+    unit: K
+    source_type: simulated
+  - name: temperatura_salida_caliente
+    value: 384.156247979128
+    unit: K
+    source_type: simulated
+  - name: temperatura_salida_frio
+    value: 333.204676360266
+    unit: K
+    source_type: simulated
+  - name: presion_salida_caliente
+    value: 300000.0
+    unit: Pa
+    source_type: simulated
+  - name: presion_salida_frio
+    value: 350000.0
+    unit: Pa
+    source_type: simulated
+  - name: diferencial_presion_limpio_menos_contaminado
+    value: 50000.0
+    unit: Pa
+    source_type: simulated
+  - name: fraccion_masica_vapor_entrada_caliente
+    value: 8.08093885493838e-06
+    unit: dimensionless
+    source_type: simulated
+  - name: residuo_balance_energia
+    value: 0.0112136376628769
+    unit: W
+    source_type: simulated
+  - name: desviacion_carga_ua
+    value: 1.44691563344e-06
+    unit: dimensionless
+    source_type: simulated
+  - name: escenarios_sensibilidad_validos
+    value: 12.0
+    unit: dimensionless
+    source_type: simulated
+  - name: carga_minima_sensibilidad
+    value: 867678.324103981
+    unit: W
+    source_type: simulated
+  - name: carga_maxima_sensibilidad
+    value: 1461455.13311345
+    unit: W
+    source_type: simulated
+  - name: residuo_energetico_maximo_sensibilidad_percent
+    value: 7.29855502061818e-05
+    unit: "%"
+    source_type: simulated
+  - name: cp_efectiva_lado_frio_dwsim
+    value: 5317.01588223537
+    unit: J/(kg·K)
+    source_type: simulated
+  - name: diferencia_screening_cp_caso001_percent
+    value: 27.2178988601703
+    unit: "%"
+    source_type: simulated
+  - name: desviacion_maxima_paridad_caso002_percent
+    value: 0.11555459624896086
+    unit: "%"
+    source_type: simulated
+qc_rules:
+  - schema
+  - units
+  - completeness
+  - range
+  - naming
+  - referential_integrity
+  - checksum
+validation:
+  strategy: Validacion declarativa del punto nominal mediante DWSIM Automation API, balances de masa y energia, replica independiente de LMTD, evaluacion del margen de presion y una malla de sensibilidad U por caudal frio de 12 escenarios. La igualdad Q=U*A*F*LMTD se trata como cierre de la parametrizacion UA y no como validacion independiente. La paridad final del Caso 002 fue ejecutada y falla en energia; NRTL contra DECHEMA, VLE contra literatura y calorimetria permanecen NOT_RUN.
+  acceptance_criteria: Balance de masa por lado <= 0.01%; residuo energetico <= 0.01% de Q; desviacion absoluta de LMTD <= 0.1 K; 12 escenarios de sensibilidad resueltos; margen limpio-contaminado > 0 Pa como tamiz nominal; paridad del Caso 002 <= 0.05%; ausencia de afirmaciones de rating geometrico, integridad mecanica o seguridad. El FAIL externo no bloqueante y los criterios requeridos sin evidencia conservan el veredicto CONDITIONAL y el ciclo de vida review.
+traceability:
+  provenance_ref: provenance.json
+  derived_from:
+    - cases/003_recuperacion_calor_condensado_y_control_contaminacion_cruzada/data/process_results_v01.csv
+    - simulations/dwsim/004_control_contaminacion_cruzada_validacion_cruzada.dwxmz
+si_units: true
+status: review
