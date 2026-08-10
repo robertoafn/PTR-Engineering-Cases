@@ -21,7 +21,7 @@ deja definido el siguiente caso sobre incertidumbre de HX-301.
 | Pruebas unitarias y recorrido Streamlit | Implementado | 11 pruebas; cuatro vistas y tres casos |
 | Revisión visual en navegador | Implementado | revisión de autor, tema legible y QA estructural con AppTest |
 | Preflight integral del repositorio | Implementado | 55 pruebas y todos los validadores en PASS |
-| Propuesta técnica Caso 004 | Implementado | `docs/proposals/004_incertidumbre_gum_monte_carlo_hx301.md` |
+| Propuesta técnica entonces numerada 004 | Implementado | Renumerada como `docs/proposals/005_incertidumbre_gum_monte_carlo_hx301.md` durante el desarrollo v0.6.0 |
 | Release v0.5.0 | Implementado | tag `v0.5.0` y notas de publicación |
 
 ## Alcance funcional
@@ -68,6 +68,9 @@ visual confirme que las figuras ayudan a explicar los mecanismos, que el texto
 es legible y que `FAIL` o `CONDITIONAL` no inducen conclusiones físicas o de
 seguridad incorrectas.
 
-El Caso 004 no forma parte de la definición de terminado como implementación:
-su entregable v0.5.0 es una propuesta auditable. Su promoción requiere fuentes
-de incertidumbre, reglas de correlación, código y resultados reproducibles.
+La propuesta que v0.5.0 denominaba Caso 004 no formó parte de su definición de
+terminado como implementación. Durante el desarrollo v0.6.0 se renumeró como
+Caso 005 para reservar el ID 004 al escenario HX-301 implementado. Este cambio
+editorial no altera el cierre histórico de v0.5.0; la futura promoción de la
+propuesta sigue requiriendo fuentes de incertidumbre, correlaciones, código y
+resultados reproducibles.

@@ -7,6 +7,52 @@ y este proyecto adhiere a [Semantic Versioning 2.0.0](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-08-09
+
+### Added
+- Caso 004 para HX-301 con especificación `U = 1000 W/(m²·K)`, `A = 13 m²`,
+  margen nominal limpio−contaminado de `+50 kPa` y criterios separados para
+  cierre UA, fase, calorimetría, sensibilidad y validación cruzada.
+- Explicación científica del Caso 004 en Streamlit, con perfil contracorriente,
+  reconstrucciones de carga, barrido U–caudal, comparación de presiones y
+  estados vacíos explícitos para evidencia externa pendiente.
+- Roadmap v0.6.0 para integrar el nuevo caso sin modificar el cierre histórico
+  del release v0.5.0.
+- Paridad real del Caso 002 reejecutada mediante DWSIM API: estados dentro de
+  tolerancia y `FAIL` energético de `0.115554596 %` en `MSTR-204`.
+- Línea `Literature_cases/` iniciada con el Caso FOSSEE 102, sus dos archivos
+  originales inmutables, manifiesto, procedencia, licencia, checksums e informe
+  de ingreso.
+- Validador genérico de Literature Cases para tamaños, SHA-256, rutas seguras y
+  comparación byte a byte opcional contra el corpus local.
+
+### Changed
+- La propuesta GUM/Monte Carlo sobre HX-301 se renumera como Caso 005 y adopta
+  el Caso 004 como futuro punto nominal, sin generar resultados de incertidumbre.
+- El índice, overview, protocolo del dashboard y catálogo editorial extienden
+  la continuidad conceptual a `002 → 003 → 004 → 005 propuesto`.
+- El dashboard distingue el cierre de una parametrización UA de una validación
+  independiente de U, A, propiedades termodinámicas o seguridad.
+- Los generadores y crosschecks del Caso 004 validan colisiones de rutas; las
+  figuras leen estados, parámetros y margen hidráulico desde datasets
+  versionados en vez de duplicar valores manuales.
+- El alcance de desarrollo de los Casos PTR 001-004 se cierra conservando sus
+  estados reales; el trabajo nuevo se orienta primero a casos FOSSEE existentes.
+- El corpus `references/Literature_cases_references/` queda excluido de Git;
+  sólo se publican casos seleccionados bajo `Literature_cases/`.
+- La figura de destilación metanol-agua se reasigna del Caso 003 al Caso 102.
+
+### Validation
+- El Caso 004 conserva ciclo de vida `review` y veredicto `CONDITIONAL` mientras
+  existan advertencia de fase, crosschecks externos `NOT_RUN` y la paridad
+  energética adversa del Caso 002; `+50 kPa` se interpreta sólo como orden
+  nominal de presiones.
+- Caso 102: `SOURCE_BASELINE_VERIFIED`; 2/2 archivos coinciden en tamaño,
+  SHA-256 y contenido con el corpus local. La paridad DWSIM 9.0.5 y el contraste
+  termodinámico permanecen `NOT_RUN`.
+- Se registra, sin ocultarla, la discrepancia entre DWSIM v6.5 Classic UI de la
+  ficha FOSSEE y el build 5.5.6886.34470 embebido.
+
 ## [0.5.0] - 2026-08-01
 
 ### Added
@@ -168,7 +214,8 @@ y este proyecto adhiere a [Semantic Versioning 2.0.0](https://semver.org/).
 - Solo se incluía el placeholder `000_template`.
 - Esta versión constituye la arquitectura base para las iteraciones posteriores.
 
-[Unreleased]: https://github.com/robertoafn/PTR-Engineering-Cases/compare/v0.5.0...HEAD
+[Unreleased]: https://github.com/robertoafn/PTR-Engineering-Cases/compare/v0.6.0...HEAD
+[0.6.0]: https://github.com/robertoafn/PTR-Engineering-Cases/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/robertoafn/PTR-Engineering-Cases/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/robertoafn/PTR-Engineering-Cases/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/robertoafn/PTR-Engineering-Cases/compare/v0.2.0...v0.3.0

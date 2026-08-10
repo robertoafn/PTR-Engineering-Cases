@@ -1,0 +1,339 @@
+schema_version: 1.0.0
+case_id: 004_control_contaminacion_cruzada_validacion_cruzada
+
+dwsim:
+  file: simulations/dwsim/004_control_contaminacion_cruzada_validacion_cruzada.dwxmz
+  required_version: 9.0.5
+  timeout_seconds: 120
+  object_map:
+    MSTR-301_CONDENSADO_CALIENTE: MSTR-301_CONDENSADO_CALIENTE
+    MSTR-302_AGUA_FRIA: MSTR-302_AGUA_FRIA
+    MSTR-303_CONDENSADO_ENFRIADO: MSTR-303_CONDENSADO_ENFRIADO
+    MSTR-304_AGUA_PRECALENTADA: MSTR-304_AGUA_PRECALENTADA
+    HX-301_INTERCAMBIADOR: HX-301_INTERCAMBIADOR
+
+datasets:
+  process:
+    path: data/process_results_v01.csv
+    id_column: object_id
+
+criteria:
+  - id: integridad_artefactos
+    title: Metadatos, tablas, unidades y checksums
+    type: existing_validators
+    scope: data_quality
+    blocking: true
+    required: true
+    validators:
+      - metadata
+      - tables
+      - units
+      - checksums
+    evidence_paths:
+      - metadata.yaml
+      - data/process_results_v01.meta.yaml
+      - provenance.json
+
+  - id: paridad_api_dataset_estado
+    title: Paridad DWSIM API-dataset del estado de las corrientes
+    type: api_dataset_consistency
+    scope: data_quality
+    blocking: true
+    required: false
+    dataset: process
+    ids:
+      - MSTR-301_CONDENSADO_CALIENTE
+      - MSTR-302_AGUA_FRIA
+      - MSTR-303_CONDENSADO_ENFRIADO
+      - MSTR-304_AGUA_PRECALENTADA
+    columns:
+      - dataset_column: temperature_K
+        api_column: temperature_K
+      - dataset_column: pressure_Pa
+        api_column: pressure_Pa
+      - dataset_column: mass_flow_kg_s
+        api_column: mass_flow_kg_s
+      - dataset_column: specific_enthalpy_kJ_kg
+        api_column: specific_enthalpy_kJ_kg
+    threshold:
+      operator: <=
+      value: 0.01
+      unit: "%"
+    unavailable_status: NOT_RUN
+    evidence_paths:
+      - data/process_results_v01.csv
+      - simulations/dwsim/004_control_contaminacion_cruzada_validacion_cruzada.dwxmz
+
+  - id: balance_masa_lado_caliente
+    title: Balance de masa del lado caliente
+    type: side_mass_balance
+    scope: numerical
+    blocking: true
+    required: true
+    dataset: process
+    id_column: object_id
+    value_column: mass_flow_kg_s
+    inlet_ids:
+      - MSTR-301_CONDENSADO_CALIENTE
+    outlet_ids:
+      - MSTR-303_CONDENSADO_ENFRIADO
+    threshold:
+      operator: <=
+      value: 0.01
+      unit: "%"
+    evidence_paths:
+      - data/process_results_v01.csv
+
+  - id: balance_masa_lado_frio
+    title: Balance de masa del lado frio
+    type: side_mass_balance
+    scope: numerical
+    blocking: true
+    required: true
+    dataset: process
+    id_column: object_id
+    value_column: mass_flow_kg_s
+    inlet_ids:
+      - MSTR-302_AGUA_FRIA
+    outlet_ids:
+      - MSTR-304_AGUA_PRECALENTADA
+    threshold:
+      operator: <=
+      value: 0.01
+      unit: "%"
+    evidence_paths:
+      - data/process_results_v01.csv
+
+  - id: balance_energia_transferida
+    title: Balance de energia normalizado por la carga transferida
+    type: stream_energy_balance
+    scope: numerical
+    blocking: true
+    required: true
+    terms:
+      - dataset: process
+        column: energy_flow_kW
+        ids:
+          - MSTR-301_CONDENSADO_CALIENTE
+        factor: 1.0
+      - dataset: process
+        column: energy_flow_kW
+        ids:
+          - MSTR-302_AGUA_FRIA
+        factor: 1.0
+      - dataset: process
+        column: energy_flow_kW
+        ids:
+          - MSTR-303_CONDENSADO_ENFRIADO
+        factor: -1.0
+      - dataset: process
+        column: energy_flow_kW
+        ids:
+          - MSTR-304_AGUA_PRECALENTADA
+        factor: -1.0
+    normalization: reference
+    normalization_reference:
+      metadata_output: carga_termica_exchanger
+      factor: 0.001
+      absolute: true
+    threshold:
+      operator: <=
+      value: 0.01
+      unit: "%"
+    evidence_paths:
+      - data/process_results_v01.csv
+      - metadata.yaml
+
+  - id: replica_lmtd
+    title: Diferencia absoluta entre LMTD DWSIM y replica independiente
+    type: comparison
+    scope: phenomenon
+    blocking: true
+    required: true
+    left:
+      metadata_output: lmtd_intercambiador
+    right:
+      metadata_output: lmtd_reconstruida
+    calculation: absolute_difference
+    threshold:
+      operator: <=
+      value: 0.1
+      unit: K
+    evidence_paths:
+      - metadata.yaml
+      - validation_report.md
+
+  - id: cierre_parametrizacion_ua
+    title: Cierre numerico de Q mediante U por A por F por LMTD
+    type: reported_metric
+    scope: phenomenon
+    blocking: false
+    required: false
+    value:
+      metadata_output: desviacion_carga_ua
+      factor: 100.0
+      absolute: true
+    threshold:
+      operator: <=
+      value: 0.5
+      unit: "%"
+    evidence_paths:
+      - metadata.yaml
+      - validation_report.md
+    notes: Este criterio comprueba el cierre de la especificacion UA. U y A fueron seleccionados para conservar aproximadamente el UA previo, por lo que no constituye una validacion independiente de U, A o Q.
+
+  - id: margen_presion_limpio_contaminado
+    title: Signo nominal del margen de presion limpio menos contaminado
+    type: pressure_margin
+    scope: phenomenon
+    blocking: false
+    required: true
+    value:
+      metadata_output: diferencial_presion_limpio_menos_contaminado
+    threshold:
+      operator: ">"
+      value: 0.0
+      unit: Pa
+    evidence_paths:
+      - metadata.yaml
+      - data/process_results_v01.csv
+      - validation_report.md
+    notes: Demuestra solamente el signo nominal entre corrientes. No modela fuga, dinamica, incertidumbre, integridad mecanica ni capas de proteccion.
+
+  - id: fase_liquida_monofasica
+    title: Ausencia de fase vapor en la entrada caliente
+    type: reported_metric
+    scope: phenomenon
+    blocking: false
+    required: true
+    value:
+      dataset: process
+      column: vapor_mass_fraction
+      ids:
+        - MSTR-301_CONDENSADO_CALIENTE
+      aggregate: first
+      absolute: true
+    threshold:
+      operator: <=
+      value: 0.0
+      unit: dimensionless
+    failure_status: NOT_DEMONSTRATED
+    evidence_paths:
+      - metadata.yaml
+      - data/process_results_v01.csv
+      - data/process_results_v01.meta.yaml
+      - simulations/dwsim/004_control_contaminacion_cruzada_validacion_cruzada.dwxmz
+      - validation_report.md
+    notes: El archivo conserva una fraccion masica de vapor pequena y mensajes de cambio de fase; el resultado del intercambiador se presenta como aproximacion del modelo UA.
+
+  - id: validacion_calorimetrica_independiente
+    title: Comparacion contra calorimetria independiente
+    type: reported_metric
+    scope: phenomenon
+    blocking: false
+    required: true
+    value:
+      metadata_output: desviacion_calorimetria_independiente_percent
+      absolute: true
+    threshold:
+      operator: <=
+      value: 0.01
+      unit: "%"
+    unavailable_status: NOT_RUN
+    evidence_paths:
+      - validation_report.md
+    notes: No existe medicion calorimetrica experimental ni modelo independiente de propiedades para este punto nominal.
+
+  - id: sensibilidad_u_caudal_frio
+    title: Sensibilidad reproducible de U y caudal frio
+    type: reported_metric
+    scope: phenomenon
+    blocking: false
+    required: true
+    value:
+      metadata_output: escenarios_sensibilidad_validos
+    threshold:
+      operator: ">="
+      value: 12.0
+      unit: dimensionless
+    unavailable_status: NOT_RUN
+    evidence_paths:
+      - scripts/sensitivity_hx301.py
+      - data/processed/hx301_sensitivity_v01.csv
+
+  - id: comparacion_nrtl_dechema
+    title: Coeficientes de actividad NRTL frente a DECHEMA
+    type: reported_metric
+    scope: data_quality
+    blocking: false
+    required: true
+    value:
+      metadata_output: desviacion_maxima_coeficiente_actividad_percent
+      absolute: true
+    threshold:
+      operator: <=
+      value: 0.5
+      unit: "%"
+    unavailable_status: NOT_RUN
+    evidence_paths:
+      - scripts/crosscheck_nrtl_dechema.py
+      - data/raw/literature/dechema_nrtl_meoh_h2o_v01.csv
+      - data/processed/nrtl_activity_crosscheck_v01.csv
+    notes: La referencia DECHEMA exacta, su licencia, la convencion de parametros y las unidades aun no estan resueltas.
+
+  - id: comparacion_vle_literatura
+    title: Curva VLE DWSIM frente a datos experimentales
+    type: reported_metric
+    scope: data_quality
+    blocking: false
+    required: true
+    value:
+      metadata_output: desviacion_maxima_temperatura_vle_K
+      absolute: true
+    threshold:
+      operator: <=
+      value: 0.01
+      unit: K
+    unavailable_status: NOT_RUN
+    evidence_paths:
+      - scripts/vle_comparison_dwsim_literature.py
+      - data/processed/vle_meoh_h2o_comparison_v01.csv
+
+  - id: comparacion_vle_composicion
+    title: Composicion VLE DWSIM frente a datos experimentales
+    type: reported_metric
+    scope: data_quality
+    blocking: false
+    required: true
+    value:
+      metadata_output: desviacion_maxima_composicion_vle_molfrac
+      absolute: true
+    threshold:
+      operator: <=
+      value: 0.01
+      unit: dimensionless
+    unavailable_status: NOT_RUN
+    evidence_paths:
+      - scripts/vle_comparison_dwsim_literature.py
+      - data/processed/vle_meoh_h2o_comparison_v01.csv
+    notes: La tolerancia composicional se evalua en fraccion molar absoluta y permanece NOT_RUN mientras falten datos experimentales trazables.
+
+  - id: paridad_final_caso002
+    title: Paridad final DWSIM API-dataset del Caso 002
+    type: reported_metric
+    scope: data_quality
+    blocking: false
+    required: true
+    value:
+      metadata_output: desviacion_maxima_paridad_caso002_percent
+      absolute: true
+    threshold:
+      operator: <=
+      value: 0.05
+      unit: "%"
+    unavailable_status: NOT_RUN
+    evidence_paths:
+      - scripts/parity_check_002.py
+      - data/processed/case002_api_parity_v01.csv
+      - data/processed/case002_api_parity_v01.meta.yaml
+    notes: La ejecucion real obtiene 0.115554596% en energia frente a 0.05%; el criterio permanece no bloqueante para separar el estado del Caso 004 de la deuda reproducible del Caso 002, pero se registra como FAIL y no permite promover ninguno de los casos.

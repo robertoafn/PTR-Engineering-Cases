@@ -24,6 +24,7 @@ derived_si:
   - {symbol: J/mol,      quantity: molar_energy}
   - {symbol: J/(mol·K),  quantity: molar_heat_capacity}
   - {symbol: J/(kg·K),   quantity: specific_heat_capacity}
+  - {symbol: W/K,        quantity: thermal_conductance}
   - {symbol: W/(m·K),    quantity: thermal_conductivity}
   - {symbol: W/(m^2·K),  quantity: heat_transfer_coefficient}
   - {symbol: kJ/kg,      quantity: specific_energy}
@@ -33,6 +34,7 @@ derived_si:
   - {symbol: dimensionless, quantity: dimensionless}
 
 allowed_non_si:
+  - {symbol: "%", quantity: dimensionless_ratio, rule: "1 % = 0.01; declarar si el valor numérico está expresado en porcentaje"}
   - {symbol: "°C", quantity: temperature, rule: "Convertir a K antes de cálculo"}
   - {symbol: bar,  quantity: pressure,    rule: "1 bar = 1e5 Pa, declarar en metadata"}
   - {symbol: L,    quantity: volume,      rule: "1 L = 1e-3 m^3"}

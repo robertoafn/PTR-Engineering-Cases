@@ -355,12 +355,184 @@ cases:
         evidence_criteria:
           - margen_presion_limpio_contaminado
 
-proposals:
   "004":
+    short_title: HX-301 con par U–A reparametrizado y margen positivo
+    process_stage: Recuperación térmica y validación cruzada
+    scientific_question: >-
+      ¿Qué cambia al expresar el desempeño de HX-301 mediante U=1000
+      W/(m²·K), A=13 m² y una presión nominal 50 kPa mayor en el lado
+      limpio, y qué conclusiones siguen necesitando evidencia independiente?
+    summary: >-
+      El caso conserva aproximadamente el producto UA del Caso 003, recalcula
+      las temperaturas de salida y establece un orden estático de presiones.
+      La coherencia térmica y el signo del margen se explican con datos; la
+      suficiencia de U, la seguridad y los contrastes externos se mantienen
+      separados y no se infieren del cierre numérico.
+    learning_outcomes:
+      - Distinguir el producto UA de sus factores U y A por separado.
+      - Interpretar una sensibilidad como respuesta del modelo y no como validación experimental.
+      - Separar un margen de presión nominal de la integridad y seguridad del equipo.
+      - Diferenciar paridad numérica, comparación de modelos y contraste con literatura.
+    figure_caption: >-
+      HX-301 recibe el condensado con trazas a 300 kPa y agua limpia a 350 kPa;
+      el intercambio se calcula en contracorriente con U=1000 W/(m²·K),
+      A=13 m², F=1 y caídas internas nulas.
+    figure_guide:
+      - label: "1 · MSTR-301 — lado contaminado"
+        text: Entra a aproximadamente 406.649 K y 300 kPa con la composición heredada de la cadena 002–003.
+      - label: "2 · MSTR-302 — lado limpio"
+        text: Agua a 293.15 K y 350 kPa establece un margen nominal de +50 kPa.
+      - label: "3 · HX-301 — modelo UA"
+        text: U y A se especifican; el modelo calcula ambas temperaturas de salida.
+      - label: "4 · Instrumentación conceptual"
+        text: PT, PDT, TT y FT muestran qué debería observarse, pero la figura no implementa una capa de protección.
+    methods:
+      - name: DWSIM GUI 9.0.5
+        role: Conserva el estado nominal resuelto del intercambiador con NRTL y especificación UA.
+      - name: Python
+        role: Extrae el estado guardado y reconstruye balances, LMTD, UA, sensibilidad y trazabilidad.
+      - name: Literatura / DECHEMA
+        role: Fuente externa prevista para contrastes termodinámicos; permanece pendiente hasta resolver referencia, licencia y convención.
+    conclusion: >-
+      El estado guardado sostiene un intercambio cercano a 1.065 MW, un cierre
+      interno entre ambos lados y un margen nominal limpio−contaminado de +50
+      kPa. No demuestra que U o A sean correctos de forma independiente, ni que
+      el equipo evite contaminación durante fugas, transitorios o fallas.
+    limitations: >-
+      DWSIM registra una pequeña fase vapor y advierte que el intercambio es una
+      aproximación. El cálculo es UA concentrado, no rating geométrico. Las
+      propiedades calorimétricas, DECHEMA y VLE continúan sin contraste externo.
+      La paridad del Caso 002 fue ejecutada y falla en energía con 0.11555 %
+      frente a 0.05 %. El barrido U–caudal convergió en sus 12 escenarios, pero
+      sigue siendo una sensibilidad del modelo, no una validación experimental
+      de U.
+    phenomena:
+      - id: reparametrizacion_ua
+        name: Conservación del desempeño mediante UA
+        category: Diseño térmico
+        question: ¿Por qué el deber térmico cambia poco al reducir U y aumentar A?
+        explanation: >-
+          En el modelo concentrado la carga depende del producto U·A, del factor
+          F y de la fuerza impulsora LMTD. El nuevo par U–A mantiene UA casi igual
+          al del Caso 003; por eso preserva la escala de Q sin probar por separado
+          que el coeficiente o el área correspondan a un equipo real.
+        equation: "Q_dot = U * A * F * LMTD"
+        equation_latex: '\dot Q=U\,A\,F\,LMTD'
+        variables:
+          - '\dot Q: carga térmica [W]'
+          - 'U: coeficiente global especificado [W/(m²·K)]'
+          - 'A: área especificada [m²]'
+          - 'F: factor de corrección [1]'
+          - 'LMTD: diferencia media logarítmica [K]'
+        data_reading: >-
+          Compare Q calculada desde las entalpías de ambos lados con U·A·F·LMTD.
+          La coincidencia verifica cierre interno; la advertencia de fase y el
+          crosscheck calorimétrico delimitan la afirmación. Como tamiz, el cₚ
+          efectivo frío de 5.3170 kJ/(kg·K) supera en 27.22 % la escala de 4.17946
+          kJ/(kg·K) derivada del Caso 001 con Steam Tables/IAPWS.
+        engineering_meaning: >-
+          U y A son identificables sólo con información adicional. Ajustar uno
+          para compensar el otro conserva el desempeño nominal, no valida el diseño.
+        limitation: >-
+          No se calcula geometría, ensuciamiento, coeficientes de película ni
+          incertidumbre de propiedades; el cambio de fase detectado convierte el
+          resultado en una aproximación del modelo UA. Las condiciones y paquetes
+          de los casos 001 y 004 no son idénticos: el tamiz de cₚ es una señal de
+          revisión, no una validación independiente ni evidencia de error.
+        evidence_criteria:
+          - balance_energia_transferida
+          - replica_lmtd
+          - cierre_parametrizacion_ua
+          - fase_liquida_monofasica
+          - validacion_calorimetrica_independiente
+      - id: sensibilidad_ua_caudal
+        name: Sensibilidad de Q a U y caudal frío
+        category: Análisis de sensibilidad
+        question: ¿Cómo responde HX-301 cuando cambian U y la capacidad térmica del lado frío?
+        explanation: >-
+          Aumentar U intensifica el acoplamiento térmico, mientras el caudal frío
+          modifica su tasa de capacidad y las temperaturas de salida. El barrido
+          permite observar no linealidad y saturación del aprovechamiento térmico.
+        equation: "C_c = m_dot_c * cp_c; Q_dot = epsilon * C_min * (T_h,in - T_c,in)"
+        equation_latex: 'C_c=\dot m_c c_{p,c},\qquad \dot Q=\varepsilon C_{min}(T_{h,in}-T_{c,in})'
+        variables:
+          - 'C_c: tasa de capacidad térmica del lado frío [W/K]'
+          - '\varepsilon: efectividad del intercambiador [1]'
+          - 'C_min: menor tasa de capacidad [W/K]'
+        data_reading: >-
+          Lea cada curva a caudal frío constante y compare cómo cambia Q al
+          recorrer U. Después compare curvas para separar ambos efectos.
+        engineering_meaning: >-
+          El barrido identifica qué supuestos dominan la respuesta del modelo y
+          prepara un futuro presupuesto de incertidumbre.
+        limitation: >-
+          Los escenarios comparten el mismo modelo y no aportan mediciones. Con
+          presiones fijadas y caídas internas nulas, el margen hidráulico no es
+          sensible a U ni al caudal dentro de este flowsheet.
+        evidence_criteria:
+          - sensibilidad_u_caudal_frio
+      - id: margen_presion_positivo
+        name: Orden nominal de presiones entre lados
+        category: Integridad de proceso
+        question: ¿Qué demuestra realmente una diferencia de +50 kPa a favor del lado limpio?
+        explanation: >-
+          Ante una abertura hipotética y condiciones estáticas, el gradiente de
+          presión favorecería flujo desde el agua limpia hacia el condensado. La
+          simulación impone las presiones y no resuelve la fuga ni su evolución.
+        equation: "Delta p_b = p_clean - p_contaminated"
+        equation_latex: '\Delta p_b=p_{limpio}-p_{contaminado}=50\,000\ \mathrm{Pa}'
+        variables:
+          - '\Delta p_b: margen nominal entre lados [Pa]'
+          - 'p_limpio, p_contaminado: presiones en puntos comparables [Pa]'
+        data_reading: >-
+          Las entradas y salidas muestran 350 kPa en el lado limpio y 300 kPa en
+          el contaminado porque ambas caídas internas se fijaron en cero.
+        engineering_meaning: >-
+          El Caso 004 corrige el signo nominal ausente en el Caso 003, pero no
+          define cuánto margen es suficiente ni si se mantiene durante una falla.
+        limitation: >-
+          No hay modelo de fuga, perfiles hidráulicos, transitorios, incertidumbre
+          instrumental, detección, aislamiento o integridad mecánica.
+        evidence_criteria:
+          - margen_presion_limpio_contaminado
+      - id: validacion_cruzada_metodos
+        name: Jerarquía de validación cruzada
+        category: Termodinámica y calidad de datos
+        question: ¿Qué evidencia aporta cada comparación y cuándo puede llamarse validación externa?
+        explanation: >-
+          Reabrir el mismo archivo comprueba reproducibilidad; recalcular NRTL con
+          los mismos parámetros verifica implementación; usar otra parametrización
+          compara modelos; y contrastar VLE o entalpías con datos independientes
+          evalúa capacidad predictiva dentro de condiciones declaradas.
+        equation: "residual = model - reference"
+        equation_latex: 'r_i=y_{modelo,i}-y_{referencia,i}'
+        variables:
+          - 'r_i: residuo con signo y unidad de la magnitud comparada'
+          - 'y_referencia: dato independiente con fuente e incertidumbre'
+        data_reading: >-
+          Revise fuente, condiciones, convención y tolerancia antes del residuo.
+          Aquí NRTL y VLE permanecen NOT_RUN; la paridad del Caso 002 sí se
+          ejecutó y su discrepancia energética se muestra como FAIL.
+        engineering_meaning: >-
+          La validación cruzada es fuerte cuando las rutas no comparten el mismo
+          supuesto dominante y cuando el dominio de comparación es equivalente.
+        limitation: >-
+          DECHEMA y los datos VLE no pueden inventarse ni tratarse como abiertos
+          sin referencia y licencia exactas. La paridad del Caso 002 falla en
+          MSTR-204.energy_flow_kW y permanece abierta hasta reconciliar ese flujo.
+        evidence_criteria:
+          - paridad_api_dataset_estado
+          - comparacion_nrtl_dechema
+          - comparacion_vle_literatura
+          - comparacion_vle_composicion
+          - paridad_final_caso002
+
+proposals:
+  "005":
     short_title: Incertidumbre GUM/Monte Carlo en HX-301
     process_stage: Metrología aplicada a integración térmica
     status: proposed
-    depends_on: "003"
+    depends_on: "004"
     scientific_question: >-
       ¿Qué tan robustas son las conclusiones térmicas e hidráulicas de HX-301
       cuando se propagan incertidumbres y correlaciones de las entradas?
@@ -368,4 +540,4 @@ proposals:
       Comparará propagación GUM y Monte Carlo para carga térmica, LMTD, U y
       margen de presión. No se muestran distribuciones hasta contar con un
       presupuesto de incertidumbre trazable.
-    document: docs/proposals/004_incertidumbre_gum_monte_carlo_hx301.md
+    document: docs/proposals/005_incertidumbre_gum_monte_carlo_hx301.md

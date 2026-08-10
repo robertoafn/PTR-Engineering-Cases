@@ -1,0 +1,375 @@
+{
+  "actual_source": "dwsim_api",
+  "case_id": "004_control_contaminacion_cruzada_validacion_cruzada",
+  "case_version": "0.1.0",
+  "criteria": [
+    {
+      "blocking": true,
+      "evidence_paths": [
+        "metadata.yaml",
+        "data/process_results_v01.meta.yaml",
+        "provenance.json"
+      ],
+      "evidence_source": "existing_validator",
+      "id": "integridad_artefactos",
+      "message": "metadata: OK ([OK] 1 metadata file(s) valid.) | tables: OK ([OK] 4 tabla(s) válida(s).) | units: OK ([OK] unidades consistentes en 5 archivo(s).) | checksums: OK",
+      "required": true,
+      "result": {
+        "unit": "errores",
+        "value": 0.0
+      },
+      "scope": "data_quality",
+      "status": "PASS",
+      "threshold": null,
+      "title": "Metadatos, tablas, unidades y checksums",
+      "type": "existing_validators"
+    },
+    {
+      "blocking": true,
+      "evidence_paths": [
+        "data/process_results_v01.csv",
+        "simulations/dwsim/004_control_contaminacion_cruzada_validacion_cruzada.dwxmz"
+      ],
+      "evidence_source": "dwsim_api",
+      "id": "paridad_api_dataset_estado",
+      "message": "máxima discrepancia en MSTR-301_CONDENSADO_CALIENTE specific_enthalpy_kJ_kg↔specific_enthalpy_kJ_kg: dataset=-2052.3269703; api=-2052.3269703",
+      "required": false,
+      "result": {
+        "unit": "%",
+        "value": 5.539411573632312e-13
+      },
+      "scope": "data_quality",
+      "status": "PASS",
+      "threshold": {
+        "operator": "<=",
+        "unit": "%",
+        "value": 0.01
+      },
+      "title": "Paridad DWSIM API-dataset del estado de las corrientes",
+      "type": "api_dataset_consistency"
+    },
+    {
+      "blocking": true,
+      "evidence_paths": [
+        "data/process_results_v01.csv"
+      ],
+      "evidence_source": "dwsim_api",
+      "id": "balance_masa_lado_caliente",
+      "message": "entrada=8.951122; salida=8.951122",
+      "required": true,
+      "result": {
+        "unit": "%",
+        "value": 0.0
+      },
+      "scope": "numerical",
+      "status": "PASS",
+      "threshold": {
+        "operator": "<=",
+        "unit": "%",
+        "value": 0.01
+      },
+      "title": "Balance de masa del lado caliente",
+      "type": "side_mass_balance"
+    },
+    {
+      "blocking": true,
+      "evidence_paths": [
+        "data/process_results_v01.csv"
+      ],
+      "evidence_source": "dwsim_api",
+      "id": "balance_masa_lado_frio",
+      "message": "entrada=5; salida=5",
+      "required": true,
+      "result": {
+        "unit": "%",
+        "value": 0.0
+      },
+      "scope": "numerical",
+      "status": "PASS",
+      "threshold": {
+        "operator": "<=",
+        "unit": "%",
+        "value": 0.01
+      },
+      "title": "Balance de masa del lado frio",
+      "type": "side_mass_balance"
+    },
+    {
+      "blocking": true,
+      "evidence_paths": [
+        "data/process_results_v01.csv",
+        "metadata.yaml"
+      ],
+      "evidence_source": "dwsim_api",
+      "id": "balance_energia_transferida",
+      "message": "residuo=1.12137258839e-05",
+      "required": true,
+      "result": {
+        "unit": "%",
+        "value": 1.05307364079949e-06
+      },
+      "scope": "numerical",
+      "status": "PASS",
+      "threshold": {
+        "operator": "<=",
+        "unit": "%",
+        "value": 0.01
+      },
+      "title": "Balance de energia normalizado por la carga transferida",
+      "type": "stream_energy_balance"
+    },
+    {
+      "blocking": true,
+      "evidence_paths": [
+        "metadata.yaml",
+        "validation_report.md"
+      ],
+      "evidence_source": "dwsim_api",
+      "id": "replica_lmtd",
+      "message": "izquierda=81.9120586955; derecha=81.9119401738",
+      "required": true,
+      "result": {
+        "unit": "K",
+        "value": 0.00011852166899473104
+      },
+      "scope": "phenomenon",
+      "status": "PASS",
+      "threshold": {
+        "operator": "<=",
+        "unit": "K",
+        "value": 0.1
+      },
+      "title": "Diferencia absoluta entre LMTD DWSIM y replica independiente",
+      "type": "comparison"
+    },
+    {
+      "blocking": false,
+      "evidence_paths": [
+        "metadata.yaml",
+        "validation_report.md"
+      ],
+      "evidence_source": "reported_metric",
+      "id": "cierre_parametrizacion_ua",
+      "message": "criterio cumplido",
+      "required": false,
+      "result": {
+        "unit": "%",
+        "value": 0.00014469156334400002
+      },
+      "scope": "phenomenon",
+      "status": "PASS",
+      "threshold": {
+        "operator": "<=",
+        "unit": "%",
+        "value": 0.5
+      },
+      "title": "Cierre numerico de Q mediante U por A por F por LMTD",
+      "type": "reported_metric"
+    },
+    {
+      "blocking": false,
+      "evidence_paths": [
+        "metadata.yaml",
+        "data/process_results_v01.csv",
+        "validation_report.md"
+      ],
+      "evidence_source": "dwsim_api",
+      "id": "margen_presion_limpio_contaminado",
+      "message": "criterio cumplido",
+      "required": true,
+      "result": {
+        "unit": "Pa",
+        "value": 50000.0
+      },
+      "scope": "phenomenon",
+      "status": "PASS",
+      "threshold": {
+        "operator": ">",
+        "unit": "Pa",
+        "value": 0.0
+      },
+      "title": "Signo nominal del margen de presion limpio menos contaminado",
+      "type": "pressure_margin"
+    },
+    {
+      "blocking": false,
+      "evidence_paths": [
+        "metadata.yaml",
+        "data/process_results_v01.csv",
+        "data/process_results_v01.meta.yaml",
+        "simulations/dwsim/004_control_contaminacion_cruzada_validacion_cruzada.dwxmz",
+        "validation_report.md"
+      ],
+      "evidence_source": "exported_dataset",
+      "id": "fase_liquida_monofasica",
+      "message": "criterio no cumplido",
+      "required": true,
+      "result": {
+        "unit": "dimensionless",
+        "value": 8.08093885493838e-06
+      },
+      "scope": "phenomenon",
+      "status": "NOT_DEMONSTRATED",
+      "threshold": {
+        "operator": "<=",
+        "unit": "dimensionless",
+        "value": 0.0
+      },
+      "title": "Ausencia de fase vapor en la entrada caliente",
+      "type": "reported_metric"
+    },
+    {
+      "blocking": false,
+      "evidence_paths": [
+        "validation_report.md"
+      ],
+      "evidence_source": "not_available",
+      "id": "validacion_calorimetrica_independiente",
+      "message": "output de metadata no disponible o ambiguo: desviacion_calorimetria_independiente_percent",
+      "required": true,
+      "result": null,
+      "scope": "phenomenon",
+      "status": "NOT_RUN",
+      "threshold": {
+        "operator": "<=",
+        "unit": "%",
+        "value": 0.01
+      },
+      "title": "Comparacion contra calorimetria independiente",
+      "type": "reported_metric"
+    },
+    {
+      "blocking": false,
+      "evidence_paths": [
+        "scripts/sensitivity_hx301.py",
+        "data/processed/hx301_sensitivity_v01.csv"
+      ],
+      "evidence_source": "reported_metric",
+      "id": "sensibilidad_u_caudal_frio",
+      "message": "criterio cumplido",
+      "required": true,
+      "result": {
+        "unit": "dimensionless",
+        "value": 12.0
+      },
+      "scope": "phenomenon",
+      "status": "PASS",
+      "threshold": {
+        "operator": ">=",
+        "unit": "dimensionless",
+        "value": 12.0
+      },
+      "title": "Sensibilidad reproducible de U y caudal frio",
+      "type": "reported_metric"
+    },
+    {
+      "blocking": false,
+      "evidence_paths": [
+        "scripts/crosscheck_nrtl_dechema.py",
+        "data/raw/literature/dechema_nrtl_meoh_h2o_v01.csv",
+        "data/processed/nrtl_activity_crosscheck_v01.csv"
+      ],
+      "evidence_source": "not_available",
+      "id": "comparacion_nrtl_dechema",
+      "message": "output de metadata no disponible o ambiguo: desviacion_maxima_coeficiente_actividad_percent",
+      "required": true,
+      "result": null,
+      "scope": "data_quality",
+      "status": "NOT_RUN",
+      "threshold": {
+        "operator": "<=",
+        "unit": "%",
+        "value": 0.5
+      },
+      "title": "Coeficientes de actividad NRTL frente a DECHEMA",
+      "type": "reported_metric"
+    },
+    {
+      "blocking": false,
+      "evidence_paths": [
+        "scripts/vle_comparison_dwsim_literature.py",
+        "data/processed/vle_meoh_h2o_comparison_v01.csv"
+      ],
+      "evidence_source": "not_available",
+      "id": "comparacion_vle_literatura",
+      "message": "output de metadata no disponible o ambiguo: desviacion_maxima_temperatura_vle_K",
+      "required": true,
+      "result": null,
+      "scope": "data_quality",
+      "status": "NOT_RUN",
+      "threshold": {
+        "operator": "<=",
+        "unit": "K",
+        "value": 0.01
+      },
+      "title": "Curva VLE DWSIM frente a datos experimentales",
+      "type": "reported_metric"
+    },
+    {
+      "blocking": false,
+      "evidence_paths": [
+        "scripts/vle_comparison_dwsim_literature.py",
+        "data/processed/vle_meoh_h2o_comparison_v01.csv"
+      ],
+      "evidence_source": "not_available",
+      "id": "comparacion_vle_composicion",
+      "message": "output de metadata no disponible o ambiguo: desviacion_maxima_composicion_vle_molfrac",
+      "required": true,
+      "result": null,
+      "scope": "data_quality",
+      "status": "NOT_RUN",
+      "threshold": {
+        "operator": "<=",
+        "unit": "dimensionless",
+        "value": 0.01
+      },
+      "title": "Composicion VLE DWSIM frente a datos experimentales",
+      "type": "reported_metric"
+    },
+    {
+      "blocking": false,
+      "evidence_paths": [
+        "scripts/parity_check_002.py",
+        "data/processed/case002_api_parity_v01.csv",
+        "data/processed/case002_api_parity_v01.meta.yaml"
+      ],
+      "evidence_source": "reported_metric",
+      "id": "paridad_final_caso002",
+      "message": "criterio no cumplido",
+      "required": true,
+      "result": {
+        "unit": "%",
+        "value": 0.11555459624896086
+      },
+      "scope": "data_quality",
+      "status": "FAIL",
+      "threshold": {
+        "operator": "<=",
+        "unit": "%",
+        "value": 0.05
+      },
+      "title": "Paridad final DWSIM API-dataset del Caso 002",
+      "type": "reported_metric"
+    }
+  ],
+  "datasets": [
+    "cases/004_control_contaminacion_cruzada_validacion_cruzada/data/process_results_v01.csv"
+  ],
+  "dwsim_version": "DWSIM version 9.0.5.0 (28-10-2025 10:42:38)",
+  "figures": [
+    "cases/004_control_contaminacion_cruzada_validacion_cruzada/assets/figures/fig_004_01_pfd_hx301_instrumentado.png",
+    "cases/004_control_contaminacion_cruzada_validacion_cruzada/assets/figures/fig_004_02_sensibilidad_u_q.png"
+  ],
+  "generated_at_utc": "2026-08-02T06:48:18Z",
+  "lifecycle_status": "review",
+  "overall_status": "CONDITIONAL",
+  "requested_source": "dwsim",
+  "schema_version": "1.0.0",
+  "scopes": {
+    "data_quality": "FAIL",
+    "numerical": "PASS",
+    "phenomenon": "CONDITIONAL"
+  },
+  "source_message": "simulación resuelta mediante DWSIM Automation API",
+  "validator": "Roberto Flores Núñez"
+}

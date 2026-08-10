@@ -1,7 +1,8 @@
 """QC tabular sobre datasets canónicos que tienen sidecar .meta.yaml.
 
 Verifica: schema del sidecar, columnas, tipos, rangos, nulos, checksum,
-unicidad de (case_id, dataset_id) e integridad sidecar-caso.
+unicidad de (case_id, dataset_id), integridad sidecar-caso y ausencia de CSV
+canónicos versionados con patrón de nombre *_vNN.csv sin sidecar.
 
 Uso:
     python scripts/validate_tables.py cases/
@@ -11,6 +12,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -20,6 +22,7 @@ from jsonschema import Draft202012Validator
 
 ROOT = Path(__file__).resolve().parents[1]
 SCHEMA = ROOT / "schemas" / "dataset.schema.json"
+VERSIONED_CSV = re.compile(r"_v[0-9]+\.csv$", re.IGNORECASE)
 
 
 def load_sidecar(csv_path: Path) -> dict | None:
@@ -39,6 +42,20 @@ def iter_sidecars(target: Path):
                 yield sidecar
         return
     yield from sorted(target.rglob("*.meta.yaml"))
+
+
+def iter_versioned_csvs(target: Path):
+    if target.is_file():
+        if target.suffix.lower() == ".csv" and VERSIONED_CSV.search(target.name):
+            yield target
+        elif target.name.endswith(".meta.yaml"):
+            csv = csv_for_sidecar(target)
+            if csv.is_file():
+                yield csv
+        return
+    yield from sorted(
+        csv for csv in target.rglob("*.csv") if VERSIONED_CSV.search(csv.name)
+    )
 
 
 def csv_for_sidecar(sidecar: Path) -> Path:
@@ -135,8 +152,18 @@ def main(target: Path) -> int:
     seen_dataset_keys: set[tuple[str, str]] = set()
     schema = json.loads(SCHEMA.read_text(encoding="utf-8"))
     validator = Draft202012Validator(schema)
-    sidecars = list(iter_sidecars(target.resolve()))
-    if not sidecars:
+    resolved_target = target.resolve()
+    sidecars = list(iter_sidecars(resolved_target))
+    orphan_csvs = [
+        csv
+        for csv in iter_versioned_csvs(resolved_target)
+        if not csv.with_suffix(".meta.yaml").is_file()
+    ]
+    for csv in orphan_csvs:
+        failures[_display_path(csv)] = [
+            f"falta sidecar para CSV: {csv.with_suffix('.meta.yaml').name}"
+        ]
+    if not sidecars and not orphan_csvs:
         print(f"[FAIL] 0 datasets con sidecar bajo {_display_path(target)}.")
         return 1
 

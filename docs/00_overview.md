@@ -12,6 +12,8 @@ ingeniería química industrial, donde cada caso documenta la cadena completa:
 - ETL científico y QA/QC de datos sintéticos/hipotéticos.
 - Metrología, propagación de incertidumbre.
 - Visualización analítica reproducible (Streamlit, Power BI, Plotly).
+- Curaduría reproducible de casos publicados por FOSSEE, preservando el
+  artefacto fuente y separándolo de toda reproducción o variante posterior.
 - Cuando aplique: cromatografía y espectrometría (JCAMP-DX, mzML).
 
 ## Exclusiones
@@ -25,17 +27,52 @@ ingeniería química industrial, donde cada caso documenta la cadena completa:
 - Comunidad académica y open-source.
 
 ## Estado actual
-v0.5.0 — Release del portafolio con motor declarativo de validación, integración
-opcional con DWSIM Automation API y dashboard científico Streamlit para los
-tres casos implementados. La interfaz utiliza flowsheets, ecuaciones y gráficos
-específicos para explicar los fenómenos desde los datos versionados. La lectura
-sigue `pregunta → mecanismo → evidencia → interpretación → límites`; los
-veredictos, criterios y datasets quedan disponibles como respaldo de rigor y
-trazabilidad.
 
-La propuesta del Caso 004 extenderá HX-301 mediante propagación de
-incertidumbre GUM/Monte Carlo; permanece fuera de `cases/` hasta contar con un
-presupuesto trazable e implementación reproducible.
+v0.6.0 organiza el repositorio en dos líneas de trabajo conectadas, pero con
+evidencia y ciclos de vida independientes:
+
+1. **Casos PTR (`cases/`)**: el alcance de desarrollo de los casos 001–004 se
+   cierra para este release. Cierre de alcance no significa que todos estén
+   validados: 001 conserva `validated/PASS`; 002 permanece `review/FAIL` por la
+   discrepancia energética API↔dataset; 003 y 004 permanecen
+   `review/CONDITIONAL` por las limitaciones que documentan sus informes.
+2. **Casos de literatura (`Literature_cases/`)**: comienza una línea de
+   curaduría y reproducción de casos FOSSEE con el Caso 102, *Methanol Water
+   Distillation*. Su incorporación inicial verifica identidad, integridad,
+   procedencia y licencia del material fuente; no equivale a reconvergencia ni
+   a validación científica con DWSIM actual.
+
+El corpus documental de exploración se mantiene únicamente en
+`references/Literature_cases_references/`, ruta excluida por `.gitignore`. El
+repositorio no publica ese corpus en bloque: sólo promueve a
+`Literature_cases/` los casos seleccionados que recorren el flujo de trabajo.
+En cada promoción, los originales FOSSEE se conservan sin modificación y se
+acompañan con hashes SHA-256, manifiesto, licencia y procedencia.
+
+La siguiente etapa del Caso 102 depende de archivos que aportará el usuario:
+una reproducción en DWSIM 9.0.5 y, posteriormente, variantes termodinámicas
+separadas —por ejemplo NRTL— cuando correspondan. Esas variantes nunca
+sustituirán el archivo FOSSEE original ni heredarán un estado de validación sin
+evidencia propia.
+
+El dashboard científico de v0.6.0 explica todavía los casos PTR 001–004. El
+Caso 102 se integrará a la interfaz sólo después de disponer de resultados
+propios, metadatos y figuras reproducibles; por ahora su evidencia se consulta
+directamente en `Literature_cases/`.
+
+El Caso 004 adopta `U = 1000 W/(m²·K)`, `A = 13 m²` y una presión del lado
+limpio 50 kPa mayor que la del contaminado. El cierre térmico demuestra
+coherencia interna del estado nominal, mientras el margen sólo demuestra el
+signo estático impuesto. El cambio de fase advertido por DWSIM, las propiedades
+calorimétricas, la validación externa y la seguridad conservan estados y
+limitaciones separados. La paridad del Caso 002 fue reejecutada: el estado
+termodinámico reproduce el dataset, pero la energía de `MSTR-204` falla el
+umbral de 0.05 %, por lo que no se promueven los casos dependientes.
+
+La propagación de incertidumbre GUM/Monte Carlo sobre HX-301 permanece como
+trabajo futuro. No se publicarán distribuciones, intervalos o probabilidades
+sin presupuesto trazable, correlaciones, implementación reproducible y una
+regla de decisión externa cuando se pretenda evaluar conformidad hidráulica.
 
 El Caso 003 extiende la secuencia del Caso 002: reutiliza el condensado líquido
 caliente con trazas de metanol como fuente térmica para precalentar agua limpia
@@ -51,8 +88,8 @@ barrera mecánica apropiada.
 
 El portafolio no representa una planta Kraft integrada. El Caso 001 modela un
 servicio auxiliar de agua previo al lavado de pulpa y es independiente de los
-otros casos. Los casos 002 y 003 sí forman una secuencia conceptual: expansión
-y separación flash de un condensado caliente, seguida por recuperación
-indirecta de calor desde la fase líquida residual para precalentar agua limpia.
-Todas las condiciones son sintéticas o simuladas y no se atribuyen a una
-instalación industrial específica.
+otros casos. Los casos 002, 003 y 004 forman una secuencia conceptual:
+expansión y separación flash de un condensado caliente, recuperación indirecta
+de calor y revisión del escenario HX-301 con UA y orden nominal de presiones
+corregidos. Todas las condiciones son sintéticas o simuladas y no se atribuyen
+a una instalación industrial específica.

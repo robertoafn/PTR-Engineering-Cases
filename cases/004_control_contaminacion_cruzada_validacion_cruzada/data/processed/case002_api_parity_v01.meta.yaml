@@ -1,0 +1,27 @@
+dataset_id: case002_api_parity_v01
+case_id: 004_control_contaminacion_cruzada_validacion_cruzada
+title: Paridad DWSIM API frente al dataset publicado del Caso 002
+description: >-
+  Resumen por corriente de la reapertura del Caso 002 mediante DWSIM 9.0.5
+  Automation API. El estado termodinámico cumple la tolerancia de 0.05 %, pero
+  MSTR-204 falla en energy_flow_kW con una diferencia de 0.115554596 %.
+  El detalle heterogéneo por magnitud se conserva en la salida JSON del script.
+source_type: simulated
+license: CC0-1.0
+author: Roberto Flores Núñez
+variables:
+  - {symbol: object_id, column: object_id, name: Identificador de la corriente, unit: dimensionless, type: string}
+  - {symbol: d_state_max, column: max_state_difference_percent, name: Máxima diferencia relativa de estado, unit: "%", type: float}
+  - {symbol: d_energy_max, column: max_energy_difference_percent, name: Máxima diferencia relativa de energía, unit: "%", type: float}
+  - {symbol: eps_state, column: state_tolerance_percent, name: Tolerancia relativa de estado, unit: "%", type: float}
+  - {symbol: eps_energy, column: energy_tolerance_percent, name: Tolerancia relativa de energía, unit: "%", type: float}
+  - {symbol: state_status, column: state_status, name: Estado de la paridad termodinámica, unit: dimensionless, type: string}
+  - {symbol: energy_status, column: energy_status, name: Estado de la paridad energética, unit: dimensionless, type: string}
+  - {symbol: failed_metrics, column: failed_metrics, name: Magnitudes que exceden tolerancia, unit: dimensionless, type: string, nullable: true}
+  - {symbol: overall_status, column: overall_status, name: Estado combinado por corriente, unit: dimensionless, type: string}
+primary_key:
+  - object_id
+created_at: "2026-08-02T04:45:00Z"
+version: 0.1.0
+checksum_sha256: e8dea1de56f7f0a59273d3dd13d1a6f906afc67556e76efc68c45108dee8bf16
+provenance_ref: ../../provenance.json

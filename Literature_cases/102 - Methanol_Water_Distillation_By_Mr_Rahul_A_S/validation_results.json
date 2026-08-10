@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.0.0",
+  "case_id": "102",
+  "generated_at": "2026-08-09",
+  "overall_status": "SOURCE_BASELINE_VERIFIED",
+  "criteria": [
+    {
+      "id": "source_manifest_integrity",
+      "status": "PASS",
+      "evidence": "SHA-256 y tamaños verificados para Abstracts.pdf y MethanolDistillation.dwxmz."
+    },
+    {
+      "id": "local_corpus_parity",
+      "status": "PASS",
+      "evidence": "Los dos archivos publicados son idénticos byte a byte al Caso 102 del corpus local."
+    },
+    {
+      "id": "source_version_consistency",
+      "status": "WARNING",
+      "evidence": "Ficha oficial: DWSIM v6.5 Classic UI; XML: build 5.5.6886.34470."
+    },
+    {
+      "id": "dwsim_9_0_5_raoult_parity",
+      "status": "NOT_RUN",
+      "evidence": "Pendiente de la versión creada manualmente por el usuario."
+    },
+    {
+      "id": "thermodynamic_model_comparison",
+      "status": "NOT_RUN",
+      "evidence": "NRTL/UNIQUAC requieren variante separada y contraste VLE trazable."
+    }
+  ]
+}

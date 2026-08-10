@@ -1,0 +1,24 @@
+schema_version: 1.0.0
+case_id: "102"
+scope: source_ingestion
+criteria:
+  - id: source_manifest_integrity
+    description: Los archivos publicados coinciden en tamaño y SHA-256 con source_manifest.json.
+    required: true
+    blocking: true
+  - id: local_corpus_parity
+    description: Comparación byte a byte con el caso equivalente del corpus local ignorado.
+    required: false
+    blocking: false
+  - id: source_version_consistency
+    description: Concordancia entre la versión declarada por FOSSEE y el build embebido.
+    required: true
+    blocking: false
+  - id: dwsim_9_0_5_raoult_parity
+    description: Reapertura y reconvergencia en DWSIM 9.0.5 conservando Raoult antes de cambiar el modelo.
+    required: true
+    blocking: false
+  - id: thermodynamic_model_comparison
+    description: Comparación posterior de Raoult con NRTL u otro modelo justificado mediante evidencia VLE.
+    required: true
+    blocking: false
