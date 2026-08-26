@@ -7,6 +7,19 @@ y este proyecto adhiere a [Semantic Versioning 2.0.0](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+- ADR 0001 con la política de versiones DWSIM: fuente histórica, reproducción
+  de referencia, migración exploratoria y objetivo estable reproducible.
+- Contrato y JSON Schema `SimulationRun` v1.0.0 con fixture y pruebas para
+  registrar software, modelo, parámetros, ejecución, artefactos, evidencia y
+  procedencia.
+- Primer `SimulationRun` canónico de inspección para el baseline FOSSEE del
+  Literature Case 102, sin copiar ni modificar el archivo DWSIM original.
+
+### Changed
+- Overview, gobernanza y modelo de trazabilidad incorporan la primera capa de
+  transición hacia PTR Core sin promover todavía las simulaciones locales.
+
 ## [0.6.0] - 2026-08-09
 
 ### Added

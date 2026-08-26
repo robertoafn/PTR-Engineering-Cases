@@ -33,6 +33,11 @@ Ambos archivos son copias byte a byte del Caso 102 en el corpus local ignorado.
 No deben abrirse y guardarse sobre sí mismos. Una nueva ejecución se inicia
 siempre desde una copia ubicada en `variants/`.
 
+La inspección documental del flowsheet está registrada como un
+[`SimulationRun`](./runs/run_102_source_raoult_5_5_saved_state/simulation_run.json).
+Ese registro conserva versión, modelo, hash y procedencia, pero no afirma que
+el archivo haya sido recalculado ni que esté validado contra datos externos.
+
 ## Evidencia de versión
 
 La ficha oficial informa **DWSIM v6.5 (Classic UI)**. El XML dentro del
@@ -47,12 +52,16 @@ paridad, no como autoridad para el VLE real de una mezcla alcohol-agua.
 ## Secuencia de trabajo
 
 1. verificar hashes del baseline;
-2. crear manualmente una copia en DWSIM 9.0.5 conservando Raoult;
-3. comparar topología, especificaciones, convergencia, balances, purezas,
+2. conservar la reproducción DWSIM 9.0.5 como compromiso histórico pendiente;
+3. ejecutar una copia limpia en la versión estable fijada por la
+   [ADR 0001](../../docs/adr/0001-dwsim-version-policy.md), conservando Raoult;
+4. comparar topología, especificaciones, convergencia, balances, purezas,
    temperaturas, perfiles y deberes térmicos;
-4. crear una segunda variante separada con NRTL u otro modelo justificado;
-5. contrastar VLE y resultados con literatura o datos experimentales;
-6. explicar las diferencias físicas sin modificar el baseline.
+5. crear variantes separadas con NRTL, UNIQUAC y Modified UNIFAC Dortmund,
+   con parameter sets trazables y el modelo de entalpía controlado;
+6. contrastar primero el VLE `T-x-y` con datos experimentales a la misma
+   presión y después evaluar la columna completa;
+7. explicar las diferencias físicas sin modificar el baseline.
 
 La primera variante pendiente debe ubicarse bajo
 `variants/dwsim_9_0_5/parity_raoult/`. Las variantes NRTL/UNIQUAC sólo se

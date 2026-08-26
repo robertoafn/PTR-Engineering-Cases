@@ -7,6 +7,15 @@
 | Metadata del caso | `cases/<NNN>/metadata.yaml` | `schemas/case_metadata.schema.json` |
 | Provenance | `cases/<NNN>/provenance.json` | `schemas/provenance.schema.json` |
 | Sidecar de dataset | `<dataset>.meta.yaml` | `schemas/dataset.schema.json` |
+| Ejecución de simulación | `<case>/runs/<run_id>/simulation_run.json` | `schemas/simulation_run.schema.json` |
+
+## `SimulationRun`
+
+Cada registro relaciona una actividad de simulación con sus agentes,
+configuración termodinámica y artefactos inmutables. Distingue una inspección
+de estado guardado de un recálculo y mantiene separados convergencia, paridad
+y validación científica. Contrato completo:
+[docs/11_simulation_run_contract.md](11_simulation_run_contract.md).
 
 ## `provenance.json` (W3C PROV-lite)
 
