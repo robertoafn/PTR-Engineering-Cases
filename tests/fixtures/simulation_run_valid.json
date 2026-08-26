@@ -1,0 +1,82 @@
+{
+  "schema_version": "1.0.0",
+  "run_id": "run:999_raoult_10_2_3_001",
+  "case_id": "999_example",
+  "scenario_id": "scenario:base",
+  "run_type": "simulation",
+  "version_role": "target_reproducible",
+  "status": "completed",
+  "recorded_at_utc": "2026-08-26T12:00:00Z",
+  "software": {
+    "name": "DWSIM",
+    "version": "10.2.3",
+    "build_version": "10.2.3.0",
+    "release_channel": "stable",
+    "edition": "Open-Source Core"
+  },
+  "model": {
+    "model_id": "model:999_raoult",
+    "thermodynamic_model": "Raoult's Law",
+    "enthalpy_model": "Ideal",
+    "parameter_set": {
+      "parameter_set_id": "params:raoult_not_applicable",
+      "provenance_status": "not_applicable",
+      "auto_estimated": false,
+      "source_ids": []
+    }
+  },
+  "artifacts": [
+    {
+      "artifact_id": "artifact:999_input",
+      "path": "Literature_cases/999_example/runs/run_999_raoult_10_2_3_001/input.dwxmz",
+      "role": "simulation_input",
+      "sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+      "immutable": true,
+      "media_type": "application/zip"
+    },
+    {
+      "artifact_id": "artifact:999_output",
+      "path": "Literature_cases/999_example/runs/run_999_raoult_10_2_3_001/output.dwxmz",
+      "role": "simulation_output",
+      "sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+      "immutable": true,
+      "media_type": "application/zip"
+    },
+    {
+      "artifact_id": "artifact:999_results",
+      "path": "Literature_cases/999_example/runs/run_999_raoult_10_2_3_001/results.csv",
+      "role": "result_dataset",
+      "sha256": "3333333333333333333333333333333333333333333333333333333333333333",
+      "immutable": true,
+      "media_type": "text/csv"
+    }
+  ],
+  "execution": {
+    "mode": "manual_gui",
+    "recalculated": true,
+    "clean_start": true,
+    "convergence_status": "verified_converged",
+    "started_at_utc": "2026-08-26T11:45:00Z",
+    "ended_at_utc": "2026-08-26T11:50:00Z",
+    "operating_system": "Windows 11",
+    "solver": "Wang-Henke"
+  },
+  "evidence": {
+    "evidence_mode": "simulated",
+    "data_origin": "hypothetical",
+    "source_ids": ["source:example_case_spec"],
+    "limitations": ["Fixture sintético; no representa un resultado publicado."]
+  },
+  "provenance": {
+    "activity_id": "activity:simulate_999_001",
+    "agent_ids": ["agent:example_operator", "agent:dwsim_10_2_3"],
+    "used_artifact_ids": ["artifact:999_input"],
+    "generated_artifact_ids": [
+      "artifact:999_output",
+      "artifact:999_results"
+    ],
+    "derived_from_run_ids": []
+  },
+  "validation_result_ids": [],
+  "notes": "Ejemplo exclusivamente estructural para las pruebas del schema."
+}

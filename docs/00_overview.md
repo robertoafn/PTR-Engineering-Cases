@@ -84,6 +84,20 @@ diferencial positivo definido por análisis de riesgos, vigilarlo de forma
 continua y complementar la presión con detección de fugas, aislamiento o una
 barrera mecánica apropiada.
 
+## Transición PTR Core
+
+La evolución hacia PTR Industrial Decision Core se realizará por capas, sin
+reescribir ni reclasificar retrospectivamente la evidencia existente. El
+primer bloque introduce la
+[política de versiones DWSIM](adr/0001-dwsim-version-policy.md) y el
+[contrato `SimulationRun`](11_simulation_run_contract.md).
+
+Este bloque separa el estado guardado de una ejecución real, fija el rol de
+cada versión del simulador y crea la frontera gobernada entre los archivos
+DWSIM y los futuros datos canónicos. Todavía no promueve las cuatro
+simulaciones exploratorias locales ni habilita conclusiones nuevas para el
+Caso 102.
+
 ## Relación con el proceso productivo
 
 El portafolio no representa una planta Kraft integrada. El Caso 001 modela un

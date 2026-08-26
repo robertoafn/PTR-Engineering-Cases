@@ -1,0 +1,67 @@
+{
+  "schema_version": "1.0.0",
+  "run_id": "run:102_source_raoult_5_5_saved_state",
+  "case_id": "102",
+  "scenario_id": "scenario:case_102_base",
+  "run_type": "inspection",
+  "version_role": "source_baseline",
+  "status": "completed",
+  "recorded_at_utc": "2026-08-26T17:48:07Z",
+  "software": {
+    "name": "DWSIM",
+    "version": "5.5.6886.34470",
+    "build_version": "5.5.6886.34470",
+    "release_channel": "unknown",
+    "edition": "Classic UI"
+  },
+  "model": {
+    "model_id": "model:102_source_raoult",
+    "thermodynamic_model": "Raoult's Law",
+    "enthalpy_model": "Ideal",
+    "parameter_set": {
+      "parameter_set_id": "params:raoult_not_applicable",
+      "provenance_status": "not_applicable",
+      "auto_estimated": false,
+      "source_ids": []
+    }
+  },
+  "artifacts": [
+    {
+      "artifact_id": "artifact:102_source_5_5_dwxmz",
+      "path": "Literature_cases/102 - Methanol_Water_Distillation_By_Mr_Rahul_A_S/MethanolDistillation.dwxmz",
+      "role": "source_simulation",
+      "sha256": "b262eb9b3d00d641189e913620cf4ef27b6651188be9a006293f5e947eee5498",
+      "immutable": true,
+      "media_type": "application/zip"
+    }
+  ],
+  "execution": {
+    "mode": "saved_state_inspection",
+    "recalculated": false,
+    "clean_start": false,
+    "convergence_status": "saved_state_only",
+    "operating_system": "Microsoft Windows 10 Home Single Language"
+  },
+  "evidence": {
+    "evidence_mode": "documentary",
+    "data_origin": "literature",
+    "source_ids": [
+      "source:fossee_record_256",
+      "source:embedded_xml"
+    ],
+    "limitations": [
+      "No se abrió ni recalculó el flowsheet durante esta inspección.",
+      "El modo de entalpía Ideal se infiere del property package histórico y no de un campo explícito de DWSIM 5.5.",
+      "La ficha FOSSEE declara DWSIM 6.5 Classic, pero el XML embebido declara el build 5.5.6886.34470."
+    ]
+  },
+  "provenance": {
+    "activity_id": "activity:inspect_102_source_20260826",
+    "agent_ids": ["agent:roberto_flores_nunez"],
+    "used_artifact_ids": ["artifact:102_source_5_5_dwxmz"],
+    "generated_artifact_ids": [],
+    "derived_from_run_ids": []
+  },
+  "validation_result_ids": [],
+  "notes": "Inspección documental autorizada por el mantenedor; no es una reejecución ni una validación independiente."
+}

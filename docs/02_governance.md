@@ -66,3 +66,20 @@ Modelo W3C PROV-lite implementado en `provenance.json` con `agents`,
   parámetros, autoría, fecha, relación con la fuente y hashes propios.
 - La verificación de integridad, la convergencia, la paridad numérica y la
   validación científica son estados distintos; ninguno se infiere de otro.
+
+## Ejecuciones de simulación
+
+Toda inspección o ejecución que se pretenda usar como evidencia se registra
+con el [contrato `SimulationRun`](11_simulation_run_contract.md) y se valida
+contra [`schemas/simulation_run.schema.json`](../schemas/simulation_run.schema.json).
+La [ADR 0001](adr/0001-dwsim-version-policy.md) fija los roles permitidos
+para las versiones DWSIM del Caso 102.
+
+- Un estado guardado se declara como inspección sin recálculo.
+- Un mensaje de éxito del simulador no equivale a validación científica.
+- Entrada, salida y resultados se conservan como artefactos distintos cuando
+  una corrida se promueve como reproducible.
+- Las rutas canónicas son relativas al repositorio; nunca apuntan al espacio
+  local externo de investigación.
+- El dashboard consume datasets gobernados y sus IDs de procedencia, no
+  archivos DWSIM ni convenciones de nombres.
