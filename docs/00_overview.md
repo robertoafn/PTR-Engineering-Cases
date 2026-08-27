@@ -1,109 +1,131 @@
 # 00 — Overview
 
 ## Propósito
-PTR Engineering Cases es un portafolio público de **casos reproducibles** de
-ingeniería química industrial, donde cada caso documenta la cadena completa:
 
-> fenómeno → fundamento científico → modelo → simulación/procesamiento →
-> resultados → validación/QC → trazabilidad → conclusión técnica
+**Periodic Table Research — From Elements to Industrial Decisions** construye
+un ecosistema interoperable de casos científicos e industriales de ingeniería
+química. El repositorio conserva la reproducibilidad como unidad mínima de
+trabajo y amplía su cadena conceptual:
 
-## Alcance
-- Simulación de procesos (DWSIM, balances, equilibrios).
-- ETL científico y QA/QC de datos sintéticos/hipotéticos.
-- Metrología, propagación de incertidumbre.
-- Visualización analítica reproducible (Streamlit, Power BI, Plotly).
-- Curaduría reproducible de casos publicados por FOSSEE, preservando el
-  artefacto fuente y separándolo de toda reproducción o variante posterior.
-- Cuando aplique: cromatografía y espectrometría (JCAMP-DX, mzML).
+> elementos → sustancias → propiedades → fenómenos → modelos → simulación →
+> evidencia experimental → proceso → energía → ambiente → economía →
+> supply chain → decisión industrial
 
-## Exclusiones
-- Datos reales sin licencia compatible.
-- Reproducción literal de material con copyright.
-- Casos no reproducibles o sin trazabilidad metrológica.
-
-## Público objetivo
-- Reclutadores técnicos de industria química, energía, alimentos, farma.
-- Ingenieros de procesos, datos científicos, QA/QC y metrólogos.
-- Comunidad académica y open-source.
+El valor de un caso no depende de cuántos archivos contiene, sino de cuánto
+conocimiento verificable deja disponible para otros casos.
 
 ## Estado actual
 
-v0.6.0 organiza el repositorio en dos líneas de trabajo conectadas, pero con
-evidencia y ciclos de vida independientes:
+La fundación técnica está implementada:
 
-1. **Casos PTR (`cases/`)**: el alcance de desarrollo de los casos 001–004 se
-   cierra para este release. Cierre de alcance no significa que todos estén
-   validados: 001 conserva `validated/PASS`; 002 permanece `review/FAIL` por la
-   discrepancia energética API↔dataset; 003 y 004 permanecen
-   `review/CONDITIONAL` por las limitaciones que documentan sus informes.
-2. **Casos de literatura (`Literature_cases/`)**: comienza una línea de
-   curaduría y reproducción de casos FOSSEE con el Caso 102, *Methanol Water
-   Distillation*. Su incorporación inicial verifica identidad, integridad,
-   procedencia y licencia del material fuente; no equivale a reconvergencia ni
-   a validación científica con DWSIM actual.
+- políticas FAIR, SI, IUPAC, QC, metrología y versionado;
+- schemas para casos, datasets, procedencia, validación y ejecuciones;
+- validadores, pruebas y CI;
+- cuatro casos PTR con estados conservados según su evidencia;
+- una línea de Literature Cases con fuente inmutable y promoción selectiva;
+- dashboard científico Streamlit;
+- contrato `SimulationRun` y política de versiones DWSIM.
 
-El corpus documental de exploración se mantiene únicamente en
-`references/Literature_cases_references/`, ruta excluida por `.gitignore`. El
-repositorio no publica ese corpus en bloque: sólo promueve a
-`Literature_cases/` los casos seleccionados que recorren el flujo de trabajo.
-En cada promoción, los originales FOSSEE se conservan sin modificación y se
-acompañan con hashes SHA-256, manifiesto, licencia y procedencia.
+El repositorio se encuentra en transición hacia datos y entidades
+interoperables. Esta transición no significa que todas sus capas objetivo estén
+disponibles:
 
-La siguiente etapa del Caso 102 depende de archivos que aportará el usuario:
-una reproducción en DWSIM 9.0.5 y, posteriormente, variantes termodinámicas
-separadas —por ejemplo NRTL— cuando correspondan. Esas variantes nunca
-sustituirán el archivo FOSSEE original ni heredarán un estado de validación sin
-evidencia propia.
+| Capacidad | Estado |
+|---|---|
+| DWSIM, Python, DWSIM API, schemas, QC, provenance y Streamlit | Implementada |
+| Caso 102: fuente FOSSEE y registro de inspección | Implementada |
+| Caso 102: réplicas 10.2.0 y VLE de Álvarez et al. | Contexto local en revisión |
+| Dataset experimental canónico y recálculos estables del Caso 102 | Pendiente |
+| SQL analítico, modelo estrella y Power BI | Planificado |
+| JSON-LD, Knowledge Graph y PTR Industrial Decision Core | Planificado |
 
-El dashboard científico de v0.6.0 explica todavía los casos PTR 001–004. El
-Caso 102 se integrará a la interfaz sólo después de disponer de resultados
-propios, metadatos y figuras reproducibles; por ahora su evidencia se consulta
-directamente en `Literature_cases/`.
+La dirección normativa y sus gates están en
+[12 — Estado y dirección del proyecto](12_project_direction.md).
 
-El Caso 004 adopta `U = 1000 W/(m²·K)`, `A = 13 m²` y una presión del lado
-limpio 50 kPa mayor que la del contaminado. El cierre térmico demuestra
-coherencia interna del estado nominal, mientras el margen sólo demuestra el
-signo estático impuesto. El cambio de fase advertido por DWSIM, las propiedades
-calorimétricas, la validación externa y la seguridad conservan estados y
-limitaciones separados. La paridad del Caso 002 fue reejecutada: el estado
-termodinámico reproduce el dataset, pero la energía de `MSTR-204` falla el
-umbral de 0.05 %, por lo que no se promueven los casos dependientes.
+## Líneas de publicación
 
-La propagación de incertidumbre GUM/Monte Carlo sobre HX-301 permanece como
-trabajo futuro. No se publicarán distribuciones, intervalos o probabilidades
-sin presupuesto trazable, correlaciones, implementación reproducible y una
-regla de decisión externa cuando se pretenda evaluar conformidad hidráulica.
+1. **Casos PTR (`cases/`)**: problemas desarrollados dentro del proyecto con
+   modelo, evidencia, validación y procedencia propios. El alcance de 001–004
+   está cerrado; sus estados no se homogeneizan:
 
-El Caso 003 extiende la secuencia del Caso 002: reutiliza el condensado líquido
-caliente con trazas de metanol como fuente térmica para precalentar agua limpia
-en el intercambiador HX-301. Además de los balances de materia y energía,
-evalúa la relación `P_limpio - P_contaminado`. El escenario base obtiene
-`0 Pa`, condición límite que no aporta margen ni demuestra seguridad
-operacional. El caso documenta que una aplicación real debe mantener un
-diferencial positivo definido por análisis de riesgos, vigilarlo de forma
-continua y complementar la presión con detección de fugas, aislamiento o una
-barrera mecánica apropiada.
+   - 001: `validated/PASS`;
+   - 002: `review/FAIL`;
+   - 003 y 004: `review/CONDITIONAL`.
 
-## Transición PTR Core
+2. **Casos de literatura (`Literature_cases/`)**: fuentes externas
+   seleccionadas y sus derivados auditables. La incorporación de una fuente
+   verifica identidad, licencia, integridad y procedencia; no implica
+   reconvergencia ni validación científica.
 
-La evolución hacia PTR Industrial Decision Core se realizará por capas, sin
-reescribir ni reclasificar retrospectivamente la evidencia existente. El
-primer bloque introduce la
-[política de versiones DWSIM](adr/0001-dwsim-version-policy.md) y el
-[contrato `SimulationRun`](11_simulation_run_contract.md).
+El espacio externo del mantenedor es `C:\PTR-DWSIM-WORK`. No forma parte del
+repositorio ni es una dependencia de CI. Sólo se promueven artefactos aptos,
+seleccionados y gobernados. La ruta interna
+`references/Literature_cases_references/` se conserva ignorada únicamente por
+compatibilidad con el flujo histórico.
 
-Este bloque separa el estado guardado de una ejecución real, fija el rol de
-cada versión del simulador y crea la frontera gobernada entre los archivos
-DWSIM y los futuros datos canónicos. Todavía no promueve las cuatro
-simulaciones exploratorias locales ni habilita conclusiones nuevas para el
-Caso 102.
+## Arquitectura por capas
 
-## Relación con el proceso productivo
+| Capa | Responsabilidad | Autoridad |
+|---|---|---|
+| Contexto de investigación | Fuentes, simulaciones exploratorias y notas locales | No canónica; fuera de Git |
+| Fuente promovida | Original identificado, licenciable e inmutable | Hash, manifiesto y provenance |
+| Ejecución | Configuración y actividad DWSIM explícita | `SimulationRun` |
+| Dato canónico | Observaciones y resultados normalizados | Dataset versionado + sidecar |
+| Validación | Reglas, métricas, dominio y veredicto | `validation_spec` + `validation_results` |
+| Analítica | Figuras, Streamlit y futuras vistas SQL/Power BI | Derivada; nunca reemplaza al dato canónico |
+| Semántica | IDs compartidos y futuras vistas JSON-LD/Knowledge Graph | Derivada de contratos versionados |
+| Decisión | Alternativas, restricciones, energía, ambiente y economía | Sólo después de evidencia y validación suficientes |
 
-El portafolio no representa una planta Kraft integrada. El Caso 001 modela un
-servicio auxiliar de agua previo al lavado de pulpa y es independiente de los
-otros casos. Los casos 002, 003 y 004 forman una secuencia conceptual:
-expansión y separación flash de un condensado caliente, recuperación indirecta
-de calor y revisión del escenario HX-301 con UA y orden nominal de presiones
-corregidos. Todas las condiciones son sintéticas o simuladas y no se atribuyen
-a una instalación industrial específica.
+Las capas superiores pueden recomputarse desde las inferiores. Una vista no
+debe introducir hechos que no existan en la evidencia gobernada.
+
+## Evidencia
+
+`SimulationRun` separa dos ejes:
+
+- modo de evidencia: experimental, calculated, simulated, estimated o
+  documentary;
+- origen del dato: empirical, literature, synthetic o hypothetical.
+
+El schema de datasets conserva temporalmente el campo legado `source_type`.
+Hasta que exista una migración compatible, no debe afirmarse que todos los
+datasets implementan ya ambos ejes.
+
+Integridad, convergencia, paridad, validación científica, aptitud industrial y
+decisión son estados diferentes. Cada afirmación debe identificar la evidencia
+que la respalda y las limitaciones que todavía impiden promoverla.
+
+## Caso piloto 102
+
+El Caso 102, *Methanol–Water Distillation*, es el primer piloto de extremo a
+extremo. El baseline FOSSEE y su inspección están gobernados. Las cuatro
+réplicas 10.2.0 del autor y la transcripción preliminar de VLE permanecen fuera
+de Git como contexto en revisión.
+
+El siguiente bloque científico es:
+
+1. resolver derechos, unidades y segunda revisión del dataset experimental;
+2. recalcular desde inicio limpio en la versión estable fijada por ADR 0001;
+3. comparar Raoult, NRTL, UNIQUAC y Modified UNIFAC Dortmund mediante un
+   benchmark `T-x-y` a presión común;
+4. comparar después la columna completa;
+5. extender el caso hacia energía, CAPEX, GHG y decisión sólo con la base
+   científica ya validada.
+
+DWSIM 9.0.5 conserva el rol histórico `reference_reproduction`, pero no
+bloquea la línea `target_reproducible`.
+
+## Exclusiones y límites
+
+- No se publican datos reales o fuentes de terceros sin derechos compatibles.
+- No se presenta material local no revisado como dataset canónico.
+- No se deduce convergencia desde un estado guardado.
+- No se presenta una réplica del autor como reproducción independiente.
+- No se describe una tecnología planificada como capacidad implementada.
+- Los casos PTR no representan una planta industrial integrada ni condiciones
+  operacionales de una instalación específica.
+
+Las reglas operativas para agentes están en [`AGENTS.md`](../AGENTS.md); la
+metodología y gobernanza continúan en
+[`docs/01_methodology.md`](01_methodology.md) y
+[`docs/02_governance.md`](02_governance.md).

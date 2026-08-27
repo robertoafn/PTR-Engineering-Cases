@@ -2,7 +2,8 @@
 
 Gracias por interesarse en este repositorio. Todo aporte debe respetar los
 principios FAIR, las convenciones SI y la trazabilidad documental establecidas
-en `docs/`.
+en `docs/`. El repositorio se trata como un sistema de ingeniería gobernado;
+los agentes de código deben cumplir además [`AGENTS.md`](./AGENTS.md).
 
 ## Flujo de trabajo
 
@@ -28,9 +29,11 @@ en `docs/`.
   `review/CONDITIONAL`.
 - `Literature_cases/` contiene únicamente casos externos seleccionados que ya
   recorrieron el flujo de promoción. Comienza con el Caso FOSSEE 102.
-- `references/Literature_cases_references/` es el corpus local de exploración,
-  está ignorado por Git y no se publica en bloque. Nunca usar `git add -f`
-  sobre esa ruta.
+- `C:\PTR-DWSIM-WORK` es el workspace externo del mantenedor para fuentes,
+  investigación y simulaciones exploratorias. Siempre permanece fuera de Git.
+- `references/Literature_cases_references/` se conserva ignorado por
+  compatibilidad con el corpus histórico; no es la ubicación principal para
+  trabajo nuevo. Nunca usar `git add -f` para eludir esta frontera.
 
 ### Promover un caso de literatura
 
@@ -41,12 +44,13 @@ en `docs/`.
    `source_manifest.json`, `checksums.sha256`, `metadata.yaml` y
    `provenance.json`.
 4. Ejecutar `python scripts/validate_literature_case.py <ruta-del-caso>`; cuando
-   esté disponible el corpus local, añadir `--corpus-case <ruta-fuente>` para
+   esté disponible la fuente local, añadir `--corpus-case <ruta-fuente>` para
    comprobar igualdad binaria.
-5. Mantener toda reproducción en una carpeta de variante. El archivo DWSIM
-   9.0.5 que aporte el usuario y las alternativas posteriores de paquete
-   termodinámico deben conservar resultados, supuestos y hashes propios; nunca
-   sobrescriben el original FOSSEE.
+5. Mantener toda reproducción en una carpeta de variante y registrarla como
+   `SimulationRun`. DWSIM 9.0.5 conserva el rol histórico de reproducción de
+   referencia; el objetivo reproducible usa la versión estable fijada por la
+   ADR vigente. Todas las variantes conservan resultados, parámetros,
+   supuestos y hashes propios y nunca sobrescriben el original.
 6. No declarar convergencia, paridad o validación científica a partir de una
    comprobación de integridad documental.
 
@@ -70,6 +74,7 @@ Para una PR de `Literature_cases/`, se añaden estos requisitos:
 - [ ] Fuente, versión, autoría, licencia y discrepancias documentadas.
 - [ ] Variantes separadas del original y con procedencia propia.
 - [ ] El estado diferencia integridad, convergencia, paridad y validación.
+- [ ] La réplica del autor y una reproducción independiente no se confunden.
 - [ ] `scripts/validate_literature_case.py` retorna código 0 para el caso.
 
 ## Reglas Git
@@ -81,12 +86,16 @@ Para una PR de `Literature_cases/`, se añaden estos requisitos:
 ## Política de datos
 
 - No incluir datos reales sin licencia compatible.
-- Etiquetar todo dataset como `synthetic`, `hypothetical`, `literature` o
-  `simulated` en `metadata.yaml`.
+- Etiquetar todo dataset con el `source_type` legado exigido por su schema y
+  describir sin ambigüedad su origen. Para `SimulationRun`, mantener separados
+  `evidence_mode` y `data_origin`; no atribuir todavía esos dos ejes a todos los
+  sidecars de datasets.
 - No reproducir literalmente material protegido (libros, papers); solo citar.
 - No asumir que la licencia general del repositorio cubre artefactos de
   terceros; cada original promovido conserva la licencia declarada por su
   fuente.
+- No promover recursos desde `C:\PTR-DWSIM-WORK` sin revisión explícita de
+  derechos, identidad, procedencia y necesidad.
 
 ## Reportar issues
 

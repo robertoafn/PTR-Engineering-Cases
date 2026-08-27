@@ -15,10 +15,18 @@ criteria:
     required: true
     blocking: false
   - id: dwsim_9_0_5_raoult_parity
-    description: Reapertura y reconvergencia en DWSIM 9.0.5 conservando Raoult antes de cambiar el modelo.
+    description: Reproducción histórica opcional en DWSIM 9.0.5 conservando Raoult.
+    required: false
+    blocking: false
+  - id: experimental_vle_dataset
+    description: Dataset VLE experimental revisado, licenciable, canónico y trazable a la fuente.
+    required: true
+    blocking: false
+  - id: stable_dwsim_recalculation
+    description: Recálculo limpio gobernado en la versión estable fijada por ADR 0001, comenzando con Raoult.
     required: true
     blocking: false
   - id: thermodynamic_model_comparison
-    description: Comparación posterior de Raoult con NRTL u otro modelo justificado mediante evidencia VLE.
+    description: Benchmark T-x-y de Raoult, NRTL, UNIQUAC y Modified UNIFAC Dortmund frente a VLE experimental.
     required: true
     blocking: false

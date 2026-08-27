@@ -15,5 +15,13 @@
 | Hipotético | Dato asumido para fines didácticos, sin pretensión de realidad | — |
 | Simulado | Dato producido por un simulador de proceso (p. ej. DWSIM) | — |
 | Literatura | Dato extraído o derivado de fuente publicada con DOI/ISBN | — |
+| Experimental | Evidencia obtenida por medición o experimento identificado, con método e incertidumbre disponibles según la fuente | — |
+| Calculado | Resultado de una transformación o ecuación reproducible aplicada a entradas declaradas | — |
+| Estimado | Valor inferido mediante un método declarado y sujeto a supuestos o incertidumbre | — |
+| Documentary | Evidencia obtenida por inspección de documentos o estados serializados, sin afirmar recálculo | — |
 | Sidecar | Archivo `.meta.yaml` que acompaña a un dataset con sus metadatos | — |
+| Dataset canónico | Representación versionada que actúa como frontera gobernada entre fuentes, transformaciones y consumidores | — |
+| SimulationRun | Registro inmutable de una inspección o ejecución de simulación, su configuración, artefactos y procedencia | `schemas/simulation_run.schema.json` |
+| Knowledge Graph | Vista semántica de entidades y relaciones gobernadas; no constituye por sí sola una nueva fuente de verdad | — |
+| PTR Industrial Decision Core | Capa progresiva que enlaza evidencia validada con alternativas, energía, ambiente, economía y decisión | `docs/12_project_direction.md` |
 | SemVer | Semantic Versioning 2.0.0 | semver.org |

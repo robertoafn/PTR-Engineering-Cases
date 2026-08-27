@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "case_id": "102",
-  "generated_at": "2026-08-09",
+  "generated_at": "2026-08-26",
   "overall_status": "SOURCE_BASELINE_VERIFIED",
   "criteria": [
     {
@@ -22,12 +22,22 @@
     {
       "id": "dwsim_9_0_5_raoult_parity",
       "status": "NOT_RUN",
-      "evidence": "Pendiente de la versión creada manualmente por el usuario."
+      "evidence": "Reproducción histórica opcional sin artefacto; no bloquea el objetivo estable."
+    },
+    {
+      "id": "experimental_vle_dataset",
+      "status": "NOT_RUN",
+      "evidence": "La extracción preliminar de Álvarez et al. permanece local; faltan segunda revisión y decisión de derechos."
+    },
+    {
+      "id": "stable_dwsim_recalculation",
+      "status": "NOT_RUN",
+      "evidence": "No existe aún un recálculo limpio gobernado en la versión estable fijada por ADR 0001."
     },
     {
       "id": "thermodynamic_model_comparison",
       "status": "NOT_RUN",
-      "evidence": "NRTL/UNIQUAC requieren variante separada y contraste VLE trazable."
+      "evidence": "Raoult, NRTL, UNIQUAC y Modified UNIFAC Dortmund requieren SimulationRun separados y contraste VLE trazable."
     }
   ]
 }

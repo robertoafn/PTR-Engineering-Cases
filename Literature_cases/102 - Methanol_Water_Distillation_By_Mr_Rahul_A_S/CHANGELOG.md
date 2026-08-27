@@ -1,5 +1,17 @@
 # Changelog - Literature Case 102
 
+## Unreleased
+
+- DWSIM 9.0.5 se reclasifica como reproducción histórica opcional y no
+  bloqueante; la línea reproducible sigue la versión estable de ADR 0001.
+- El siguiente gate pasa a ser el dataset VLE experimental gobernado y el
+  recálculo limpio, seguidos por el benchmark de cuatro modelos.
+- Se reserva `variants/dwsim_10_2_3/` como línea `target_reproducible`, sin
+  incorporar aún una simulación.
+- Las réplicas 10.2.0 del autor y la extracción preliminar de Álvarez et al. se
+  reconocen como contexto local no promovido, sin cambiar el veredicto
+  `SOURCE_BASELINE_VERIFIED`.
+
 ## 0.2.0 - 2026-08-26
 
 - Se añadió el primer `SimulationRun` canónico para la inspección de sólo

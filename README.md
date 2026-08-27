@@ -1,55 +1,96 @@
-# PTR Engineering Cases
+# Periodic Table Research — From Elements to Industrial Decisions
 
-> Portafolio técnico de casos reproducibles de ingeniería química industrial.
-> Stack open source · FAIR · SI · IUPAC · ISO 8000 · VIM · trazabilidad SHA-256.
+> **PTR Engineering Cases**: ecosistema interoperable de casos científicos e
+> industriales de ingeniería química.
+> FAIR · SI · IUPAC · QC · provenance · versionado · reproducibilidad.
 
 [![release](https://img.shields.io/badge/release-v0.6.0-blue)](./CHANGELOG.md)
+[![status](https://img.shields.io/badge/main-Unreleased-orange)](./CHANGELOG.md)
 [![license-code](https://img.shields.io/badge/code-MIT-green)](./LICENSE)
 [![license-docs](https://img.shields.io/badge/docs-CC--BY--4.0-lightgrey)](./LICENSE-docs)
 
 ---
 
-## ¿Quién soy?
+## Estado y dirección del proyecto
 
-Ingeniero en Química Industrial enfocado en simulación de procesos, QA/QC,
-metrología, validación de datos, ETL científico y documentación reproducible.
-Construyo casos auditables que conectan **fenómeno → modelo → simulación →
-validación → trazabilidad → conclusión**.
+PTR evoluciona desde un portafolio de simulaciones reproducibles hacia una
+**base creciente de conocimiento técnico verificable y reutilizable**. Conserva
+su arquitectura fundacional —FAIR, SI, IUPAC, QC, provenance, versionado y
+reproducibilidad— y amplía su alcance para conectar:
 
-## ¿Qué resuelve este repositorio?
+> **elementos → sustancias → propiedades → fenómenos → modelos → simulación →
+> evidencia experimental → proceso → energía → ambiente → economía →
+> supply chain → decisión industrial**
 
-Demuestra, caso por caso, competencia técnica integral mediante artefactos
-verificables. Cada caso busca ser reproducible end-to-end, validado contra
-referencias, balances globales o cálculos independientes, con metadatos formales,
-unidades SI y checksums SHA-256.
+La infraestructura base está establecida y comienza una etapa centrada en
+casos evolutivos. DWSIM funciona como laboratorio computacional principal;
+Python implementa transformaciones, QC y validación; y los datasets gobernados
+serán la frontera común para SQL, APIs, Streamlit, Power BI y futuras capas
+JSON-LD/Knowledge Graph.
 
-El repositorio combina ingeniería de procesos, control de calidad de datos y
-prácticas de ingeniería de software. Desde v0.6.0 mantiene dos líneas
-complementarias:
+El **Case 102 — Methanol–Water Distillation** es el piloto activo: comparará
+Raoult, NRTL, UNIQUAC y Modified UNIFAC (Dortmund), primero contra VLE
+experimental y después a escala de columna. Las extensiones de energía, CAPEX,
+GHG y decisión industrial dependen de completar esa validación científica; no
+se presentan todavía como resultados disponibles.
 
-1. `cases/`: casos PTR 001-004, cuyo alcance de desarrollo queda cerrado en
-   este release conservando sus veredictos reales;
-2. `Literature_cases/`: revisión reproducible de casos existentes, iniciada
-   con el Caso FOSSEE 102.
+La dirección, los gates y la frontera entre capacidades implementadas y
+planificadas se mantienen en
+[`docs/12_project_direction.md`](./docs/12_project_direction.md).
 
-Los casos pueden usar datos sintéticos, hipotéticos, abiertos o experimentales,
-siempre declarados explícitamente.
+## Estado de implementación
+
+| Capa | Estado verificable |
+|---|---|
+| Casos PTR 001–004 | Baseline publicado; sus veredictos reales permanecen visibles |
+| Literature Case 102 | Fuente FOSSEE inmutable e inspección `SimulationRun` gobernada |
+| Cuatro réplicas DWSIM 10.2.0 del autor | Contexto local auditado; aún no promovido ni validado de forma independiente |
+| VLE de Álvarez et al. | Borrador local; pendiente de segunda revisión y decisión de derechos |
+| Ingesta canónica, Power BI y Knowledge Graph | Arquitectura planificada; no se afirma como implementada |
+
+Desde v0.6.0 existen dos líneas versionadas y complementarias:
+
+1. `cases/`: casos PTR 001–004, con alcance cerrado y estados conservados;
+2. `Literature_cases/`: fuentes externas seleccionadas y sus derivados
+   auditables, iniciada con el Caso 102.
+
+Los recursos de investigación del mantenedor residen fuera del repositorio en
+`C:\PTR-DWSIM-WORK`. Git sólo recibe artefactos aptos, seleccionados y
+acompañados por licencia, procedencia, identidad y controles reproducibles.
+
+## Autor y enfoque
+
+Roberto Flores, Ingeniero en Química Industrial, desarrolla casos auditables
+que integran simulación de procesos, QA/QC, metrología, ingeniería de datos y
+documentación reproducible. El repositorio demuestra resultados y también sus
+límites: integridad, convergencia, paridad y validación científica son estados
+distintos.
 
 ## Metodología
 
-`fenómeno → fundamento científico → modelo → simulación/procesamiento →
-resultados → validación/QC → trazabilidad → conclusión técnica`
+`fuente → sustancia/propiedad → fenómeno → modelo → simulación/procesamiento →
+dataset canónico → validación/QC → trazabilidad → conclusión → decisión`
 
 Para Literature Cases se añade una separación explícita:
 
-`corpus local ignorado → baseline seleccionado inmutable → paridad de versión
-→ variante termodinámica → comparación → explicación`
+`espacio externo de investigación → fuente seleccionada inmutable →
+SimulationRun → variante termodinámica → dataset canónico → comparación →
+explicación → decisión`
 
-## Stack
+## Stack e interoperabilidad
 
-- **Principal:** DWSIM · Python (pandas, numpy, scipy) · Power Query · Power BI · Streamlit
-- **Complementario, según caso:** OpenChrom, SpectraGryph, OpenMS, ProteoWizard,
-  pyOpenMS, JCAMP-DX, mzML, SQLite, DuckDB, Plotly, Altair y Jupyter
+- **Implementado:** DWSIM · Python (pandas, numpy, scipy) · JSON/YAML/CSV ·
+  Streamlit · Plotly/Altair · validadores y CI.
+- **Complementario según caso:** OpenChrom, SpectraGryph, OpenMS,
+  ProteoWizard, pyOpenMS, JCAMP-DX, mzML y Jupyter.
+- **Siguiente capa:** SQL/SQLite/DuckDB, APIs de ingesta, modelo estrella y
+  Power BI sobre datasets canónicos.
+- **Dirección semántica:** Obsidian como contexto de investigación y
+  JSON-LD/Knowledge Graph como vistas interoperables de entidades e IDs
+  gobernados.
+
+Las herramientas de visualización o consulta no son fuentes de verdad. Deben
+consumir artefactos versionados y trazables.
 
 ## Gobernanza
 
@@ -61,7 +102,7 @@ Para Literature Cases se añade una separación explícita:
 - Estados del ciclo de vida: `draft → review → validated → published`
 
 Ver [`docs/`](./docs/) para la metodología, gobernanza, convenciones y modelo de
-trazabilidad.
+trazabilidad. Los agentes de código siguen además [`AGENTS.md`](./AGENTS.md).
 
 ## Trazabilidad
 
@@ -144,13 +185,13 @@ corregir evidencia concreta.
 
 | ID | Caso | Fuente y software baseline | Estado | Próximo hito |
 |---|---|---|---|---|
-| [102](<./Literature_cases/102 - Methanol_Water_Distillation_By_Mr_Rahul_A_S/>) | Methanol Water Distillation | FOSSEE, 2018; ficha DWSIM v6.5 Classic UI; XML build 5.5.6886; Raoult | `SOURCE_BASELINE_VERIFIED` | Paridad manual DWSIM 9.0.5/Raoult |
+| [102](<./Literature_cases/102 - Methanol_Water_Distillation_By_Mr_Rahul_A_S/>) | Methanol–Water Distillation | FOSSEE, 2018; ficha DWSIM v6.5 Classic UI; XML build 5.5.6886; Raoult | `SOURCE_BASELINE_VERIFIED` | Dataset VLE gobernado y benchmark `T-x-y` con DWSIM estable |
 
-El corpus completo vive localmente en
-`references/Literature_cases_references/` y está excluido por `.gitignore`.
-Sólo se versionan casos promovidos dentro de
-[`Literature_cases/`](./Literature_cases/), con archivos originales
-inmutables, licencia, procedencia y checksums.
+El espacio completo de investigación vive localmente en
+`C:\PTR-DWSIM-WORK`, físicamente fuera de Git. La ruta histórica interna
+`references/Literature_cases_references/` también permanece ignorada. Sólo se
+versionan casos promovidos dentro de [`Literature_cases/`](./Literature_cases/),
+con archivos originales inmutables, licencia, procedencia y checksums.
 
 ### Ubicación conceptual en el proceso productivo Kraft
 
@@ -249,22 +290,31 @@ inventados. Ver
 | **v0.4.0** | Motor declarativo de validación, integración opcional con DWSIM API y resultados estructurados por caso |
 | **v0.5.0** | Dashboard científico Streamlit, visualizaciones explicativas, índice automático y propuesta metrológica del Caso 004 |
 | **v0.6.0 (release actual)** | Cierre auditable de 001-004, Caso 004 sincronizado y comienzo de Literature Cases con el baseline FOSSEE 102 |
-| **v0.7.0 (planificado)** | Paridad manual del Caso 102 en DWSIM 9.0.5/Raoult y primera comparación termodinámica trazable |
-| **v1.0.0** | Portafolio inicial validado y publicado con varios casos reproducibles |
+| **Próximo ciclo (`Unreleased`)** | Arquitectura interoperable, ingesta gobernada del Caso 102 y primer benchmark VLE trazable; DWSIM 9.0.5 permanece referencia histórica no bloqueante |
+| **Dirección posterior** | Datasets canónicos reutilizables, modelo estrella y primera proyección Power BI gobernada |
+| **Dirección posterior** | Knowledge Graph transversal y primera capa PTR Industrial Decision Core |
+| **Hito de madurez** | Ecosistema inicial publicado con casos interoperables desde evidencia hasta decisión |
 
 El alcance cerrado de este release se documenta en
 [`docs/ROADMAP_v0.6.0.md`](./docs/ROADMAP_v0.6.0.md). El cierre histórico del
 dashboard permanece en
 [`docs/ROADMAP_v0.5.0.md`](./docs/ROADMAP_v0.5.0.md).
 
-Próximas líneas de desarrollo previstas:
+Secuencia de desarrollo vigente:
 
-1. recibir del usuario la copia del Caso 102 resuelta en DWSIM 9.0.5 con Raoult;
-2. comparar luego NRTL u otro paquete respaldado por VLE y parámetros
-   trazables;
-3. seleccionar el siguiente caso FOSSEE desde el corpus local;
-4. mantener como backlog la
-   [propuesta GUM/Monte Carlo del Caso 005](./docs/proposals/005_incertidumbre_gum_monte_carlo_hx301.md).
+1. consolidar la arquitectura y documentación del repositorio;
+2. publicar el Caso 102 como primer caso científico-industrial completo;
+3. normalizar la ingesta de simulaciones DWSIM y literatura experimental;
+4. construir datasets canónicos, QC automático y provenance reproducible;
+5. implementar el modelo estrella y el dashboard interoperable de Power BI;
+6. incorporar progresivamente PTR Industrial Decision Core y el Knowledge
+   Graph transversal;
+7. migrar capacidades reutilizables de logística, supply chain y análisis
+   comercial al mismo modelo semántico.
+
+La [dirección detallada](./docs/12_project_direction.md) define las dependencias
+y gates. La [propuesta GUM/Monte Carlo del Caso 005](./docs/proposals/005_incertidumbre_gum_monte_carlo_hx301.md)
+permanece en backlog y no compite con el cierre científico del Caso 102.
 
 ## Uso profesional
 
@@ -275,7 +325,9 @@ El repositorio está diseñado como evidencia verificable de competencias en:
 - validación independiente de resultados;
 - QA/QC, metrología y criterios de aceptación;
 - ingeniería de datos científicos;
-- trazabilidad, versionado, pruebas y CI/CD.
+- trazabilidad, versionado, pruebas y CI/CD;
+- diseño de la integración futura entre evidencia, energía, ambiente, economía
+  y decisión industrial.
 
 ## Licencia
 

@@ -1,6 +1,7 @@
 # Validación de ingreso - Literature Case 102
 
 - **Fecha:** 2026-08-09
+- **Dirección actualizada:** 2026-08-26
 - **Alcance:** integridad, procedencia e inspección del estado guardado
 - **Veredicto:** `SOURCE_BASELINE_VERIFIED`
 - **Validación científica:** `NOT_RUN`
@@ -13,15 +14,17 @@
 | Paridad con corpus FOSSEE local | 2/2 idénticos byte a byte | PASS |
 | Archivo `.dwxmz` legible como ZIP/XML | 1/1 | PASS |
 | Concordancia de versión | v6.5 web vs build 5.5.6886 embebido | WARNING |
-| Reapertura y reconvergencia DWSIM 9.0.5/Raoult | Sin archivo del usuario | NOT_RUN |
-| Comparación NRTL/UNIQUAC y VLE externo | Sin variante ni dataset externo | NOT_RUN |
+| Reproducción histórica DWSIM 9.0.5/Raoult | Sin artefacto; no bloqueante | NOT_RUN |
+| Dataset VLE experimental gobernado | Borrador local no promovido | NOT_RUN |
+| Recálculo limpio en DWSIM estable | Sin `SimulationRun` objetivo | NOT_RUN |
+| Benchmark Raoult/NRTL/UNIQUAC/M-UNIFAC | Sin resultados comparables | NOT_RUN |
 
 ## Inspección del estado guardado
 
 La inspección de sólo lectura del XML identifica Raoult's Law, metanol, agua y
 una columna de ocho etapas. Los objetos relevantes figuran calculados y sin
 `ErrorMessage`. Esta evidencia describe el archivo guardado; no demuestra que
-DWSIM 9.0.5 pueda reconvergerlo sin cambios.
+una versión actual pueda reconvergerlo sin cambios.
 
 | Magnitud | Abstract | Estado guardado |
 |---|---:|---:|
@@ -52,12 +55,18 @@ experimental ni a una nueva corrida.
 2. La atribución oficial es Rahul A S; el metadata PDF informa Rahul Nagraj.
 3. Raoult representa una solución ideal. Para metanol-agua debe contrastarse
    con un modelo de coeficientes de actividad y evidencia VLE.
-4. No existe aún variante DWSIM 9.0.5 aportada por el usuario.
-5. La figura es un artefacto derivado de visualización, no parte del baseline
+4. Las cuatro réplicas DWSIM 10.2.0 del autor permanecen en el workspace
+   externo. Sus estados guardados no demuestran recálculo limpio ni validación
+   independiente, y su etiqueta RC exacta continúa en discrepancia.
+5. La extracción preliminar de Álvarez et al. requiere segunda revisión,
+   decisión de derechos y reconciliación de unidades antes de promoverse.
+6. La figura es un artefacto derivado de visualización, no parte del baseline
    controlado por el manifiesto.
 
 ## Regla de promoción
 
 El caso puede publicarse como baseline fuente íntegro. No puede etiquetarse
-`validated` hasta disponer de la paridad DWSIM 9.0.5/Raoult, balances
-recalculados, comparación termodinámica y contraste externo trazable.
+`validated` hasta disponer de un dataset experimental gobernado, recálculos
+limpios en la versión estable objetivo, balances, comparación termodinámica y
+contraste externo trazable. La reproducción DWSIM 9.0.5 es histórica y
+opcional; no bloquea esos gates.

@@ -34,9 +34,15 @@ los casos PTR 001–004; `cases/000_template`, propuestas documentales y
 El Caso de literatura 102 ya está indexado y auditado en el repositorio como
 fuente FOSSEE, pero todavía no tiene resultados propios de una reproducción
 actual. Por ello no se presenta en el dashboard. Se integrará sólo después de
-que el usuario aporte la variante DWSIM 9.0.5 y existan datasets, figuras,
-metadatos y conclusiones reproducibles. Las variantes termodinámicas posteriores
-se mostrarán como comparaciones separadas, nunca como reemplazo del original.
+que existan recálculos gobernados en la versión estable objetivo, un dataset
+VLE revisado, resultados canónicos, figuras, metadatos y conclusiones
+reproducibles. DWSIM 9.0.5 permanece como reproducción histórica opcional. Las
+variantes termodinámicas se mostrarán como comparaciones separadas, nunca como
+reemplazo del original.
+
+Streamlit continúa siendo la vista científica implementada. El futuro modelo
+estrella de Power BI deberá consumir los mismos datasets e IDs gobernados; no
+se construirá una segunda lógica de resultados dentro del dashboard.
 
 ## Contrato de explicación por fenómeno
 

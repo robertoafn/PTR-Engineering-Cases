@@ -1,85 +1,119 @@
-# 02 — Gobernanza de Datos
+# 02 — Gobernanza de datos y artefactos
 
-## Líneas de publicación
+## Zonas de información
 
-| Línea | Ubicación versionada | Regla de ingreso |
+| Zona | Propósito | Política Git |
 |---|---|---|
-| Casos PTR | `cases/` | Modelo, datos, validación y procedencia propios |
-| Casos de literatura | `Literature_cases/` | Promoción selectiva de una fuente identificada y sus derivados auditables |
+| `C:\PTR-DWSIM-WORK` | Contexto, fuentes y simulaciones de investigación del mantenedor | Siempre fuera del repositorio |
+| `references/Literature_cases_references/` | Compatibilidad con el corpus local histórico | Ignorado; no es el workspace principal |
+| `cases/` | Casos PTR desarrollados y versionados | Publicable bajo contratos del repositorio |
+| `Literature_cases/` | Fuentes seleccionadas y derivados auditables | Promoción explícita y trazable |
 
-El corpus FOSSEE de trabajo reside en
-`references/Literature_cases_references/`. Es una fuente local de exploración,
-está excluida por `.gitignore` y no forma parte del contenido publicable del
-repositorio. No se debe usar `git add -f` para incorporar archivos desde esa
-ruta.
+No se incorpora un workspace completo. Cada promoción debe justificar el
+artefacto y registrar licencia o derecho de uso, procedencia, identidad,
+SHA-256, función y relación con otros artefactos. Nunca usar `git add -f` para
+eludir esta frontera.
 
-## Codificación
-- **UTF-8 sin BOM** para todo archivo de texto.
-- Salto de línea **LF** (fijado en `.gitattributes`).
+Las rutas absolutas locales no entran en manifests canónicos. La ausencia del
+workspace externo en CI o en otro equipo no puede impedir validar el
+repositorio.
 
-## Separadores y decimales (CSV)
-| Aspecto | Regla |
-|---|---|
-| Separador de columnas | `,` |
-| Separador decimal | `.` |
-| Separador de miles | ninguno |
-| Notación científica | `e` minúscula (`1.013e5`) |
+## Codificación y serialización
 
-## Fechas
-- ISO 8601, UTC, con sufijo `Z`. Ejemplo: `2026-05-15T12:34:56Z`.
+- UTF-8 sin BOM para archivos de texto.
+- Saltos de línea LF, fijados en `.gitattributes`.
+- CSV con coma, decimal punto, sin separador de miles y `e` minúscula para
+  notación científica.
+- Fechas ISO 8601 UTC con sufijo `Z`.
+- Unidades SI según [`docs/04_units_SI_policy.md`](04_units_SI_policy.md).
+- Nombres e IDs según [`docs/03_naming_conventions.md`](03_naming_conventions.md).
 
-## Metadatos obligatorios por dataset
-`dataset_id`, `case_id`, `title`, `description`, `source_type`
-(`synthetic|hypothetical|literature|simulated`), `units`, `variables`,
-`created_at`, `author`, `license`, `version`, `checksum_sha256`,
-`provenance_ref`.
+## Datasets
 
-## Checksums
-- Algoritmo: **SHA-256**.
-- Almacenado en `provenance.json` por caso.
-- Recalculable con `scripts/compute_checksums.py`.
-- En un caso de literatura, los originales se enumeran además en
-  `source_manifest.json` y `checksums.sha256` con ruta, tamaño e indicador de
-  inmutabilidad.
+El contrato vigente exige en el sidecar:
+`dataset_id`, `case_id`, `title`, `description`, `source_type`,
+`units`, `variables`, `created_at`, `author`, `license`, `version`,
+`checksum_sha256` y `provenance_ref`.
 
-## Versioning
-- **SemVer** (`MAJOR.MINOR.PATCH`).
+`source_type` es un campo legado que combina conceptos. No se amplía
+silenciosamente ni se interpreta como los dos ejes completos de
+`SimulationRun`. Una migración posterior debe conservar compatibilidad y
+separar:
+
+- modo de evidencia: experimental, calculated, simulated, estimated o
+  documentary;
+- origen del dato: empirical, literature, synthetic o hypothetical.
+
+Cada variable debe mapear símbolo, columna física, unidad y tipo. El dataset es
+la frontera canónica para analítica: SQL, APIs, Streamlit, Power BI y Knowledge
+Graph consumen sus IDs y valores gobernados, no extraen resultados directamente
+de nombres de archivo DWSIM.
+
+## Identidad, checksums e inmutabilidad
+
+- SHA-256 es el algoritmo de identidad e integridad.
+- Los hashes se verifican con `scripts/compute_checksums.py`.
+- Un original de literatura promovido se conserva byte a byte.
+- Abrir, convertir, guardar o recalcular un original genera otro artefacto con
+  hash y procedencia propios.
+- Una coincidencia de hash no demuestra validez científica.
+
+Los casos de literatura enumeran además sus originales en
+`source_manifest.json` y `checksums.sha256`.
+
+## Versionado y cambios de estado
+
+- SemVer para releases del repositorio.
 - Tags Git por release.
-- Cambios en `CHANGELOG.md` (Keep a Changelog).
+- Keep a Changelog en `CHANGELOG.md`.
+- Los cambios en desarrollo permanecen bajo `[Unreleased]` hasta aprobar el
+  alcance; un roadmap no constituye una release.
+- Los estados de ciclo de vida y los veredictos de validación son dimensiones
+  distintas.
 
-## Lineage
-Cada artefacto declara `derived_from: [<dataset_id>@<version>]`.
+## Provenance y lineage
 
-## Provenance
-Modelo W3C PROV-lite implementado en `provenance.json` con `agents`,
-`activities` y `entities`. Esquema: `schemas/provenance.schema.json`.
+El modelo W3C PROV-lite se implementa en `provenance.json` mediante agentes,
+actividades y entidades. Cada artefacto derivado identifica su fuente mediante
+IDs estables y relaciones `derived_from`.
 
-## Inmutabilidad y variantes de literatura
+La cadena mínima de una conclusión es:
 
-- Un archivo fuente promovido desde FOSSEE se conserva byte a byte; su hash es
-  la identidad auditable del artefacto.
-- La versión declarada en la ficha FOSSEE y la versión interna que pueda
-  contener el archivo se registran por separado cuando difieren.
-- Una reproducción en DWSIM 9.0.5 o con otro paquete termodinámico se almacena
-  como variante y nunca reemplaza al original.
-- Las variantes que aporte el usuario deben declarar software, paquete,
-  parámetros, autoría, fecha, relación con la fuente y hashes propios.
-- La verificación de integridad, la convergencia, la paridad numérica y la
-  validación científica son estados distintos; ninguno se infiere de otro.
+> fuente → transformación → resultado → validación → decisión
 
-## Ejecuciones de simulación
+Si una transformación manual no puede automatizarse, debe registrar operador,
+fecha, herramienta, versión y criterio de revisión.
 
-Toda inspección o ejecución que se pretenda usar como evidencia se registra
-con el [contrato `SimulationRun`](11_simulation_run_contract.md) y se valida
-contra [`schemas/simulation_run.schema.json`](../schemas/simulation_run.schema.json).
-La [ADR 0001](adr/0001-dwsim-version-policy.md) fija los roles permitidos
-para las versiones DWSIM del Caso 102.
+## Ejecuciones DWSIM
+
+Toda inspección o ejecución usada como evidencia se registra con el
+[contrato `SimulationRun`](11_simulation_run_contract.md) y se valida contra
+[`schemas/simulation_run.schema.json`](../schemas/simulation_run.schema.json).
+La [ADR 0001](adr/0001-dwsim-version-policy.md) fija los roles iniciales de
+versión para el Caso 102.
 
 - Un estado guardado se declara como inspección sin recálculo.
-- Un mensaje de éxito del simulador no equivale a validación científica.
-- Entrada, salida y resultados se conservan como artefactos distintos cuando
-  una corrida se promueve como reproducible.
-- Las rutas canónicas son relativas al repositorio; nunca apuntan al espacio
-  local externo de investigación.
-- El dashboard consume datasets gobernados y sus IDs de procedencia, no
-  archivos DWSIM ni convenciones de nombres.
+- Un mensaje de éxito no equivale a convergencia verificada.
+- Fuente, entrada, salida, parámetros, resultados y logs son artefactos
+  distintos cuando existen.
+- Una réplica realizada por el autor no se denomina reproducción independiente.
+- Cambiar paquete, parameter set o modelo de entalpía genera otro
+  `SimulationRun`.
+
+## Vistas analíticas y semánticas
+
+Streamlit es la vista científica implementada actualmente. SQL, Power BI,
+JSON-LD y Knowledge Graph son capas objetivo. Para incorporarlas deben:
+
+1. consumir artefactos canónicos;
+2. conservar IDs, unidades, versiones y lineage;
+3. ser regenerables;
+4. no introducir hechos sin fuente;
+5. demostrar un consumidor o decisión concreta.
+
+## Agentes de código
+
+Las reglas persistentes para Codex y otros agentes están en
+[`AGENTS.md`](../AGENTS.md). Todo agente debe reutilizar contratos existentes,
+mantener `C:\PTR-DWSIM-WORK` fuera de Git, calibrar las afirmaciones y ejecutar
+validaciones proporcionales al riesgo antes de publicar una PR.
