@@ -15,10 +15,26 @@ y este proyecto adhiere a [Semantic Versioning 2.0.0](https://semver.org/).
   procedencia.
 - Primer `SimulationRun` canónico de inspección para el baseline FOSSEE del
   Literature Case 102, sin copiar ni modificar el archivo DWSIM original.
+- Documento rector versionado `docs/12_project_direction.md` con visión,
+  estado comprobable, gates del Caso 102 y secuencia de evolución hacia el
+  ecosistema interoperable.
+- `AGENTS.md` raíz con reglas persistentes para tratar el repositorio como un
+  sistema de ingeniería gobernado y mantener `C:\PTR-DWSIM-WORK` fuera de Git.
 
 ### Changed
 - Overview, gobernanza y modelo de trazabilidad incorporan la primera capa de
   transición hacia PTR Core sin promover todavía las simulaciones locales.
+- La portada adopta **Periodic Table Research — From Elements to Industrial
+  Decisions**, distingue capacidades implementadas de arquitectura planificada
+  y presenta el Caso 102 como piloto científico-industrial en construcción.
+- Metodología, contribución, licenciamiento, Literature Cases y dashboard
+  alinean el workspace externo, la taxonomía de evidencia y la política de
+  versiones DWSIM; 9.0.5 queda como referencia histórica no bloqueante.
+- Metadata, especificación y reporte del Caso 102 sustituyen el bloqueo 9.0.5
+  por gates explícitos de dataset VLE, recálculo estable y benchmark de Raoult,
+  NRTL, UNIQUAC y Modified UNIFAC Dortmund, todos aún `NOT_RUN`.
+- El roadmap futuro se expresa bajo `Unreleased` y como dirección posterior,
+  sin crear tags ni comprometer versiones antes de aprobar su alcance.
 
 ## [0.6.0] - 2026-08-09
 

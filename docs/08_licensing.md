@@ -19,9 +19,10 @@
 
 ## Casos FOSSEE
 
-- `references/Literature_cases_references/` es un corpus local de trabajo:
-  permanece en `.gitignore` y no se distribuye en bloque desde este
-  repositorio.
+- `C:\PTR-DWSIM-WORK` es el workspace externo del mantenedor y nunca se
+  distribuye en bloque desde este repositorio. La ruta interna
+  `references/Literature_cases_references/` permanece ignorada sólo por
+  compatibilidad histórica.
 - Sólo se publica en `Literature_cases/` un caso seleccionado después de
   verificar su ficha oficial, autoría, licencia y procedencia.
 - Cada original conserva su licencia de origen. La licencia general del código
@@ -34,6 +35,19 @@
 - Si la licencia o atribución de un artefacto no puede verificarse, el archivo
   no se promueve: se conserva únicamente como referencia local o se enlaza a
   la fuente.
+
+## Datos extraídos de literatura
+
+- La posibilidad técnica de transcribir una tabla no concede derechos de
+  redistribución.
+- Antes de promover observaciones experimentales se documentan cita, DOI,
+  licencia o base legal, alcance de la extracción y revisión de transcripción.
+- Cuando no sea posible distribuir la tabla, se versionan el schema, el
+  procedimiento de extracción y las métricas permitidas, y se mantiene la
+  fuente fuera de Git.
+- Los valores normalizados conservan vínculo con el valor publicado, unidad
+  original, transformación y advertencias. Corregir una unidad aparente sin
+  conservar el dato fuente destruye auditabilidad.
 
 ## Exclusiones de copyright
 - Logos y marcas de terceros: no incluir salvo permiso explícito.

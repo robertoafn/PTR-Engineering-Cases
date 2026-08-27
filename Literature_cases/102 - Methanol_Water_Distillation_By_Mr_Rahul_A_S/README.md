@@ -1,4 +1,4 @@
-# Literature Case 102 - Methanol Water Distillation
+# Literature Case 102 — Methanol–Water Distillation
 
 Baseline documental y de simulación del Caso 102 del **DWSIM Flowsheeting
 Project de FOSSEE, IIT Bombay**, aportado por Rahul A S (SASTRA Deemed
@@ -6,8 +6,8 @@ University, 2018). Este caso abre la línea `Literature_cases`: estudiar
 ejemplos existentes antes de crear nuevas variantes.
 
 > Estado: `SOURCE_BASELINE_VERIFIED`. Los archivos FOSSEE son íntegros, pero
-> todavía no se ha reconvergido el flowsheet en DWSIM 9.0.5 ni se ha realizado
-> una validación científica externa.
+> todavía no existe un recálculo limpio gobernado en la versión estable objetivo
+> ni una validación científica frente a VLE experimental.
 
 ## Pregunta ingenieril
 
@@ -52,20 +52,31 @@ paridad, no como autoridad para el VLE real de una mezcla alcohol-agua.
 ## Secuencia de trabajo
 
 1. verificar hashes del baseline;
-2. conservar la reproducción DWSIM 9.0.5 como compromiso histórico pendiente;
-3. ejecutar una copia limpia en la versión estable fijada por la
+2. conservar DWSIM 9.0.5 como reproducción histórica opcional y no bloqueante;
+3. revisar la procedencia de las cuatro réplicas DWSIM 10.2.0 del autor sin
+   promover sus estados guardados como recálculos verificados;
+4. revisar derechos, unidades y transcripción del VLE experimental antes de
+   crear su dataset canónico;
+5. ejecutar copias limpias en la versión estable fijada por la
    [ADR 0001](../../docs/adr/0001-dwsim-version-policy.md), conservando Raoult;
-4. comparar topología, especificaciones, convergencia, balances, purezas,
-   temperaturas, perfiles y deberes térmicos;
-5. crear variantes separadas con NRTL, UNIQUAC y Modified UNIFAC Dortmund,
+6. crear ejecuciones separadas con NRTL, UNIQUAC y Modified UNIFAC Dortmund,
    con parameter sets trazables y el modelo de entalpía controlado;
-6. contrastar primero el VLE `T-x-y` con datos experimentales a la misma
-   presión y después evaluar la columna completa;
-7. explicar las diferencias físicas sin modificar el baseline.
+7. contrastar primero el VLE `T-x-y` con datos experimentales a la misma
+   presión;
+8. comparar después topología, especificaciones, balances, purezas,
+   temperaturas, perfiles y deberes de la columna;
+9. extender el caso hacia energía, CAPEX, GHG y decisión sólo sobre resultados
+   gobernados y explicar las diferencias sin modificar el baseline.
 
-La primera variante pendiente debe ubicarse bajo
-`variants/dwsim_9_0_5/parity_raoult/`. Las variantes NRTL/UNIQUAC sólo se
-promueven después de documentar parámetros y fuente.
+La ruta `variants/dwsim_9_0_5/parity_raoult/` se conserva para el compromiso
+histórico. No define el siguiente gate. Las ejecuciones estables y cada variante
+termodinámica tendrán su propio `SimulationRun`, entrada, salida, resultados,
+parámetros y hashes. La línea objetivo está reservada en
+[`variants/dwsim_10_2_3/`](./variants/dwsim_10_2_3/).
+
+Las cuatro réplicas 10.2.0 y la extracción preliminar de Álvarez et al. viven
+en `C:\PTR-DWSIM-WORK`, fuera de Git. Su presencia acredita contexto disponible,
+no promoción, convergencia verificada ni validación independiente.
 
 ## Reproducibilidad
 

@@ -29,8 +29,11 @@ baseline:
   execution_status: NOT_RUN
   scientific_validation: NOT_RUN
 workflow:
-  next_required_variant: dwsim_9_0_5/parity_raoult
+  reference_variant: dwsim_9_0_5/parity_raoult
+  next_required_variant: dwsim_10_2_3/raoult_target
+  next_required_evidence: experimental_vle_dataset
   later_candidate_models:
     - NRTL
     - UNIQUAC
-  rule: La variante DWSIM 9.0.5 se crea como archivo nuevo; nunca se abre y guarda sobre el baseline FOSSEE.
+    - Modified UNIFAC (Dortmund)
+  rule: Toda variante se crea como artefacto nuevo y SimulationRun propio; nunca se abre y guarda sobre el baseline FOSSEE.
